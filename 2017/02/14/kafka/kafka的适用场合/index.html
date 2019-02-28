@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        kafka的适用场合 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Kafka的常见应用场合"><span class="toc-text">Kafka的常见应用场合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#消息系统"><span class="toc-text">消息系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#网站活动追踪"><span class="toc-text">网站活动追踪</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Metrics"><span class="toc-text">Metrics</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#日志聚合Log-Aggregation"><span class="toc-text">日志聚合Log Aggregation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#流处理Stream-Processing"><span class="toc-text">流处理Stream Processing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#事件源Event-Sourcing"><span class="toc-text">事件源Event Sourcing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#提交日志Commit-Log"><span class="toc-text">提交日志Commit Log</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        kafka的适用场合
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-02-14 16:06:02</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#kafka" title="kafka">kafka</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>kafka的适用场合<br><a id="more"></a></p>
+<h3 id="Kafka的常见应用场合"><a href="#Kafka的常见应用场合" class="headerlink" title="Kafka的常见应用场合"></a>Kafka的常见应用场合</h3><h4 id="消息系统"><a href="#消息系统" class="headerlink" title="消息系统"></a>消息系统</h4><p>  Kafka完全可以替换传统消息服务器。使用消息系统有很多原因，解耦消息生产者和处理过程，缓存未处理的消息等。对比大多数消息系统，Kafka有更高的吞吐量，而且基于分片构建，有副本机制，有容错机制，对于构建大规模可扩展的消息处理程序是不错的选择。<br>  在我们的经验中，消息的使用往往相对低延迟，但需要很低的终端到终端的延迟，且经常依赖于Kafka提供强大的持久性保证。</p>
+<p>  在消息系统领域，Kafka相较于传统消息系统如ActiveMq、RabbitMQ。</p>
+<h4 id="网站活动追踪"><a href="#网站活动追踪" class="headerlink" title="网站活动追踪"></a>网站活动追踪</h4><p>  Kafka一开始是用来构建用户行为追踪流水线作为一系列实时的发布订阅模型的订阅源。这就是说网站活动（页面浏览、搜索、其他用户产生的行为动作）按着一个活动类型一个主题被发布到中央主题。这些订阅源可以用来消费用于一系列用途如实时处理、实时监控、加载数据到Hadoop或线下数据仓库系统以便于线下处理和报表。<br>  活动行为追踪常常数据量非常大，因为每一次用户浏览页面都产生许多活动信息。</p>
+<h4 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics"></a>Metrics</h4><p>  Kafka经常用来分析运行时的监控数据。这涉及聚合来自分布式应用程序的统计数据来产生运行数据的几种馈送。</p>
+<h4 id="日志聚合Log-Aggregation"><a href="#日志聚合Log-Aggregation" class="headerlink" title="日志聚合Log Aggregation"></a>日志聚合Log Aggregation</h4><p>  很多人使用Kafka进行日志聚合的方案。日志聚合通常从服务器收集物理日志文件，并将其集中起来（文件服务器或者可能HDFS）处理。Kafka抽象了文件的细节，并将日志或事件数据更清晰地抽象为消息流。这允许更低延迟地处理，更容易支持多数据源和分布式数据消费。相比于以日志为中心的系统如Scribe或者Flume，Kafka提供了同样出色的性能，更强的持久性保证及更低的端到端延迟。</p>
+<h4 id="流处理Stream-Processing"><a href="#流处理Stream-Processing" class="headerlink" title="流处理Stream Processing"></a>流处理Stream Processing</h4><p>  很多Kafka用户在由多个阶段组成的处理流水线中处理数据，其中原始数据从Kafka主体消费，接着聚合，丰富，或转换到新主题以便于进一步消费或后续处理。如，一个推荐新闻文章的流水线可能先从RSS订阅源抓取文章内容，将其发布到名为“articles”的主题；进一步处理可能是规范化或者对内容去重，然后发布到清理后的内容到一个新主题；最后的处理阶段可能是尝试推荐内容给用户。这样的处理流水线就是基于不同的主题进行实时数据流的处理。从Kafka的0.10.0.0版本处理，一个轻量级但强大的流处理库为Kafka Streams可用来执行上述的数据处理。除了Kafka Streams，也可选择其他开源流处理工具如Apache Storm和Apache Samza。</p>
+<h4 id="事件源Event-Sourcing"><a href="#事件源Event-Sourcing" class="headerlink" title="事件源Event Sourcing"></a>事件源Event Sourcing</h4><p>  事件源是一种应用程序设计风格，其中状态变化记录为按时间排序的记录序列。Kafka支持非常大的存储日志数据，是构建于这种风格的应用程序极好的后端。</p>
+<h4 id="提交日志Commit-Log"><a href="#提交日志Commit-Log" class="headerlink" title="提交日志Commit Log"></a>提交日志Commit Log</h4><p>  Kafka可以作为分布式系统的一种外部提交日志。该日志有助于各节点间备份数据，以及故障节点重新恢复数据时充当重新同步机制。Kafka的日志压缩特性有助于支持该用途。在这点上，Kafka类似于Apache的Zookeeper项目的作用。</p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

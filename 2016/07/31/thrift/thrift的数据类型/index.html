@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        thrift的数据类型 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thrfit的数据类型"><span class="toc-text">thrfit的数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#基本类型"><span class="toc-text">基本类型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#特殊类型"><span class="toc-text">特殊类型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#结构体structs"><span class="toc-text">结构体structs</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#容器类型Containers"><span class="toc-text">容器类型Containers</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#异常Exceptions"><span class="toc-text">异常Exceptions</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#服务Services"><span class="toc-text">服务Services</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        thrift的数据类型
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2016-07-31 18:01:47</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#thrift" title="thrift">thrift</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#thrift type" title="thrift type">thrift type</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>本文介绍thrift的数据类型。<br><a id="more"></a></p>
+<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>apache的thrift框架，facebook开发，用于可扩展的跨语言的服务开发，把软件栈和代码生成引擎结合，来构建高效的、在C++、JAVA、Python、PHP、Ruby、Erlang、Perl、Haskell、C#、Cocoa、JavaScript、Node.js、SmallTalk、Ocami、Dephi及他语言之间无缝的服务。</p>
+<h4 id="thrfit的数据类型"><a href="#thrfit的数据类型" class="headerlink" title="thrfit的数据类型"></a>thrfit的数据类型</h4><p>thrift的类型系统目的在于允许开发人员尽可能使用本地类型，不用管他们使用的是何种编程语言。thrift的IDL提供类型的描述，用来生成每一个目标语言对应的代码。</p>
+<h5 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h5><p>简单类型以简单明了作为目标，而不是提供大量简单类型，集中在所有语言共有的关键类型上。</p>
+<ul>
+<li>bool：一个布尔值，true或者false，对应java的boolean</li>
+<li>byte：一个8字节的有符号整数，对应java的byte</li>
+<li>i16：16位的有符号整数，对应java的short</li>
+<li>i32：32位有符号整数，对应java的int</li>
+<li>i64: 一个64位的有符号整数，对应java的long</li>
+<li>double：一个64位浮点数，对应java的double</li>
+<li>string：一个使用utf8编码的字符串，对应java的string   </li>
+</ul>
+<p>注意：没有无符号整数，因为大多数语言没有这种类型。</p>
+<h5 id="特殊类型"><a href="#特殊类型" class="headerlink" title="特殊类型"></a>特殊类型</h5><p>二进制：未编码的字节序列<br>注意：这个类型目前仅仅是上面string类型的特殊形式，为了和java更好的交互性，某些点上考虑也可认为是基本类型。</p>
+<h5 id="结构体structs"><a href="#结构体structs" class="headerlink" title="结构体structs"></a>结构体structs</h5><p>结构体定义了公共对象，本质上等同于OOP语言中的类，但是没有继承的概念。结构体有一系列强类型的字段，每一个都有唯一的命名标识符。字段可能有不同的注解（数字的字段IDs，可选的默认值等。），这些在IDL中描述。</p>
+<h5 id="容器类型Containers"><a href="#容器类型Containers" class="headerlink" title="容器类型Containers"></a>容器类型Containers</h5><p>thrift的容器类型是强类型容器，对应大部分语言中常用和公共的容器类型。<br>有3种容器类型：</p>
+<ul>
+<li>list：有序的元素列表，被转换为STL vector，java arraylist，脚本语言中的数组等。</li>
+<li>set：唯一元素的无序集合，被转换为STL set，java hashset，Python set等，php无sets，转成类似于list对待。</li>
+<li>map：严格的唯一键到值得映射，转换为STL map，java hashmap，PHP associative array，Python/ruby的dictionary等。默认时，类型映射未明确绑定，自定义代码生成器可以替换为目标语言的自定义类型（不懂。）</li>
+</ul>
+<p>容器类型支持任何有效的thrift type。<br>N.B.: 为了最大的兼容通用性，map的key只能使用基本类型，不能使用容器或者结构体类型，因为有些语言的原始map类型不支持key使用复杂类型，如json协议的key只支持使用基本类型。</p>
+<h5 id="异常Exceptions"><a href="#异常Exceptions" class="headerlink" title="异常Exceptions"></a>异常Exceptions</h5><p>异常功能等同于结构体，除了异常继承自每种语言的原始异常的基类，以便和每个语言的原始本地异常类无缝衔接。</p>
+<h5 id="服务Services"><a href="#服务Services" class="headerlink" title="服务Services"></a>服务Services</h5><p>服务使用thrift的类型定义，一个service的定义语义等同于定义一个接口（或者纯粹的抽象类）在面向对象的编程中。thrift编译器根据服务可生成功能齐全的客户端及实现了服务接口的server存根。</p>
+<p>一个service包含一系列命名函数，每一个包含一系列参数和一个返回类型。</p>
+<p>注意： void是一个有效的方法返回类型，除了其他定义的thrift类型。<br>此外，一个单向的修饰符关键字可以修饰一个void函数，生成的代码不用等server端返回响应。一个纯粹的void函数是会返回一个响应到客户端的，来保证这个操作已在服务端处理完成。单向方法调用仅仅保证强求在传输层调用成功。同一客户端的单向方法多次调用可能在服务端是并行或者无序执行。</p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

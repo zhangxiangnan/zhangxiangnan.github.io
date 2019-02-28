@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        okhttp之常见使用方法（一） - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET方式同步调用"><span class="toc-text">GET方式同步调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET方式异步调用"><span class="toc-text">GET方式异步调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#访问头部信息"><span class="toc-text">访问头部信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST提交String字符串"><span class="toc-text">POST提交String字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST提交流"><span class="toc-text">POST提交流</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        okhttp之常见使用方法（一）
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2016-09-25 21:18:48</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#okhttp" title="okhttp">okhttp</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#http" title="http">http</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#译" title="译">译</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>常见的GET同步、异步调用示例，POST提交字符串、提交流示例。<br><a id="more"></a></p>
+<h3 id="GET方式同步调用"><a href="#GET方式同步调用" class="headerlink" title="GET方式同步调用"></a>GET方式同步调用</h3><pre><code>package cn.xiangnan.okhttpdemo;
+
+/**
+ * Created by zhangxiangnan on 16/9/25.
+ */
+
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.IOException;
+
+/**
+ * 使用GET方式同步掉调用,输出响应的header及返回内容。
+ * string方法适合于&lt;=1M的响应,再大的话最好用stream流方式。
+ */
+public class SynchronousGet {
+    private final OkHttpClient client = new OkHttpClient();
+
+    public void run() throws Exception {
+        Request request = new Request.Builder()
+                .url(&quot;http://www.baidu.com&quot;)// 可以是需要下载的文件地址
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException(&quot;Unexpected code &quot; + response);
+
+            Headers responseHeaders = response.headers();
+            for (int i = 0; i &lt; responseHeaders.size(); i++) {
+                System.out.println(responseHeaders.name(i) + &quot;: &quot; + responseHeaders.value(i));
+            }
+
+            System.out.println(response.body().string());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (response != null) {
+                response.close();
+            }
+        }
+    }
+
+    public static void main(String... args) throws Exception {
+        new SynchronousGet().run();
+    }
+}
+</code></pre><h3 id="GET方式异步调用"><a href="#GET方式异步调用" class="headerlink" title="GET方式异步调用"></a>GET方式异步调用</h3><pre><code>package cn.xiangnan.okhttpdemo;
+
+/**
+ * Created by zhangxiangnan on 16/9/25.
+ */
+
+import okhttp3.*;
+
+import java.io.IOException;
+
+/**
+ * 异步GET调用,在一个工作线程中进行文件或者普通页面调用,当响应可读时在另一个线程中执行回调函数;
+ * 在响应头部信息准备好后,就执行回调函数;但是读响应体可能仍然阻塞。
+ * Okhttp目前不提供对响应体异步分开读取。
+ */
+public final class AsynchronousGet {
+    private final OkHttpClient client = new OkHttpClient();
+
+    public void run() throws Exception {
+        Request request = new Request.Builder()
+                .url(&quot;http://www.baidu.com&quot;)
+                .build();
+
+        // 异步请求是通过执行入队
+        client.newCall(request).enqueue(new Callback() {
+            // 失败
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            //正常
+            public void onResponse(Call call, Response response) throws IOException {
+                ResponseBody responseBody = null;
+                try {
+                    responseBody = response.body();
+                    if (!response.isSuccessful()) throw new IOException(&quot;Unexpected code &quot; + response);
+
+                    Headers responseHeaders = response.headers();
+                    for (int i = 0, size = responseHeaders.size(); i &lt; size; i++) {
+                        System.out.println(responseHeaders.name(i) + &quot;: &quot; + responseHeaders.value(i));
+                    }
+
+                    System.out.println(responseBody.string());
+                } catch (Exception e) {
+
+                } finally {
+                    responseBody.close();
+                    response.close();
+                }
+            }
+        });
+    }
+
+    public static void main(String... args) throws Exception {
+        new AsynchronousGet().run();
+    }
+}
+</code></pre><h3 id="访问头部信息"><a href="#访问头部信息" class="headerlink" title="访问头部信息"></a>访问头部信息</h3><p>通常HTTP头部类似Map&lt;String,String&gt;工作：每一个字段有一个值或更多。但是一些头部允许多个值，如Guava的MultiMap。例如，HTTP响应体提供多个变化的headers是合法和常见的。OKHttp的API尝试优雅的处理2中情形。</p>
+<p>当写入请求体时，使用header(name, value)来设置name和value的首次设置，如果已经存在values，values会被移除，新值会被添加。可以使用addHeader(name,value)来追加header，而不用移除已经存在的headers.</p>
+<p>当读取响应的头部时，使用header(name)来获取最近出现的命名的value值。通常这也是仅有的一个值。如果值不存在，header(name)返回null。想要读取一个字段的所有值返回一个list，可以使用headers(name).</p>
+<p>想要访问所有的头部，使用Headers类，支持按索引访问。</p>
+<pre><code>package cn.xiangnan.okhttpdemo;
+
+/**
+ * Created by zhangxiangnan on 16/9/25.
+ */
+
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+/**
+ * 访问头部,header(name)访问最近的头部,headers(name)返回多个值
+ */
+public final class AccessHeaders {
+    private final OkHttpClient client = new OkHttpClient();
+
+    public void run() throws Exception {
+        Request request = new Request.Builder()
+                .url(&quot;https://api.github.com/repos/square/okhttp/issues&quot;)
+                .header(&quot;User-Agent&quot;, &quot;OkHttp Headers.java&quot;)
+                .addHeader(&quot;Accept&quot;, &quot;application/json; q=0.5&quot;)
+                .addHeader(&quot;Accept&quot;, &quot;application/vnd.github.v3+json&quot;)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+
+            if (!response.isSuccessful()) throw new IOException(&quot;Unexpected code &quot; + response);
+
+            System.out.println(&quot;Server: &quot; + response.header(&quot;Server&quot;));
+            System.out.println(&quot;Date: &quot; + response.header(&quot;Date&quot;));
+            System.out.println(&quot;Vary: &quot; + response.headers(&quot;Vary&quot;));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            response.close();
+        }
+
+    }
+
+    public static void main(String... args) throws Exception {
+        new AccessHeaders().run();
+    }
+}
+</code></pre><h3 id="POST提交String字符串"><a href="#POST提交String字符串" class="headerlink" title="POST提交String字符串"></a>POST提交String字符串</h3><p>使用一个HTTP POST来发送一个请求体到一个服务，因为该API的整个请求体全部在内存里，所以最好&lt;=1m。</p>
+<pre><code>package cn.xiangnan.okhttpdemo;
+
+/**
+ * Created by zhangxiangnan on 16/9/25.
+ */
+
+import okhttp3.*;
+
+import java.io.IOException;
+
+/**
+ * 使用一个HTTP POST来发送一个请求体到一个服务，因为该API的整个请求体全部在内存里，所以最好&lt;=1m。
+ */
+public final class PostString {
+    public static final MediaType MEDIA_TYPE_MARKDOWN
+            = MediaType.parse(&quot;text/x-markdown; charset=utf-8&quot;);
+
+    private final OkHttpClient client = new OkHttpClient();
+
+    public void run() throws Exception {
+        String postBody = &quot;&quot;
+                + &quot;Releases\n&quot;
+                + &quot;--------\n&quot;
+                + &quot;\n&quot;
+                + &quot; * _1.0_ May 6, 2013\n&quot;
+                + &quot; * _1.1_ June 15, 2013\n&quot;
+                + &quot; * _1.2_ August 11, 2013\n&quot;;
+
+        Request request = new Request.Builder()
+                .url(&quot;https://api.github.com/markdown/raw&quot;)
+                .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))
+                .build();
+
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException(&quot;Unexpected code &quot; + response);
+            System.out.println(response.body().string());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            response.body();
+        }
+    }
+
+    public static void main(String... args) throws Exception {
+        new PostString().run();
+    }
+}
+</code></pre><h3 id="POST提交流"><a href="#POST提交流" class="headerlink" title="POST提交流"></a>POST提交流</h3><pre><code>package cn.xiangnan.okhttpdemo;
+
+/**
+ * Created by zhangxiangnan on 16/9/25.
+ *  POST方式提交流，请求提写入的同时产生；该例直接将流写入到okio
+ * 的buffered sink,可以优先使用OutputStream，并从BufferedSink.outputStream()得到。
+ *
+ */
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okio.BufferedSink;
+
+public final class PostStreaming {
+    public static final MediaType MEDIA_TYPE_MARKDOWN
+            = MediaType.parse(&quot;text/x-markdown; charset=utf-8&quot;);
+
+    private final OkHttpClient client = new OkHttpClient();
+
+    public void run() throws Exception {
+        RequestBody requestBody = new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return MEDIA_TYPE_MARKDOWN;
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                sink.writeUtf8(&quot;Numbers\n&quot;);
+                sink.writeUtf8(&quot;-------\n&quot;);
+                for (int i = 2; i &lt;= 997; i++) {
+                    sink.writeUtf8(String.format(&quot; * %s = %s\n&quot;, i, factor(i)));
+                }
+            }
+
+            private String factor(int n) {
+                for (int i = 2; i &lt; n; i++) {
+                    int x = n / i;
+                    if (x * i == n) return factor(x) + &quot; × &quot; + i;
+                }
+                return Integer.toString(n);
+            }
+        };
+
+        Request request = new Request.Builder()
+                .url(&quot;https://api.github.com/markdown/raw&quot;)
+                .post(requestBody)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            if (!response.isSuccessful()) throw new IOException(&quot;Unexpected code &quot; + response);
+            System.out.println(response.body().string());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            response.close();
+        }
+    }
+
+    public static void main(String... args) throws Exception {
+        new PostStreaming().run();
+    }
+}
+</code></pre>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        spring如何保证线程安全的 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#spring的常见业务组件采取单例如何保证线程安全？"><span class="toc-text">spring的常见业务组件采取单例如何保证线程安全？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring的dao、service层使用的数据库connection连接等一些有状态bean如何保证线程安全？"><span class="toc-text">spring的dao、service层使用的数据库connection连接等一些有状态bean如何保证线程安全？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#springMVC的controller并发访问呢？"><span class="toc-text">springMVC的controller并发访问呢？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring的几个概念"><span class="toc-text">spring的几个概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何配置单例与多例"><span class="toc-text">如何配置单例与多例</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        spring如何保证线程安全的
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2016-06-14 13:41:03</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#spring" title="spring">spring</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#framework" title="framework">framework</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#threadsafe" title="threadsafe">threadsafe</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#concurrent" title="concurrent">concurrent</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h3 id="spring的常见业务组件采取单例如何保证线程安全？"><a href="#spring的常见业务组件采取单例如何保证线程安全？" class="headerlink" title="spring的常见业务组件采取单例如何保证线程安全？"></a>spring的常见业务组件采取单例如何保证线程安全？</h3><p>　　spring作为ioc框架，一般spring项目管理的bean如controller、api、service、dao大多数是单例（默认单例，配置多例模式使用scope=prototype），既然是单例，那么如何控制单例被多个线程同时访问线程安全呢？<br>  <a id="more"></a><br>  　　首先要理解每个http请求到后台都是一个单独的线程，线程之间共享同一个进程的内存、io、cpu等资源，但线程栈是线程独有，线程之间不共享栈资源。<br>　　其次，bean分为有状态bean和无状态bean，有状态bean即类定义了成员变量，可能被多个线程同时访问，则会出现线程安全问题；无状态bean每个线程访问不会产生线程安全问题，因为各个线程栈及方法栈资源都是独立的，不共享。即是，无状态bean可以在多线程环境下共享，有状态bean不能。<br>　　所以一般来说，spring管理的api、service、dao都是单例存在，节省内存和cpu、提高单机资源利用率。</p>
+<h3 id="spring的dao、service层使用的数据库connection连接等一些有状态bean如何保证线程安全？"><a href="#spring的dao、service层使用的数据库connection连接等一些有状态bean如何保证线程安全？" class="headerlink" title="spring的dao、service层使用的数据库connection连接等一些有状态bean如何保证线程安全？"></a>spring的dao、service层使用的数据库connection连接等一些有状态bean如何保证线程安全？</h3><p>　　spring应用中dao、service一般以单例形式存在，dao、service中使用的数据库connection以及RequestContextHolder、TransactionSynchronizationManager、LocaleContextHolder等都是有状态bean，而dao、service又是单例，如何保证线程安全呢？<br>　　答案是使用threadLocal进行处理，ThreadLocal是线程本地变量，每个线程拥有变量的一个独立副本，所以各个线程之间互不影响，保证了线程安全。</p>
+<h3 id="springMVC的controller并发访问呢？"><a href="#springMVC的controller并发访问呢？" class="headerlink" title="springMVC的controller并发访问呢？"></a>springMVC的controller并发访问呢？</h3><p>　　springMVC中的controller默认是单例的，所以如上所述，属性变量会到值线程安全问题，解决方法包括使用threadLocal或、不使用属性变量、配置为多例均可（加锁控制效率不行）。</p>
+<h3 id="spring的几个概念"><a href="#spring的几个概念" class="headerlink" title="spring的几个概念"></a>spring的几个概念</h3><p>singleton：单例、缺省,就是指一个spring的容器中，只有一个实例存在，和单例模式不同。<br>prototype：原型，多例，指一个spring容器中，每个请求创建一个单独的实例存在。<br>scope属性的其他值：request：请求范围内，session：session范围内。</p>
+<h3 id="如何配置单例与多例"><a href="#如何配置单例与多例" class="headerlink" title="如何配置单例与多例"></a>如何配置单例与多例</h3><p>spring的注解或者xml配置属性scope=singleton表示单例，scope=prototype表示多例。</p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

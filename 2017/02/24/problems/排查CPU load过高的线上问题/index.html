@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        排查CPU使用率始终100%问题 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#现象"><span class="toc-text">现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决过程"><span class="toc-text">解决过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#top找到cpu占用最高的进程号"><span class="toc-text">top找到cpu占用最高的进程号</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看已找到的进程中哪个线程CPU使用率最高"><span class="toc-text">查看已找到的进程中哪个线程CPU使用率最高</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#jstack-进程号导出线程堆栈"><span class="toc-text">jstack+进程号导出线程堆栈</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#得到线程号8566的十六进制表示"><span class="toc-text">得到线程号8566的十六进制表示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在堆栈日志中查找线程号十六进制表示为4b22的线程堆栈信息"><span class="toc-text">在堆栈日志中查找线程号十六进制表示为4b22的线程堆栈信息</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        排查CPU使用率始终100%问题
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-02-24 18:21:08</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#problems" title="problems">problems</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>排查CPU使用率始终100%的线上问题，现象，排查过程，解决方案。<br><a id="more"></a></p>
+<h3 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h3><p>  收到线上机器单个CPU平均load过高的报警，登陆到机器，命令行执行top命令显示如下：   </p>
+<pre><code>[zhangxia@xxxx ~]$ top
+
+top - 17:38:39 up 58 days,  6:38,  2 users,  load average: 0.66, 0.20, 0.19
+Tasks: 119 total,   2 running, 117 sleeping,   0 stopped,   0 zombie
+Cpu0  : 38.3%us, 59.0%sy,  0.0%ni,  0.3%id,  0.0%wa,  0.0%hi,  2.3%si,  0.0%st
+Cpu1  : 20.7%us, 47.4%sy,  0.0%ni, 31.6%id,  0.0%wa,  0.0%hi,  0.0%si,  0.3%st
+Mem:   1922348k total,  1703128k used,   219220k free,     4300k buffers
+Swap:  2096440k total,        0k used,  2096440k free,   235564k cached
+
+PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                
+8288 zhangxia  20   0 2628m  29m  11m S 98.1  1.6   0:25.24 java          
+</code></pre><p>  可以发现进程号为8288的进程CPU使用率为98%，接近100%。</p>
+<h3 id="解决过程"><a href="#解决过程" class="headerlink" title="解决过程"></a>解决过程</h3><h4 id="top找到cpu占用最高的进程号"><a href="#top找到cpu占用最高的进程号" class="headerlink" title="top找到cpu占用最高的进程号"></a>top找到cpu占用最高的进程号</h4><p>  已找到进程号为8288.</p>
+<h4 id="查看已找到的进程中哪个线程CPU使用率最高"><a href="#查看已找到的进程中哪个线程CPU使用率最高" class="headerlink" title="查看已找到的进程中哪个线程CPU使用率最高"></a>查看已找到的进程中哪个线程CPU使用率最高</h4><p>  在top执行的视图里执行shift+H快捷键，提示“Show threads On”，此时展示的PID为线程ID，可以观察到线程id为19234的线程占用CPU最高。或者使用”Top -Hp 进程号“来观察。</p>
+<pre><code>top - 17:47:40 up 58 days,  6:47,  2 users,  load average: 0.71, 0.23, 0.18
+Tasks: 526 total,   2 running, 524 sleeping,   0 stopped,   0 zombie
+Cpu0  : 25.5%us, 44.4%sy,  0.0%ni,  0.0%id,  0.0%wa,  0.0%hi,  1.9%si, 28.2%st
+Cpu1  : 19.9%us, 41.4%sy,  0.0%ni, 37.5%id,  0.0%wa,  0.0%hi,  0.0%si,  1.3%st
+Mem:   1922348k total,  1707684k used,   214664k free,     5740k buffers
+Swap:  2096440k total,        0k used,  2096440k free,   237624k cached
+
+PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                
+19234 zhangxia  20   0 2628m  29m  11m R 97.3  1.6   0:26.50 java
+</code></pre><h5 id="jstack-进程号导出线程堆栈"><a href="#jstack-进程号导出线程堆栈" class="headerlink" title="jstack+进程号导出线程堆栈"></a>jstack+进程号导出线程堆栈</h5><p>  执行导出某个进程内的所有线程堆栈信息到文件：</p>
+<pre><code>jstack 8288 &gt; stack.8288
+</code></pre><p>  堆栈信息导出到了当前文件夹，为stack.8288。<br>  内容如下：</p>
+<pre><code>  2017-02-24 18:12:51
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (25.45-b02 mixed mode):
+
+&quot;Attach Listener&quot; #9 daemon prio=9 os_prio=0 tid=0x00007f8abc001000 nid=0x4b48 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+&quot;Finalizer&quot; #3 daemon prio=8 os_prio=0 tid=0x00007f8b0407e800 nid=0x4b2a in Object.wait() [0x00007f8af12f9000]
+   java.lang.Thread.State: WAITING (on object monitor)
+    at java.lang.Object.wait(Native Method)
+    - waiting on &lt;0x00000006c6c06e80&gt; (a java.lang.ref.ReferenceQueue$Lock)
+    at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:143)
+    - locked &lt;0x00000006c6c06e80&gt; (a java.lang.ref.ReferenceQueue$Lock)
+    at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:164)
+    at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:209)
+
+&quot;Reference Handler&quot; #2 daemon prio=10 os_prio=0 tid=0x00007f8b0407c000 nid=0x4b29 in Object.wait() [0x00007f8af13fa000]
+   java.lang.Thread.State: WAITING (on object monitor)
+    at java.lang.Object.wait(Native Method)
+    - waiting on &lt;0x00000006c6c08370&gt; (a java.lang.ref.Reference$Lock)
+    at java.lang.Object.wait(Object.java:502)
+    at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:157)
+    - locked &lt;0x00000006c6c08370&gt; (a java.lang.ref.Reference$Lock)
+
+&quot;main&quot; #1 prio=5 os_prio=0 tid=0x00007f8b04009800 nid=0x4b22 runnable [0x00007f8b0a8ae000]
+   java.lang.Thread.State: RUNNABLE
+    at java.io.FileOutputStream.writeBytes(Native Method)
+    at java.io.FileOutputStream.write(FileOutputStream.java:326)
+    at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+    at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+    - locked &lt;0x00000006c6c17678&gt; (a java.io.BufferedOutputStream)
+    at java.io.PrintStream.write(PrintStream.java:482)
+    - locked &lt;0x00000006c6c06f30&gt; (a java.io.PrintStream)
+    at sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:221)
+    at sun.nio.cs.StreamEncoder.implFlushBuffer(StreamEncoder.java:291)
+    at sun.nio.cs.StreamEncoder.flushBuffer(StreamEncoder.java:104)
+    - locked &lt;0x00000006c6c06ee8&gt; (a java.io.OutputStreamWriter)
+    at java.io.OutputStreamWriter.flushBuffer(OutputStreamWriter.java:185)
+    at java.io.PrintStream.write(PrintStream.java:527)
+    - eliminated &lt;0x00000006c6c06f30&gt; (a java.io.PrintStream)
+    at java.io.PrintStream.print(PrintStream.java:669)
+    at java.io.PrintStream.println(PrintStream.java:806)
+    - locked &lt;0x00000006c6c06f30&gt; (a java.io.PrintStream)
+    at CpuLoadHighTest.main(CpuLoadHighTest.java:4)
+
+  &quot;VM Thread&quot; os_prio=0 tid=0x00007f8b04077000 nid=0x4b28 runnable
+
+  &quot;GC task thread#0 (ParallelGC)&quot; os_prio=0 tid=0x00007f8b0401e800 nid=0x4b24 runnable
+
+  &quot;GC task thread#1 (ParallelGC)&quot; os_prio=0 tid=0x00007f8b04020000 nid=0x4b25 runnable
+
+  &quot;GC task thread#2 (ParallelGC)&quot; os_prio=0 tid=0x00007f8b04022000 nid=0x4b26 runnable
+
+  &quot;GC task thread#3 (ParallelGC)&quot; os_prio=0 tid=0x00007f8b04023800 nid=0x4b27 runnable
+
+  &quot;VM Periodic Task Thread&quot; os_prio=0 tid=0x00007f8b040cc800 nid=0x4b30 waiting on condition
+
+  JNI global references: 9
+</code></pre><h4 id="得到线程号8566的十六进制表示"><a href="#得到线程号8566的十六进制表示" class="headerlink" title="得到线程号8566的十六进制表示"></a>得到线程号8566的十六进制表示</h4><p>  命令行执行如下命令：<br>    printf ‘%x\n’ 19234<br>  得到十六进制表示为4b22</p>
+<h4 id="在堆栈日志中查找线程号十六进制表示为4b22的线程堆栈信息"><a href="#在堆栈日志中查找线程号十六进制表示为4b22的线程堆栈信息" class="headerlink" title="在堆栈日志中查找线程号十六进制表示为4b22的线程堆栈信息"></a>在堆栈日志中查找线程号十六进制表示为4b22的线程堆栈信息</h4><pre><code>在堆栈文件中查找4b22，得到如下线程堆栈信息：
+
+  &quot;main&quot; #1 prio=5 os_prio=0 tid=0x00007f8b04009800 nid=0x4b22 runnable [0x00007f8b0a8ae000]
+ java.lang.Thread.State: RUNNABLE
+  at java.io.FileOutputStream.writeBytes(Native Method)
+  at java.io.FileOutputStream.write(FileOutputStream.java:326)
+  at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:82)
+  at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:140)
+  - locked &lt;0x00000006c6c17678&gt; (a java.io.BufferedOutputStream)
+  at java.io.PrintStream.write(PrintStream.java:482)
+  - locked &lt;0x00000006c6c06f30&gt; (a java.io.PrintStream)
+  at sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:221)
+  at sun.nio.cs.StreamEncoder.implFlushBuffer(StreamEncoder.java:291)
+  at sun.nio.cs.StreamEncoder.flushBuffer(StreamEncoder.java:104)
+  - locked &lt;0x00000006c6c06ee8&gt; (a java.io.OutputStreamWriter)
+  at java.io.OutputStreamWriter.flushBuffer(OutputStreamWriter.java:185)
+  at java.io.PrintStream.write(PrintStream.java:527)
+  - eliminated &lt;0x00000006c6c06f30&gt; (a java.io.PrintStream)
+  at java.io.PrintStream.print(PrintStream.java:669)
+  at java.io.PrintStream.println(PrintStream.java:806)
+  - locked &lt;0x00000006c6c06f30&gt; (a java.io.PrintStream)
+  at CpuLoadHighTest.main(CpuLoadHighTest.java:4)
+</code></pre><p>根绝CpuLoadHighTest.main(CpuLoadHighTest.java:4)可得到问题出现的具体位置，然后分析是否死循环死锁等问题即可解决。   </p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

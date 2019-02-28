@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        thrift的接口描述语言IDL - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#简介"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IDL结构描述"><span class="toc-text">IDL结构描述</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Document"><span class="toc-text">Document</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Header"><span class="toc-text">Header</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Thrift-Include"><span class="toc-text">Thrift Include</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#C-Include"><span class="toc-text">C++ Include</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Namespace"><span class="toc-text">Namespace</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#定义Definition"><span class="toc-text">定义Definition</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Const"><span class="toc-text">Const</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Typedef"><span class="toc-text">Typedef</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Enum"><span class="toc-text">Enum</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        thrift的接口描述语言IDL
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2016-08-01 10:29:05</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#thrift" title="thrift">thrift</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#thrift type" title="thrift type">thrift type</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>本文介绍thrift的接口描述语言IDL。<br><a id="more"></a></p>
+<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>thrfit的接口描述语言IDL（interface description language）允许使用thrfit类型。thrift编译器处理thrift的IDL文件来根据不同的目标语言，生成对应的代码，以便支持IDL文件中定义的结构体和服务。</p>
+<h4 id="IDL结构描述"><a href="#IDL结构描述" class="headerlink" title="IDL结构描述"></a>IDL结构描述</h4><h5 id="Document"><a href="#Document" class="headerlink" title="Document"></a>Document</h5><p>每个thrift的document包含0个或者多个headers，后面跟着0个或多个其他定义：<br>    [1]  Document        ::=  Header<em> Definition</em></p>
+<h5 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h5><p>一个header是一个thrift的include、一个c++的include、或者一个namespace的定义：<br>    [2]  Header          ::=  Include | CppInclude | Namespace</p>
+<h6 id="Thrift-Include"><a href="#Thrift-Include" class="headerlink" title="Thrift Include"></a>Thrift Include</h6><p>该种include使来自另一个文件的所有符号标记对该文件可见（使用前缀），并且添加对应的include语句到该thrift文档所生成的代码中。<br>    [3]  Include         ::=  ‘include’ Literal</p>
+<h6 id="C-Include"><a href="#C-Include" class="headerlink" title="C++ Include"></a>C++ Include</h6><p>该include添加一个自定义的c++ include到thrift文档对应c++代码生成器生成的代码里。<br>    [4]  CppInclude      ::=  ‘cpp_include’ Literal</p>
+<h6 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h6><p>一个namespace定义了哪一个namespace、包、模块等。thrift文件定义的类型将在目标语言中声明定义。namespacescope定义了该namespace所适用于哪种语言。范围“ *”表示该namespace适用于所有语言。   </p>
+<p>[5]  Namespace       ::=  ( ‘namespace’ ( NamespaceScope Identifier ) |<br>                                    ( ‘smalltalk.category’ STIdentifier ) |<br>                                    ( ‘smalltalk.prefix’ Identifier ) ) |<br>                      ( ‘php_namespace’ Literal ) |<br>                      ( ‘xsd_namespace’ Literal )</p>
+<p>[6]  NamespaceScope  ::=  ‘*‘ | ‘cpp’ | ‘java’ | ‘py’ | ‘perl’ | ‘rb’ | ‘cocoa’ | ‘csharp’</p>
+<p>N.B.:smalltalk有2种不同的命名指令；php_namespace与xsd_namespace不建议用。</p>
+<h5 id="定义Definition"><a href="#定义Definition" class="headerlink" title="定义Definition"></a>定义Definition</h5><p>[7]  Definition      ::=  Const | Typedef | Enum | Senum | Struct | Union | Exception | Service</p>
+<h5 id="Const"><a href="#Const" class="headerlink" title="Const"></a>Const</h5><p>[8]  Const           ::=  ‘const’ FieldType Identifier ‘=’ ConstValue ListSeparator?</p>
+<h5 id="Typedef"><a href="#Typedef" class="headerlink" title="Typedef"></a>Typedef</h5><p>类型定义为一个类型创建别名：<br>[9]  Typedef         ::=  ‘typedef’ DefinitionType Identifier</p>
+<h5 id="Enum"><a href="#Enum" class="headerlink" title="Enum"></a>Enum</h5><p>一个枚举创建一个枚举类型，带有命名的值。如果没提供常量值，则第一个元素值要么是0，或者比先前的子序列的数字都大。任何常量值必须非负。</p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

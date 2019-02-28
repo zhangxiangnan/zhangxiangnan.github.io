@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        深入了解javaWeb中的中文编解码 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#为啥需要编解码？"><span class="toc-text">为啥需要编解码？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常见编解码格式"><span class="toc-text">常见编解码格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#java中哪些场景要编码"><span class="toc-text">java中哪些场景要编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#IO编解码"><span class="toc-text">IO编解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内存中编解码"><span class="toc-text">内存中编解码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#String提供的方法"><span class="toc-text">String提供的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Charset的encode和decode方法"><span class="toc-text">Charset的encode和decode方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ByteBuffer类的软转换"><span class="toc-text">ByteBuffer类的软转换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#javaWeb中涉及的编解码"><span class="toc-text">javaWeb中涉及的编解码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#URL的编解码"><span class="toc-text">URL的编解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-Header的编解码"><span class="toc-text">HTTP Header的编解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#POST表单的编解码"><span class="toc-text">POST表单的编解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP-BODY的编解码"><span class="toc-text">HTTP BODY的编解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据库连接的编解码"><span class="toc-text">数据库连接的编解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#js编解码"><span class="toc-text">js编解码</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#js文件编解码"><span class="toc-text">js文件编解码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#js的url编解码"><span class="toc-text">js的url编解码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#xml文件的编解码"><span class="toc-text">xml文件的编解码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#velocity模板设置编码"><span class="toc-text">velocity模板设置编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jsp设置编码"><span class="toc-text">jsp设置编码</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        深入了解javaWeb中的中文编解码
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2015-05-12 09:40:52</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#encode" title="encode">encode</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#decode" title="decode">decode</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#javaWeb" title="javaWeb">javaWeb</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>为什么需要编解码？有几种编解码？javaweb哪些场景需要编解码？常见乱码问题如何分析解决？</p>
+<a id="more"></a>
+<h3 id="为啥需要编解码？"><a href="#为啥需要编解码？" class="headerlink" title="为啥需要编解码？"></a>为啥需要编解码？</h3><ul>
+<li>计算机中存储信息的最小单位是字节，一个字节8位，能表示范围是0~255，假如说0表示汉字“我”，1表示。。，这样最多只能表示256个汉字，而汉字有很多。</li>
+<li>其他语言也太多，不可能255个字符只用来表示汉字。</li>
+</ul>
+<p>那就需要一个新的若干个byte组合的数据结构来表示众多的语言文字-char。<br>从char到byte需要编码，从byte到char需要解码。</p>
+<h3 id="常见编解码格式"><a href="#常见编解码格式" class="headerlink" title="常见编解码格式"></a>常见编解码格式</h3><p>编解码格式定义了从字节到字符，从字符到字节的转化的规则，通过这个规则可以把汉字转成字节传输，可以从字节转成汉字。<br>常见的编解码格式如下表：</p>
+<table>
+<thead>
+<tr>
+<th>编码格式</th>
+<th>表示个数</th>
+<th>所需字节数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ASCII</td>
+<td>128</td>
+<td>单字节的低七位表示</td>
+<td>0~31为控制字符如回车换行等；32~126为打印字符，可键盘输入能够显示出来</td>
+</tr>
+<tr>
+<td>ISO-8859-1</td>
+<td>表示256个字符</td>
+<td>单字节</td>
+<td>扩展ASCII码，ISO8859-1到ISO8859-15，ISO8859-涵盖大多数西欧语言字符，应用最广泛。</td>
+</tr>
+<tr>
+<td>GB2312</td>
+<td>7445</td>
+<td>双字节</td>
+<td>A1~A9是符号区，682个；B0~F7是汉字区，共6763个汉字。</td>
+</tr>
+<tr>
+<td>GBK</td>
+<td>23940</td>
+<td>双字节</td>
+<td>扩展自GB2312，支持更多汉字，范围从8140~FEFE（去掉XX7F），能表示21003汉字，兼容GB2312。</td>
+</tr>
+<tr>
+<td>GBK18030</td>
+<td>兼容GB2312</td>
+<td>应用不广泛</td>
+<td>应用不广泛</td>
+</tr>
+<tr>
+<td>UTF-16</td>
+<td>处理Unicode编码</td>
+<td>双字节</td>
+<td>用2字节表示Unicode的转化格式，任何字符都通过2个字节表示，定长表示，效率快，java以UTF-16内存的字符存储格式。适合在本地磁盘和内存之间使用，可以达到字符和字节快速切换。</td>
+</tr>
+<tr>
+<td>UTF-8</td>
+<td>处理unicode编码</td>
+<td>变长</td>
+<td>每个编码区域不同字码长度，不同类型字符可以由1~6个字节组成，节省空间，效率不如utf-16，介于gbk和uft-16之间，适合网络传输，对ASCII码单字节存储，单字符损坏不影响后面字符。其通过首字节的前2位确定需要几个字节表示。</td>
+</tr>
+</tbody>
+</table>
+<p>说明：unicode是统一码，ISO创建的全新的超语言字典，所有语言都可以通过这个字典相互翻译。</p>
+<h3 id="java中哪些场景要编码"><a href="#java中哪些场景要编码" class="headerlink" title="java中哪些场景要编码"></a>java中哪些场景要编码</h3><h4 id="IO编解码"><a href="#IO编解码" class="headerlink" title="IO编解码"></a>IO编解码</h4><p>分磁盘IO与网络IO，网络IO见javaWeb中编解码。<br>读文件（字节到字符）：java使用InputStreamReader关联字节到字符的桥梁，进行字节解码，解码由StreamDecoder使用指定charset，无则默认z中文使用GBK。</p>
+<p>写文件（字符到字节）：java使用OutputStreamWriter做字符到字节的转换桥梁，进行字符的编码，编码由StringEncoder处理，使用指定charset，无默认GBK。</p>
+<h4 id="内存中编解码"><a href="#内存中编解码" class="headerlink" title="内存中编解码"></a>内存中编解码</h4><h5 id="String提供的方法"><a href="#String提供的方法" class="headerlink" title="String提供的方法"></a>String提供的方法</h5><p>如下：</p>
+<pre><code>String s = &quot;hah哈你好&quot;;
+byte[] b = s.getBytes(&quot;UTF-8&quot;);
+String n =new String(b, &quot;UTF-8&quot;);
+</code></pre><h5 id="Charset的encode和decode方法"><a href="#Charset的encode和decode方法" class="headerlink" title="Charset的encode和decode方法"></a>Charset的encode和decode方法</h5><p> 其提供char[]到byte[]编码及byte[]到char[]解码，如下：   </p>
+<pre><code>Charset charset = Charset.forName(&quot;UTF-8&quot;);
+ByteBuffer byteBuffer = charset.encode(string);
+CharBuffer charBuffer = charset.decode(byteBuffer);
+</code></pre><h5 id="ByteBuffer类的软转换"><a href="#ByteBuffer类的软转换" class="headerlink" title="ByteBuffer类的软转换"></a>ByteBuffer类的软转换</h5><p>ByteBuffer提供char与byte的软转换，转换不需要编解码，只是把16bit的char拆分为2个8bit的byte表示，实际值没有修改，仅仅数据类型做转换：   </p>
+<pre><code>ByteBuffer bytebuffer2 = ByteBuffer.allocate(1024);   
+ByteBuffer byteBuffer = bytebuffer2.putChar(c);
+</code></pre><h3 id="javaWeb中涉及的编解码"><a href="#javaWeb中涉及的编解码" class="headerlink" title="javaWeb中涉及的编解码"></a>javaWeb中涉及的编解码</h3><p>网络传输都是以字节为单位，java对象要经过网络传输必须经过序列化，实现Serializable序列化接口。</p>
+<p>用户发起http请求，需要编码的地方有URL、Cookie、Parameter服务端收到htt请求，对URI、Cookie、POST表单参数解码，服务端还可能从数据库、本地或网络其他地方的文本文件读取数据，都可能存在解码问题。servlet处理请求，将响应数据编码通过socket返回到浏览器，浏览器解码为文本信息。</p>
+<h4 id="URL的编解码"><a href="#URL的编解码" class="headerlink" title="URL的编解码"></a>URL的编解码</h4><p>URL中可能有中文，需要编码，根据URL的编码规范RFC3986，浏览器将非ASCII字符按照某编码格式编码然后前面加上%，可以设置编码，不同浏览器不一样。</p>
+<p>tomcat对URL的URL部门进行解码的字符集在<connector uriencoding="UTF-8">设置，默认ISO-8859-1，一般URL有中文该项需设置。</connector></p>
+<p>URL的QueryString（get请求的url后的请求参数）是通过HTTP的Header的content-type定义传到服务器，要么默认ISO-8859-1，使用自定义的ContentTYpe，需要设置 <connector uriencoding="UTF-8" usebodyencodingforuri="true">，该配置不是针对全部URI采用BodyEncoding编码，而是只针对QueryString部分。</connector></p>
+<p>总结：尽量避免在URL中使用非ASCII字符，服务器最好也设置Connector的2个属性。</p>
+<h4 id="HTTP-Header的编解码"><a href="#HTTP-Header的编解码" class="headerlink" title="HTTP Header的编解码"></a>HTTP Header的编解码</h4><p>Header中的Cookie、redirectPath也可能存在编码问题。<br>tomcat对Header中项解码在调用request.getHeader()时进行。如果请求的Header项没有解码则调用MessageBytes的toString方法，默认使用ISO-8859-1，也不能设置其他格式，如果Header中有非ASCII字符，解码会乱码。</p>
+<h4 id="POST表单的编解码"><a href="#POST表单的编解码" class="headerlink" title="POST表单的编解码"></a>POST表单的编解码</h4><p>POST表单提交的参数的解码在第一次调用request.getParameter时发生，POST表单参数通过http的body传递到服务端。<br>整个流程是点提交时，浏览器根据contenttype的charset对表单参数编码，提交到服务端，服务端同样用contenttype中的字符集进行解码，所以post表单的参数一般不会乱码。<br>通过request.setCharacterEncoding(charset)可以设置。</p>
+<p>注意：要在第一次调用request.getParameter方法之前设置request.setCharacterEncoding(charset)，否则POST表单提交的数据可能出现乱码。</p>
+<h4 id="HTTP-BODY的编解码"><a href="#HTTP-BODY的编解码" class="headerlink" title="HTTP BODY的编解码"></a>HTTP BODY的编解码</h4><p>服务端返回的结果经过编码返回浏览器，浏览器解码，然后显示。<br>编码可以通过response.setCharacterEncoding设置，会覆盖request.setCharacterEncoding的值，通过Header的content-type返回给客户端。<br>浏览器首先根据Content-type解码，无则根据HTML的<meta http-equiv="content-type" content="text/html;charset=gbk">来解码，无则使用浏览器默认编码解码。</p>
+<h4 id="数据库连接的编解码"><a href="#数据库连接的编解码" class="headerlink" title="数据库连接的编解码"></a>数据库连接的编解码</h4><p>若使用jdbc，存取数据时要和数据的内置编码保持一致，可在jdbc的url中设置编码指定。</p>
+<pre><code>url=&quot;jdbc:mysql://localhost:3306/db?useUnicode=true&amp;characterEncoding=GBK&quot;
+</code></pre><h4 id="js编解码"><a href="#js编解码" class="headerlink" title="js编解码"></a>js编解码</h4><h5 id="js文件编解码"><a href="#js文件编解码" class="headerlink" title="js文件编解码"></a>js文件编解码</h5><pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;script src=&quot;xxx/a.js&quot; charset=&quot;gbk&quot;/&gt;
+</code></pre><p>引入的js文件若有中文，和本html页面的编码若不一致则会乱码，可以手动指定编码格式。</p>
+<h5 id="js的url编解码"><a href="#js的url编解码" class="headerlink" title="js的url编解码"></a>js的url编解码</h5><p>js中发起ajax请求的url默认编码受浏览器不同影响，可使用escape()、encodeURI()、encodeURIComponent()几个函数搞定。<br>java中的URLEncoder、URLDecoder和js的encodeURIComponent对应。</p>
+<h4 id="xml文件的编解码"><a href="#xml文件的编解码" class="headerlink" title="xml文件的编解码"></a>xml文件的编解码</h4><p>xml文件开始设定encoding</p>
+<h4 id="velocity模板设置编码"><a href="#velocity模板设置编码" class="headerlink" title="velocity模板设置编码"></a>velocity模板设置编码</h4><p>services.VelocityService.input.encoding=UTF-8</p>
+<h4 id="jsp设置编码"><a href="#jsp设置编码" class="headerlink" title="jsp设置编码"></a>jsp设置编码</h4><p>jsp页面开始设置charset</p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        esper介绍 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#介绍"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#时间流及复杂事件介绍"><span class="toc-text">时间流及复杂事件介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#为什么使用esper？"><span class="toc-text">为什么使用esper？</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        esper介绍
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2016-05-19 18:26:22</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#esper" title="esper">esper</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#esp" title="esp">esp</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#cep" title="cep">cep</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#eda" title="eda">eda</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>　　项目中遇到某个api连续报错N次则报警、账户风险控制、异地登录监测、衣服有长头发 &amp; 脖子上有不明唇印 &amp; 早出晚归 则判定丈夫出轨、套牌车辆预警，同时还要避免已报警一次的数据不会重复报警导致邮件短信风暴，怎么玩？<br><a id="more"></a></p>
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>Esper是一个事件流处理（ESP)和事件相关引擎（CEP，复杂事件处理)。针对实时驱动架构（EDA)，Esper当事件条件发生在事件流中时，能够触发使用POJO编写的自定义动作（操作）。Esper为高容量的事件相关性设计，这些场景中产生的数以百万的事件使传统的数据库架构难以存储所有数据以便以后的查询。</p>
+<p>一个定制的事件处理语言（EPL）允许表达丰富的事件条件、相关性、可跨越的时间窗口，进而最大限度降低构建一个应对复杂场景的开发工作。</p>
+<p>Esper是一个使用java开发的轻量级内核，它可以完全嵌入任何其他java进程、JEE应用服务器、基于java的企业级服务总线。它可以快速开发处理大量的传入消息或者事件的应用程序。</p>
+<h4 id="时间流及复杂事件介绍"><a href="#时间流及复杂事件介绍" class="headerlink" title="时间流及复杂事件介绍"></a>时间流及复杂事件介绍</h4><p>信息对于做出睿智的决定是关键的。这不仅在现实生活中正确而且在计算中也适用，尤其在几个领域很关键，如金融、欺诈检测、商业智能或者战场指挥。信息从不同的来源以信息、事件的形式流动，可以在指定时间给出状态的提示如股票价格。</p>
+<h4 id="为什么使用esper？"><a href="#为什么使用esper？" class="headerlink" title="为什么使用esper？"></a>为什么使用esper？</h4>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

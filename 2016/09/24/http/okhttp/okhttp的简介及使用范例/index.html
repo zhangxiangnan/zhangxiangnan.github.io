@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        okhttp简介及使用范例 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#okhttp简介"><span class="toc-text">okhttp简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Get请求示例"><span class="toc-text">Get请求示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST请求示例（提交json数据）"><span class="toc-text">POST请求示例（提交json数据）</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        okhttp简介及使用范例
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2016-09-24 16:34:32</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#okhttp" title="okhttp">okhttp</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#http" title="http">http</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#译" title="译">译</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h3 id="okhttp简介"><a href="#okhttp简介" class="headerlink" title="okhttp简介"></a>okhttp简介</h3><p>Http是现代应用程序的通讯方式，我们用来交换数据和媒体。提高http的效率使我们的项目加载更快、节省带宽。<br>okhttp客户端对请求响应做了哪些优化呢？以及简单get、post如何实现呢？</p>
+<a id="more"></a>
+<p>OkHttp是一个默认效率很高的http客户端：  </p>
+<ul>
+<li>Http/2支持所有的对同一个host主机的请求共享同一个socket。</li>
+<li>连接池减少链接数目（如果HTTP/2不可用）</li>
+<li>默认GZIP压缩减少传输数据大小</li>
+<li>缓存响应减少网络请求对于重复的请求。</li>
+</ul>
+<p>OkHttp当网络出问题时做如下尝试：<br>  它默默地恢复对于常见的连接问题。如果你的服务有多个ip地址，，OkHttp将选择一个其他可用的地址如果第一次连接请求失败的话。这对IPV6 + IPV4以及多数据中心的服务是很有必要的。OkHttp使用现代的TLS特征（SNI、ALPN）发起新连接，如果握手失败则使用TLS1.0进行兜底。</p>
+<p>使用OkHttp很简单，它的请求响应API使用流式创建器及不变性。它同时支持同步调用及带有回调机制的异步调用。</p>
+<p>OKHttp支持android&gt;=2.3，java版本最低1.7</p>
+<h3 id="Get请求示例"><a href="#Get请求示例" class="headerlink" title="Get请求示例"></a>Get请求示例</h3><pre><code>package cn.xiangnan.okhttpdemo;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import java.io.IOException;
+
+/**get请求数据
+* Created by zhangxiangnan on 16/9/24.
+*/
+public class GetDemo {
+OkHttpClient client = new OkHttpClient();
+
+String doGet(String url) throws IOException {
+    Request request = new Request.Builder()
+            .url(url)
+            .build();
+
+    Response response = client.newCall(request).execute();
+    return response.body().string();
+}
+
+public static void main(String[] args) throws IOException {
+    GetDemo demo = new GetDemo();
+    String response = demo.doGet(&quot;https://raw.github.com/square/okhttp/master/README.md&quot;);
+    System.out.println(response);
+}
+}
+</code></pre><h3 id="POST请求示例（提交json数据）"><a href="#POST请求示例（提交json数据）" class="headerlink" title="POST请求示例（提交json数据）"></a>POST请求示例（提交json数据）</h3><pre><code>package cn.xiangnan.okhttpdemo;
+
+import okhttp3.*;
+
+import java.io.IOException;
+
+/**post请求发送json数据
+ * Created by zhangxiangnan on 16/9/24.
+ */
+public class PostDemo {
+    public static final MediaType JSON
+            = MediaType.parse(&quot;application/json; charset=utf-8&quot;);
+
+    OkHttpClient client = new OkHttpClient();
+
+    String post(String url, String json) throws IOException {
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+            Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    String bowlingJson(String player1, String player2) {
+        return &quot;{&apos;winCondition&apos;:&apos;HIGH_SCORE&apos;,&quot;
+                + &quot;&apos;name&apos;:&apos;Bowling&apos;,&quot;
+                + &quot;&apos;round&apos;:4,&quot;
+                + &quot;&apos;lastSaved&apos;:1367702411696,&quot;
+                + &quot;&apos;dateStarted&apos;:1367702378785,&quot;
+                + &quot;&apos;players&apos;:[&quot;
+                + &quot;{&apos;name&apos;:&apos;&quot; + player1 + &quot;&apos;,&apos;history&apos;:[10,8,6,7,8],&apos;color&apos;:-13388315,&apos;total&apos;:39},&quot;
+                + &quot;{&apos;name&apos;:&apos;&quot; + player2 + &quot;&apos;,&apos;history&apos;:[6,10,5,10,10],&apos;color&apos;:-48060,&apos;total&apos;:41}&quot;
+                + &quot;]}&quot;;
+    }
+
+    public static void main(String[] args) throws IOException {
+        PostDemo example = new PostDemo();
+        String json = example.bowlingJson(&quot;Jesse&quot;, &quot;Jake&quot;);
+        String response = example.post(&quot;http://www.roundsapp.com/post&quot;, json);
+        System.out.println(response);
+    }
+}
+</code></pre>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

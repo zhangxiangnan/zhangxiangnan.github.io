@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        JAVA反射之字段&amp;方法&amp;构造函数 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#反射中字段、方法、构造函数的学习"><span class="toc-text">反射中字段、方法、构造函数的学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字段"><span class="toc-text">字段</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#获取字段类型"><span class="toc-text">获取字段类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取-amp-解析字段的修饰符"><span class="toc-text">获取&amp;解析字段的修饰符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#设置-amp-获取字段值"><span class="toc-text">设置&amp;获取字段值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常见代码错误"><span class="toc-text">常见代码错误</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#IllegalArgumentException由于不可转换类型（due-to-Inconvertible-Types）"><span class="toc-text">IllegalArgumentException由于不可转换类型（due to Inconvertible Types）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NoSuchFieldException-for-Non-Public-Fields"><span class="toc-text">NoSuchFieldException for Non-Public Fields</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#IllegalAccessException-when-Modifying-Final-Fields"><span class="toc-text">IllegalAccessException when Modifying Final Fields</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法"><span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#获取方法类型信息"><span class="toc-text">获取方法类型信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取方法或构造函数参数的名称和其他信息"><span class="toc-text">获取方法或构造函数参数的名称和其他信息</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#隐性和合成参数"><span class="toc-text">隐性和合成参数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#获取-amp-解析方法修饰符"><span class="toc-text">获取&amp;解析方法修饰符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#调用方法"><span class="toc-text">调用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#找到-amp-执行指定声明的方法"><span class="toc-text">找到&amp;执行指定声明的方法</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Troubleshooting-covers-common-errors-encountered-when-finding-or-invoking-methods"><span class="toc-text">Troubleshooting covers common errors encountered when finding or invoking methods</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#构造函数"><span class="toc-text">构造函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Finding-Constructors-illustrates-how-to-retrieve-constructors-with-specific-parameters"><span class="toc-text">Finding Constructors illustrates how to retrieve constructors with specific parameters</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Retrieving-and-Parsing-Constructor-Modifiers-shows-how-to-obtain-the-modifiers-of-a-constructor-declaration-and-other-information-about-the-constructor"><span class="toc-text">Retrieving and Parsing Constructor Modifiers shows how to obtain the modifiers of a constructor declaration and other information about the constructor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Creating-New-Class-Instances-shows-how-to-instantiate-an-instance-of-an-object-by-invoking-its-constructor"><span class="toc-text">Creating New Class Instances shows how to instantiate an instance of an object by invoking its constructor</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Troubleshooting-describes-common-errors-which-may-be-encountered-while-finding-or-invoking-constructors"><span class="toc-text">Troubleshooting describes common errors which may be encountered while finding or invoking constructors</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        JAVA反射之字段&amp;方法&amp;构造函数
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2017-04-12 20:32:02</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#java" title="java">java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#reflect" title="reflect">reflect</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h3 id="反射中字段、方法、构造函数的学习"><a href="#反射中字段、方法、构造函数的学习" class="headerlink" title="反射中字段、方法、构造函数的学习"></a>反射中字段、方法、构造函数的学习</h3><a id="more"></a>
+<p>反射定义了一个接口java.lang.reflect.Member，java.lang.reflect.Field、java.lang.reflect.Method、java.lang.reflect.Constructor都实现了该接口。</p>
+<p>注意:根据java7的语言规范，类的成员是类体可继承的组件，包括fields、methods、nested classes、interfaces及枚举类型。由于构造函数不能被继承，他们不是成员。这和java.lang.reflect.Member的实现类不同。</p>
+<h3 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h3><p>字段有一个类型和值，java.lang.reflect.Field类提供了访问类型信息和设置、获取某个对象的某字段值的方法。</p>
+<h4 id="获取字段类型"><a href="#获取字段类型" class="headerlink" title="获取字段类型"></a>获取字段类型</h4><p>一个字段要么是基本类型，要么是引用类型。有8中基本类型：boolean, byte, short, int, long, char, float, and double. 引用类型是直接或间接继承java.lang.Object类的子类，包括接口、数组及枚举类型。</p>
+<p>如下是一个输出不同类型字段的类型及泛华类型的展示：</p>
+<pre><code>  import java.lang.reflect.Field;
+  import java.util.List;
+
+  public class FieldSpy&lt;T&gt; {
+      public boolean[][] b = {{ false, false }, { true, true } };
+      public String name  = &quot;Alice&quot;;
+      public List&lt;Integer&gt; list;
+      public T val;
+
+      public static void main(String... args) {
+          try {
+              Class&lt;?&gt; c = Class.forName(args[0]);
+              Field f = c.getField(args[1]);
+              System.out.format(&quot;Type: %s%n&quot;, f.getType());
+              System.out.format(&quot;GenericType: %s%n&quot;, f.getGenericType());
+          } catch (ClassNotFoundException x) {
+              x.printStackTrace();
+          } catch (NoSuchFieldException x) {
+              x.printStackTrace();
+          }
+      }
+  }
+
+$ java FieldSpy FieldSpy b
+Type: class [[Z
+GenericType: class [[Z
+
+$ java FieldSpy FieldSpy name
+Type: class java.lang.String
+GenericType: class java.lang.String
+
+$ java FieldSpy FieldSpy list
+Type: interface java.util.List
+GenericType: java.util.List&lt;java.lang.Integer&gt;
+
+$ java FieldSpy FieldSpy val
+Type: class java.lang.Object
+GenericType: T
+</code></pre><p>说明:字段b的类型时boolean类型的二维数组，类型名称的语法规则根据Class.getName()。<br>字段val的类型时java.lang.Object，因为泛型的信息会在编译期间擦除泛型的相关信息。T被类型变量的上层限制替代，这里是java.lang.Object.<br>Field.getGenericType()方法会在类文件中查找签名属性（如果存在）。如果签名属性不存在，会返回Field.getType()的值（没有因为引入泛型发生改变）。反射的其他名称为getGenericFoo的方法实现思路类似。</p>
+<h4 id="获取-amp-解析字段的修饰符"><a href="#获取-amp-解析字段的修饰符" class="headerlink" title="获取&amp;解析字段的修饰符"></a>获取&amp;解析字段的修饰符</h4><p>字段声明时允许的几个修饰符：</p>
+<ul>
+<li>访问修饰符: public, protected, and private</li>
+<li>管理运行时行为的修饰符： transient and volatile</li>
+<li>限制到一个实例的修饰符: static</li>
+<li>禁止修改值的修饰符：final</li>
+<li><p>注解<br>Field.getModifiers()方法用来一个整数值，代表该字段声明的修饰符集（一个或多个修饰符），该整数值中位表示的修饰符在java.lang.reflect.Modifier定义。<br>下例展示了如何根据给定的修饰符查找字段，以及判断字段是否是合成（编译器生成的）及是否是枚举常量</p>
+<p>import java.lang.reflect.Field;<br>import java.lang.reflect.Modifier;<br>import static java.lang.System.out;</p>
+<p>enum Spy { BLACK , WHITE }</p>
+<p>public class FieldModifierSpy {</p>
+<pre><code>volatile int share;
+int instance;
+class Inner {}
+
+public static void main(String... args) {
+    try {
+        Class&lt;?&gt; c = Class.forName(args[0]);
+        int searchMods = 0x0;
+        for (int i = 1; i &lt; args.length; i++) {
+              searchMods |= modifierFromString(args[i]);
+        }
+
+        Field[] flds = c.getDeclaredFields();
+        out.format(&quot;Fields in Class &apos;%s&apos; containing modifiers:  %s%n&quot;,
+               c.getName(),
+               Modifier.toString(searchMods));
+        boolean found = false;
+        for (Field f : flds) {
+            int foundMods = f.getModifiers();
+            // Require all of the requested modifiers to be present
+            if ((foundMods &amp; searchMods) == searchMods) {
+                out.format(&quot;%-8s [ synthetic=%-5b enum_constant=%-5b ]%n&quot;,
+                       f.getName(), f.isSynthetic(),
+                       f.isEnumConstant());
+                found = true;
+            }
+        }
+
+        if (!found) {
+              out.format(&quot;No matching fields%n&quot;);
+        }
+        // production code should handle this exception more gracefully
+    } catch (ClassNotFoundException x) {
+        x.printStackTrace();
+    }
+}
+
+private static int modifierFromString(String s) {
+    int m = 0x0;
+    if (&quot;public&quot;.equals(s))           m |= Modifier.PUBLIC;
+    else if (&quot;protected&quot;.equals(s))   m |= Modifier.PROTECTED;
+    else if (&quot;private&quot;.equals(s))     m |= Modifier.PRIVATE;
+    else if (&quot;static&quot;.equals(s))      m |= Modifier.STATIC;
+    else if (&quot;final&quot;.equals(s))       m |= Modifier.FINAL;
+    else if (&quot;transient&quot;.equals(s))   m |= Modifier.TRANSIENT;
+    else if (&quot;volatile&quot;.equals(s))    m |= Modifier.VOLATILE;
+    return m;
+}
+</code></pre><p>}</p>
+</li>
+</ul>
+<pre><code>$ java FieldModifierSpy FieldModifierSpy volatile
+Fields in Class &apos;FieldModifierSpy&apos; containing modifiers:  volatile
+share    [ synthetic=false enum_constant=false ]
+
+$ java FieldModifierSpy Spy public
+Fields in Class &apos;Spy&apos; containing modifiers:  public
+BLACK    [ synthetic=false enum_constant=true  ]
+WHITE    [ synthetic=false enum_constant=true  ]
+
+$ java FieldModifierSpy FieldModifierSpy\$Inner final
+Fields in Class &apos;FieldModifierSpy$Inner&apos; containing modifiers:  final
+this$0   [ synthetic=true  enum_constant=false ]
+
+$ java FieldModifierSpy Spy private static final
+Fields in Class &apos;Spy&apos; containing modifiers:  private static final
+$VALUES  [ synthetic=true  enum_constant=false ]// 枚举类有private static final类型的合成字段$VALUES
+</code></pre><p>注意编译器会生成一些合成的运行时需要的字段，可使用Field.isSynthetic()来判断是否合成字段，合成的字段根据编译器不同不同。然而内部类引入this$0字段 (即嵌套类为非静态成员类）来持有最外层类的引用；枚举类引入$VALUES字段实现隐式地定义静态方法values().合成的类成员的名字未被指定，不同的编译器实现或不同版本中可能不同。Class.getDeclaredFields()方法会返回包含合成字段的数组，但是Class.getField()方法不会返回，因为合成字段通常不是public的。<br>因为Field字段实现了接口java.lang.reflect.AnnotatedElement，因此运行时能够获取到保留策略为java.lang.annotation.RetentionPolicy.RUNTIME的注解信息。</p>
+<h4 id="设置-amp-获取字段值"><a href="#设置-amp-获取字段值" class="headerlink" title="设置&amp;获取字段值"></a>设置&amp;获取字段值</h4><p>给定某个类的一个实例，是能够用反射来设置类的字段的值。这通常仅在特殊情况下不能够以常规方式设置值。因为这么做破坏了类的设计意图，应该慎用。<br>示例：</p>
+<pre><code>  import java.lang.reflect.Field;
+  import java.util.Arrays;
+  import static java.lang.System.out;
+
+  enum Tweedle { DEE, DUM }
+
+  public class Book {
+      public long chapters = 0;
+      public String[] characters = { &quot;Alice&quot;, &quot;White Rabbit&quot; };
+      public Tweedle twin = Tweedle.DEE;
+
+      public static void main(String... args) {
+          Book book = new Book();
+          String fmt = &quot;%6S:  %-12s = %s%n&quot;;
+
+          try {
+              Class&lt;?&gt; c = book.getClass();
+
+              Field chap = c.getDeclaredField(&quot;chapters&quot;);
+              out.format(fmt, &quot;before&quot;, &quot;chapters&quot;, book.chapters);
+                chap.setLong(book, 12);
+              out.format(fmt, &quot;after&quot;, &quot;chapters&quot;, chap.getLong(book));
+
+              Field chars = c.getDeclaredField(&quot;characters&quot;);
+              out.format(fmt, &quot;before&quot;, &quot;characters&quot;,
+                     Arrays.asList(book.characters));
+              String[] newChars = { &quot;Queen&quot;, &quot;King&quot; };
+              chars.set(book, newChars);
+              out.format(fmt, &quot;after&quot;, &quot;characters&quot;,
+                     Arrays.asList(book.characters));
+
+              Field t = c.getDeclaredField(&quot;twin&quot;);
+              out.format(fmt, &quot;before&quot;, &quot;twin&quot;, book.twin);
+              t.set(book, Tweedle.DUM);
+              out.format(fmt, &quot;after&quot;, &quot;twin&quot;, t.get(book));
+
+              // production code should handle these exceptions more gracefully
+          } catch (NoSuchFieldException x) {
+              x.printStackTrace();
+          } catch (IllegalAccessException x) {
+              x.printStackTrace();
+          }
+      }
+  }
+
+
+$ java Book
+BEFORE:  chapters     = 0
+ AFTER:  chapters     = 12
+BEFORE:  characters   = [Alice, White Rabbit]
+ AFTER:  characters   = [Queen, King]
+BEFORE:  twin         = DEE
+ AFTER:  twin         = DUM
+</code></pre><p>注意：通过反射设置字段的值有一定的性能开销，因为必须进行各种操作，比如访问权限验证。从运行时角度看，效果一样，并且操作就像在代码中直接改变值一样是原子性的。<br>反射的使用会导致丢失一些运行时优化，如下代码很可能被虚拟机优化，但是使用Field.set*()就不会进行优化。</p>
+<pre><code>int x = 1;
+x = 2;
+x = 3;
+</code></pre><h4 id="常见代码错误"><a href="#常见代码错误" class="headerlink" title="常见代码错误"></a>常见代码错误</h4><h5 id="IllegalArgumentException由于不可转换类型（due-to-Inconvertible-Types）"><a href="#IllegalArgumentException由于不可转换类型（due-to-Inconvertible-Types）" class="headerlink" title="IllegalArgumentException由于不可转换类型（due to Inconvertible Types）"></a>IllegalArgumentException由于不可转换类型（due to Inconvertible Types）</h5><p>当使用反射给引用类型的整数赋值基本类型的数值时，就会报该错误。不是用反射的话，编译器会执行自动装箱操作，将基本类型装箱为引用类型，这样类型检查就没问题，但是用反射的话，类型检查只发生在运行时，没有机会去执行装箱操作。</p>
+<pre><code>import java.lang.reflect.Field;
+
+public class FieldTrouble {
+    public Integer val;
+
+    public static void main(String... args) {
+    FieldTrouble ft = new FieldTrouble();
+    try {
+        Class&lt;?&gt; c = ft.getClass();
+        Field f = c.getDeclaredField(&quot;val&quot;);
+          f.setInt(ft, 42);               // IllegalArgumentException
+
+        // production code should handle these exceptions more gracefully
+    } catch (NoSuchFieldException x) {
+        x.printStackTrace();
+     } catch (IllegalAccessException x) {
+         x.printStackTrace();
+    }
+    }
+}
+$ java FieldTrouble
+Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: Can not set
+  java.lang.Object field FieldTrouble.val to (long)42
+        at sun.reflect.UnsafeFieldAccessorImpl.throwSetIllegalArgumentException
+          (UnsafeFieldAccessorImpl.java:146)
+        at sun.reflect.UnsafeFieldAccessorImpl.throwSetIllegalArgumentException
+          (UnsafeFieldAccessorImpl.java:174)
+        at sun.reflect.UnsafeObjectFieldAccessorImpl.setLong
+          (UnsafeObjectFieldAccessorImpl.java:102)
+        at java.lang.reflect.Field.setLong(Field.java:831)
+        at FieldTrouble.main(FieldTrouble.java:11)
+</code></pre><p>解决办法：</p>
+<pre><code>f.set(ft, new Integer(43));
+</code></pre><p>提示：当时使用反射设&amp;获取一个字段的值的时候，编译器没机会来执行装箱操作。编译器只能转换Class.isAssignableFrom()方法的规范描述的相关转换。如下：</p>
+<pre><code>Integer.class.isAssignableFrom(int.class) == false// 反射时引用类型到基本类型不成功
+int.class.isAssignableFrom(Integer.class) == false// 反射时基本类型到引用类型不成功
+</code></pre><h5 id="NoSuchFieldException-for-Non-Public-Fields"><a href="#NoSuchFieldException-for-Non-Public-Fields" class="headerlink" title="NoSuchFieldException for Non-Public Fields"></a>NoSuchFieldException for Non-Public Fields</h5><pre><code>$ java FieldSpy java.lang.String count
+java.lang.NoSuchFieldException: count
+        at java.lang.Class.getField(Class.java:1519)
+        at FieldSpy.main(FieldSpy.java:12)
+</code></pre><p>提示：Class.getField()及Class.getFields()方法返回class对象代表的类、枚举、接口的公共成员方法。想获取类声明的所有方法（不是继承），使用Class.getDeclaredFields()方法。</p>
+<h5 id="IllegalAccessException-when-Modifying-Final-Fields"><a href="#IllegalAccessException-when-Modifying-Final-Fields" class="headerlink" title="IllegalAccessException when Modifying Final Fields"></a>IllegalAccessException when Modifying Final Fields</h5><p>如果尝试获取&amp;设置私有或其他无法访问的字段的值，或设置final字段的值（不论修饰符是什么）可能会抛出IllegalAccessException异常。</p>
+<pre><code>  import java.lang.reflect.Field;
+
+  public class FieldTroubleToo {
+      public final boolean b = true;
+
+      public static void main(String... args) {
+      FieldTroubleToo ft = new FieldTroubleToo();
+      try {
+          Class&lt;?&gt; c = ft.getClass();
+          Field f = c.getDeclaredField(&quot;b&quot;);
+  //         f.setAccessible(true);  // solution
+          f.setBoolean(ft, Boolean.FALSE);   // IllegalAccessException
+
+          // production code should handle these exceptions more gracefully
+      } catch (NoSuchFieldException x) {
+          x.printStackTrace();
+      } catch (IllegalArgumentException x) {
+          x.printStackTrace();
+      } catch (IllegalAccessException x) {
+          x.printStackTrace();
+      }
+      }
+  }
+
+$ java FieldTroubleToo
+java.lang.IllegalAccessException: Can not set final boolean field
+  FieldTroubleToo.b to (boolean)false
+        at sun.reflect.UnsafeFieldAccessorImpl.
+          throwFinalFieldIllegalAccessException(UnsafeFieldAccessorImpl.java:55)
+        at sun.reflect.UnsafeFieldAccessorImpl.
+          throwFinalFieldIllegalAccessException(UnsafeFieldAccessorImpl.java:63)
+        at sun.reflect.UnsafeQualifiedBooleanFieldAccessorImpl.setBoolean
+          (UnsafeQualifiedBooleanFieldAccessorImpl.java:78)
+        at java.lang.reflect.Field.setBoolean(Field.java:686)
+        at FieldTroubleToo.main(FieldTroubleToo.java:12)
+</code></pre><p>提示：class初始化后，存在一个访问限制组织修改final字段值。Field声明为继承自AccessibleObject，提供了方法来抑制此检查。但这会产生副作用；如有时即使值已经被修改，但是程序的其他部分仍可能使用旧值。AccessibleObject.setAccessible()仅在安全上下文允许的情况下才能成功。</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>方法拥有返回值、参数、及可能抛出异常。java.lang.reflect.Method类提供了获取参数和返回值的类型信息的方法，也经常用来执行指定对象的方法。</p>
+<h4 id="获取方法类型信息"><a href="#获取方法类型信息" class="headerlink" title="获取方法类型信息"></a>获取方法类型信息</h4><p>一个字段要么是基本类型要么是引用类型，有8中基本类型：boolean、byte、short、int、long、char、float、double。一个引用类型指直接或间接继承java.lang.Object类包括接口、数组、枚举类型的任意对象。</p>
+<pre><code>  import java.lang.reflect.Field;
+  import java.util.List;
+
+  public class FieldSpy&lt;T&gt; {
+      public boolean[][] b = {{ false, false }, { true, true } };
+      public String name  = &quot;Alice&quot;;
+      public List&lt;Integer&gt; list;
+      public T val;// 参数化类型
+
+      public static void main(String... args) {
+          try {
+              Class&lt;?&gt; c = Class.forName(args[0]);
+              Field f = c.getField(args[1]);
+              System.out.format(&quot;Type: %s%n&quot;, f.getType());
+              System.out.format(&quot;GenericType: %s%n&quot;, f.getGenericType());
+
+              // production code should handle these exceptions more gracefully
+          } catch (ClassNotFoundException x) {
+              x.printStackTrace();
+          } catch (NoSuchFieldException x) {
+              x.printStackTrace();
+          }
+      }
+  }
+
+$ java FieldSpy FieldSpy b
+Type: class [[Z
+GenericType: class [[Z
+$ java FieldSpy FieldSpy name
+Type: class java.lang.String
+GenericType: class java.lang.String
+$ java FieldSpy FieldSpy list
+Type: interface java.util.List
+GenericType: java.util.List&lt;java.lang.Integer&gt;
+$ java FieldSpy FieldSpy val
+Type: class java.lang.Object
+GenericType: T
+</code></pre><p>字段b是二维boolean数组，其类型名称的语法在Class.getName()描述。<br>字段val的类型结果是继承自java.lang.Object，因为通过类型擦除实现泛型，在编译期间删除删除有关泛型的信息。所以T被类型变量的上界替换，该例是java.lang.Object.</p>
+<p>Field.getGenericType()在类文件中查找签名属性（如果存在），如果不存在，会降级为Field.getType()（没有因为泛型导致被改变）。反射中其他有类似getGenericFoo方法来获取Foo的某个值的实现都类似。</p>
+<h4 id="获取方法或构造函数参数的名称和其他信息"><a href="#获取方法或构造函数参数的名称和其他信息" class="headerlink" title="获取方法或构造函数参数的名称和其他信息"></a>获取方法或构造函数参数的名称和其他信息</h4><p>可以使用java.lang.reflect.Executable.getParameters方法来获取任何方法或构造函数的形式参数(Method和Constructor类继承了Executable，因此继承了Executable.getParameters方法)然而，.class文件不保存默认不保存形参名称。这是因为许多生成和使用类的工具不希望更大的静态或动态的包含参数名称的类文件占位。尤其，这些工具不得不处理更大的.class类文件，JVM也会使用更多的内存。另外，某些参数名称，如secret、password可能暴露安全敏感的方法信息。</p>
+<p>为了在制定类文件中保存形参名称，这样就能够在反射时拿到这些形参的名称，可以使用-parameters配置javac编译器来编译源文件。</p>
+<pre><code>import java.lang.reflect.`*`;
+import java.util.function.`*`;
+import static java.lang.System.out;
+
+public class MethodParameterSpy {
+
+  private static final String  fmt = &quot;%24s: %s%n&quot;;
+
+  &lt;E extends RuntimeException&gt; void genericThrow() throws E {}
+
+  public static void printClassConstructors(Class c) {
+    Constructor[] allConstructors = c.getConstructors();
+    out.format(fmt, &quot;Number of constructors&quot;, allConstructors.length);
+    for (Constructor currentConstructor : allConstructors) {
+        printConstructor(currentConstructor);
+    }  
+    Constructor[] allDeclConst = c.getDeclaredConstructors();
+    out.format(fmt, &quot;Number of declared constructors&quot;,
+        allDeclConst.length);
+    for (Constructor currentDeclConst : allDeclConst) {
+        printConstructor(currentDeclConst);
+    }          
+  }
+
+  public static void printClassMethods(Class c) {
+   Method[] allMethods = c.getDeclaredMethods();
+    out.format(fmt, &quot;Number of methods&quot;, allMethods.length);
+    for (Method m : allMethods) {
+        printMethod(m);
+    }        
+  }
+
+  public static void printConstructor(Constructor c) {
+    out.format(&quot;%s%n&quot;, c.toGenericString());
+    Parameter[] params = c.getParameters();
+    out.format(fmt, &quot;Number of parameters&quot;, params.length);
+    for (int i = 0; i &lt; params.length; i++) {
+        printParameter(params[i]);
+    }
+  }
+
+  public static void printMethod(Method m) {
+    out.format(&quot;%s%n&quot;, m.toGenericString());
+    out.format(fmt, &quot;Return type&quot;, m.getReturnType());
+    out.format(fmt, &quot;Generic return type&quot;, m.getGenericReturnType());
+
+    Parameter[] params = m.getParameters();
+    for (int i = 0; i &lt; params.length; i++) {
+        printParameter(params[i]);
+    }
+  }
+
+  public static void printParameter(Parameter p) {
+    out.format(fmt, &quot;Parameter class&quot;, p.getType());
+    out.format(fmt, &quot;Parameter name&quot;, p.getName());
+    out.format(fmt, &quot;Modifiers&quot;, p.getModifiers());
+    out.format(fmt, &quot;Is implicit?&quot;, p.isImplicit());//
+    out.format(fmt, &quot;Is name present?&quot;, p.isNamePresent());//参数名字是否存在
+    out.format(fmt, &quot;Is synthetic?&quot;, p.isSynthetic());//是否自动生成
+  }
+
+  public static void main(String... args) {        
+      try {
+          printClassConstructors(Class.forName(args[0]));
+          printClassMethods(Class.forName(args[0]));
+      } catch (ClassNotFoundException x) {
+          x.printStackTrace();
+      }
+  }
+}
+
+import java.util.`*`;
+
+public class ExampleMethods&lt;T&gt; {
+
+    public boolean simpleMethod(String stringParam, int intParam) {
+        System.out.println(&quot;String: &quot; + stringParam + &quot;, integer: &quot; + intParam);
+        return true;
+    }
+
+    public int varArgsMethod(String... manyStrings) {
+        return manyStrings.length;
+    }
+
+    public boolean methodWithList(List&lt;String&gt; listParam) {
+        return listParam.isEmpty();
+    }
+
+    public &lt;T&gt; void genericMethod(T[] a, Collection&lt;T&gt; c) {
+        System.out.println(&quot;Length of array: &quot; + a.length);
+        System.out.println(&quot;Size of collection: &quot; + c.size());
+    }
+
+}
+
+执行命令：
+java MethodParameterSpy ExampleMethods
+
+输出：
+
+Number of constructors: 1
+
+Constructor #1
+public ExampleMethods()
+
+Number of declared constructors: 1
+
+Declared constructor #1
+public ExampleMethods()
+
+Number of methods: 4
+
+Method #1
+public boolean ExampleMethods.simpleMethod(java.lang.String,int)
+           Return type: boolean
+   Generic return type: boolean
+       Parameter class: class java.lang.String
+        Parameter name: stringParam
+             Modifiers: 0
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: false
+       Parameter class: int
+        Parameter name: intParam
+             Modifiers: 0
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: false
+
+Method #2
+public int ExampleMethods.varArgsMethod(java.lang.String...)
+           Return type: int
+   Generic return type: int
+       Parameter class: class [Ljava.lang.String;
+        Parameter name: manyStrings
+             Modifiers: 0
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: false
+
+Method #3
+public boolean ExampleMethods.methodWithList(java.util.List&lt;java.lang.String&gt;)
+           Return type: boolean
+   Generic return type: boolean
+       Parameter class: interface java.util.List
+        Parameter name: listParam
+             Modifiers: 0
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: false
+
+Method #4
+public &lt;T&gt; void ExampleMethods.genericMethod(T[],java.util.Collection&lt;T&gt;)
+           Return type: void
+   Generic return type: void
+       Parameter class: class [Ljava.lang.Object;
+        Parameter name: a
+             Modifiers: 0
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: false
+       Parameter class: interface java.util.Collection
+        Parameter name: c
+             Modifiers: 0
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: false
+</code></pre><ul>
+<li>getType: 返回参数的声明类型的Class类</li>
+<li><p>getName: 返回参数的名字。如果名字存在，则返回.class类文件返回的名称，否则该方法返回自动生成的名称，形式如argN，N是定义该参数的方法的参数的索引。<br>  例如，假如没有指定-parameters编译配置来编译类文件，则如下输出：</p>
+<pre><code>public boolean ExampleMethods.simpleMethod(java.lang.String,int)
+         Return type: boolean
+ Generic return type: boolean
+     Parameter class: class java.lang.String
+      Parameter name: arg0
+           Modifiers: 0
+        Is implicit?: false
+    Is name present?: false
+       Is synthetic?: false
+     Parameter class: int
+      Parameter name: arg1
+           Modifiers: 0
+        Is implicit?: false
+    Is name present?: false
+       Is synthetic?: false
+</code></pre></li>
+<li><p>getModifiers :返回形参具有的各种特征表示的整数，该数值是下列值的和，如果应用于形式参数：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Value (in decimal)</th>
+<th>Value (in hexadecimal)</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>0x0010</td>
+<td>形参定义为final</td>
+</tr>
+<tr>
+<td>4096</td>
+<td>0x1000</td>
+<td>形参是synthetic合成的. 或者可以调用方法isSynthetic.</td>
+</tr>
+<tr>
+<td>32768</td>
+<td>0x8000</td>
+<td>形参在源码中声明为隐式的，或者可以调用isImplicit方法。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>isImplicit: 返回源码中声明的参数是否是隐性的</p>
+</li>
+<li><p>isNamePresent: 根据.class类文件来决定形参是否有一个名字，有返回true。</p>
+</li>
+<li>isSynthetic: 如果源码中声明的参数既不是隐性的也不是明确在源码定义的则返回true。</li>
+</ul>
+<h5 id="隐性和合成参数"><a href="#隐性和合成参数" class="headerlink" title="隐性和合成参数"></a>隐性和合成参数</h5><p>  某些构造函数是如果没有被显示声明则会在源码中隐性声明。如ExampleMethods例子无构造函数，一个默认构造函数就会隐性声明。MethodParameterSpy例子打印的隐性声明构造函数如下：</p>
+<pre><code>Number of declared constructors: 1
+public ExampleMethods()
+</code></pre><p>考虑如下片段：</p>
+<pre><code>public class MethodParameterExamples {
+  public class InnerClass { }
+}
+</code></pre><p>InnerClass是一个非京台嵌套类或内部类。内部类的有个构造函数也是隐性声明的。然而，该隐性构造包含一个参数，当java编译器编译内部类时，会生成一个类似下面的：</p>
+<pre><code>public class MethodParameterExamples {
+  public class InnerClass {
+      final MethodParameterExamples parent;
+      InnerClass(final MethodParameterExamples this$0) {
+          parent = this$0;
+      }
+  }
+}
+</code></pre><p>InnerClass构造包含一个参数，参数类型是包含内部类InnerClass的类，即MethodParameterExamples。参照如下输出:</p>
+<pre><code>public MethodParameterExamples$InnerClass(MethodParameterExamples)
+       Parameter class: class MethodParameterExamples
+        Parameter name: this$0
+             Modifiers: 32784
+          Is implicit?: true
+      Is name present?: true
+         Is synthetic?: false
+</code></pre><p>因为InnerClass类的构造函数是隐性指定的，所以参数也是隐性的。<br>注意：<br>Java编译器为内部类的构造函数创建一个形式参数，以使编译器能够将创建表达式中的引用（表示直接包含的实例）传递给成员类的构造函数。值32784表示InnerClass构造函数的参数同时是finla（16）和隐性的（32768）。Java语言允许变量名称含有$符号，但是约定来说，在变量名称中不用$符号。Java编译器提供的构造函数如果他们不能对应到源码里明确地或隐含的构造函数，则就是是synthetic合成的，除非他们是类初始化方法。合成的构造函数根据不同的编译器实现而不同。考虑如下：</p>
+<pre><code>public class MethodParameterExamples {
+  enum Colors {
+      RED, WHITE;
+  }
+}
+</code></pre><p>Java编译器针对该类会生成几个方法，兼容.class类文件结构，并提供enum构造预期的功能。如，Java编译器会创建一个类文件如下：</p>
+<pre><code>final class Colors extends java.lang.Enum&lt;Colors&gt; {
+  public final static Colors RED = new Colors(&quot;RED&quot;, 0);
+  public final static Colors BLUE = new Colors(&quot;WHITE&quot;, 1);
+
+  private final static values = new Colors[]{ RED, BLUE };
+
+  private Colors(String name, int ordinal) {
+      super(name, ordinal);
+  }
+
+  public static Colors[] values(){
+      return values;
+  }
+
+  public static Colors valueOf(String name){
+      return (Colors)java.lang.Enum.valueOf(Colors.class, name);
+  }
+}
+</code></pre><p>java编译器创建了三个构造和方法，为该枚举构造： Colors(String name, int ordinal), Colors[] values(), and Colors valueOf(String name). 方法values和valueOf是隐性声明的. 因此他们的形参名称也是隐性的。</p>
+<p>枚举的Colors(String name, int ordinal)构造函数是一个默认构造函数，隐性声明。然而，该构造的形参（name和ordinal）则是非隐性声明的，因为这些形参既不是明确的，也不是隐性的，是合成的。 (一个枚举构造的默认构造的形参不是隐性声明的，因为不同的编译器构造的形式要求不一样；另一个java编译器可能指定不同的形参。当编译器编译使用了枚举常量的表达式时，他们仅仅依赖枚举构造的公共静态字段，不依赖构造函数及常量初始化的过程。）<br>因此：</p>
+<pre><code>enum Colors:
+
+Number of constructors: 0
+
+Number of declared constructors: 1
+
+Declared constructor #1
+private MethodParameterExamples$Colors()
+       Parameter class: class java.lang.String
+        Parameter name: $enum$name
+             Modifiers: 4096
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: true
+       Parameter class: int
+        Parameter name: $enum$ordinal
+             Modifiers: 4096
+          Is implicit?: false
+      Is name present?: true
+         Is synthetic?: true
+
+Number of methods: 2
+
+Method #1
+public static MethodParameterExamples$Colors[]
+  MethodParameterExamples$Colors.values()
+           Return type: class [LMethodParameterExamples$Colors;
+   Generic return type: class [LMethodParameterExamples$Colors;
+
+Method #2
+public static MethodParameterExamples$Colors
+  MethodParameterExamples$Colors.valueOf(java.lang.String)
+           Return type: class MethodParameterExamples$Colors
+   Generic return type: class MethodParameterExamples$Colors
+       Parameter class: class java.lang.String
+        Parameter name: name
+             Modifiers: 32768
+          Is implicit?: true
+      Is name present?: true
+         Is synthetic?: false
+</code></pre><h4 id="获取-amp-解析方法修饰符"><a href="#获取-amp-解析方法修饰符" class="headerlink" title="获取&amp;解析方法修饰符"></a>获取&amp;解析方法修饰符</h4><p>有几个可能成为方法声明的几个修饰符：</p>
+<ul>
+<li>访问修饰符: public, protected, and private</li>
+<li>限制到一个实例的修饰符： static</li>
+<li>禁止改变值的修饰符：final</li>
+<li>需要覆盖的修饰符： abstract</li>
+<li>组织可重入的修饰符：synchronized</li>
+<li>表示用另一种语言实现的修饰符: native</li>
+<li>强制执行严格的浮点行为: strictfp</li>
+<li>注解：Annotations</li>
+</ul>
+<p>MethodModifierSpy例子展示的指定方法的修饰符，及方法是否是编译器生成（synthetic），是否包含可变参数，是否是桥接方法（编译器生成来支持通用接口).</p>
+<pre><code>  import java.lang.reflect.Method;
+  import java.lang.reflect.Modifier;
+  import static java.lang.System.out;
+
+  public class MethodModifierSpy {
+
+      private static int count;
+      private static synchronized void inc() { count++; }
+      private static synchronized int cnt() { return count; }
+
+      public static void main(String... args) {
+          try {
+              Class&lt;?&gt; c = Class.forName(args[0]);
+              Method[] allMethods = c.getDeclaredMethods();
+              for (Method m : allMethods) {
+              if (!m.getName().equals(args[1])) {
+                  continue;
+              }
+              out.format(&quot;%s%n&quot;, m.toGenericString());
+              out.format(&quot;  Modifiers:  %s%n&quot;,
+                     Modifier.toString(m.getModifiers()));
+              out.format(&quot;  [ synthetic=%-5b var_args=%-5b bridge=%-5b ]%n&quot;,
+                     m.isSynthetic(), m.isVarArgs(), m.isBridge());
+              inc();
+              }
+              out.format(&quot;%d matching overload%s found%n&quot;, cnt(),
+                     (cnt() == 1 ? &quot;&quot; : &quot;s&quot;));
+
+              // production code should handle this exception more gracefully
+          } catch (ClassNotFoundException x) {
+              x.printStackTrace();
+          }
+      }
+  }
+
+$ java MethodModifierSpy java.lang.Object wait
+public final void java.lang.Object.wait() throws java.lang.InterruptedException
+  Modifiers:  public final
+  [ synthetic=false var_args=false bridge=false ]
+public final void java.lang.Object.wait(long,int)
+  throws java.lang.InterruptedException
+  Modifiers:  public final
+  [ synthetic=false var_args=false bridge=false ]
+public final native void java.lang.Object.wait(long)
+  throws java.lang.InterruptedException
+  Modifiers:  public final native
+  [ synthetic=false var_args=false bridge=false ]
+3 matching overloads found
+
+$ java MethodModifierSpy java.lang.StrictMath toRadians
+public static double java.lang.StrictMath.toRadians(double)
+  Modifiers:  public static strictfp
+  [ synthetic=false var_args=false bridge=false ]
+1 matching overload found
+$ java MethodModifierSpy MethodModifierSpy inc
+private synchronized void MethodModifierSpy.inc()
+  Modifiers: private synchronized
+  [ synthetic=false var_args=false bridge=false ]
+1 matching overload found
+
+$ java MethodModifierSpy java.lang.Class getConstructor
+public java.lang.reflect.Constructor&lt;T&gt; java.lang.Class.getConstructor
+  (java.lang.Class&lt;T&gt;[]) throws java.lang.NoSuchMethodException,
+  java.lang.SecurityException
+  Modifiers: public transient
+  [ synthetic=false var_args=true bridge=false ]
+1 matching overload found
+
+$ java MethodModifierSpy java.lang.String compareTo
+public int java.lang.String.compareTo(java.lang.String)
+  Modifiers: public
+  [ synthetic=false var_args=false bridge=false ]
+public int java.lang.String.compareTo(java.lang.Object)
+  Modifiers: public volatile
+  [ synthetic=true  var_args=false bridge=true  ]
+
+  2 matching overloads found
+</code></pre><p>注意对Class.getConstructor()执行Method.isVarArgs()返回true，这因为该方法声明如下：</p>
+<pre><code>public Constructor&lt;T&gt; getConstructor(Class&lt;?&gt;... parameterTypes)
+</code></pre><p>而非：</p>
+<pre><code>public Constructor&lt;T&gt; getConstructor(Class&lt;?&gt; [] parameterTypes)
+</code></pre><p>注意String.compareTo()方法的输出有2个方法，一个是String.java声明的：</p>
+<pre><code>public int compareTo(String anotherString);
+</code></pre><p>另一个是编译器生成的桥接方法或合成方法。这种情况是因为String事先了参数化泛型接口Comparable。在类型擦除时，继承的方法Comparable.compareTo()的参数类型从java.lang.Object变为java.lang.String。由于Comparable接口中的compareTo方法的参数化类型和String的方法在类型擦除后，不在匹配，不存在覆盖overriding。在所有的情形中，这会产生一个编译错误，因为接口没有被实现。桥接方法的作用就是避免这种问题。</p>
+<p>Method实现了java.lang.reflect.AnnotatedElement，所以保留策略为运行时的注解java.lang.annotation.RetentionPolicy.RUNTIME都能够获取到.</p>
+<h4 id="调用方法"><a href="#调用方法" class="headerlink" title="调用方法"></a>调用方法</h4><p>反射提供了执行类的方法的手段。通常，反射调用方法仅仅当在非反射代码里不可能转化类的实例到指定类型时才是必须的。通过java.lang.reflect.Method.invoke()可以执行方法的调用，第一个参数表示执行哪一个实例的指定方法（如果方法是静态的，第一个参数应该是null），第二个参数表示方法执行所需的参数。如果底层方法抛出异常，会被java.lang.reflect.InvocationTargetException包装。方法的原始异常可以通过异常链机制的InvocationTargetException.getCause()方法获取。</p>
+<h5 id="找到-amp-执行指定声明的方法"><a href="#找到-amp-执行指定声明的方法" class="headerlink" title="找到&amp;执行指定声明的方法"></a>找到&amp;执行指定声明的方法</h5><pre><code>import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Locale;
+import static java.lang.System.out;
+import static java.lang.System.err;
+
+public class Deet&lt;T&gt; {
+  private boolean testDeet(Locale l) {
+      // getISO3Language() may throw a MissingResourceException
+      out.format(&quot;Locale = %s, ISO Language Code = %s%n&quot;, l.getDisplayName(), l.getISO3Language());
+      return true;
+  }
+
+  private int testFoo(Locale l) { return 0; }
+  private boolean testBar() { return true; }
+
+  public static void main(String... args) {
+    if (args.length != 4) {
+        err.format(&quot;Usage: java Deet &lt;classname&gt; &lt;langauge&gt; &lt;country&gt; &lt;variant&gt;%n&quot;);
+        return;
+    }
+
+    try {
+        Class&lt;?&gt; c = Class.forName(args[0]);
+        Object t = c.newInstance();
+
+        Method[] allMethods = c.getDeclaredMethods();
+        for (Method m : allMethods) {
+        String mname = m.getName();
+        if (!mname.startsWith(&quot;test&quot;)
+            || (m.getGenericReturnType() != boolean.class)) {
+            continue;
+        }
+         Type[] pType = m.getGenericParameterTypes();
+         if ((pType.length != 1)
+            || Locale.class.isAssignableFrom(pType[0].getClass())) {
+             continue;
+         }
+
+        out.format(&quot;invoking %s()%n&quot;, mname);
+        try {
+            m.setAccessible(true);
+            Object o = m.invoke(t, new Locale(args[1], args[2], args[3]));
+            out.format(&quot;%s() returned %b%n&quot;, mname, (Boolean) o);
+
+        // Handle any exceptions thrown by method to be invoked.
+        } catch (InvocationTargetException x) {
+            Throwable cause = x.getCause();
+            err.format(&quot;invocation of %s failed: %s%n&quot;,
+                   mname, cause.getMessage());
+        }
+        }
+
+        // production code should handle these exceptions more gracefully
+    } catch (ClassNotFoundException x) {
+        x.printStackTrace();
+    } catch (InstantiationException x) {
+        x.printStackTrace();
+    } catch (IllegalAccessException x) {
+        x.printStackTrace();
+    }
+  }
+}
+</code></pre><p>Deet invokes getDeclaredMethods() which will return all methods explicitly declared in the class. Also, Class.isAssignableFrom() is used to determine whether the parameters of the located method are compatible with the desired invocation. Technically the code could have tested whether the following statement is true since Locale is final:</p>
+<p>Locale.class == pType[0].getClass()<br>However, Class.isAssignableFrom() is more general.</p>
+<p>$ java Deet Deet ja JP JP<br>invoking testDeet()<br>Locale = Japanese (Japan,JP),<br>ISO Language Code = jpn<br>testDeet() returned true<br>$ java Deet Deet xx XX XX<br>invoking testDeet()<br>invocation of testDeet failed:<br>Couldn’t find 3-letter language code for xx<br>First, note that only testDeet() meets the declaration restrictions enforced by the code. Next, when testDeet() is passed an invalid argument it throws an unchecked java.util.MissingResourceException. In reflection, there is no distinction in the handling of checked versus unchecked exceptions. They are all wrapped in an InvocationTargetException</p>
+<p>Invoking Methods with a Variable Number of Arguments</p>
+<p>Method.invoke() may be used to pass a variable number of arguments to a method. The key concept to understand is that methods of variable arity are implemented as if the variable arguments are packed in an array.</p>
+<p>The InvokeMain example illustrates how to invoke the main() entry point in any class and pass a set of arguments determined at runtime.</p>
+<p>import java.lang.reflect.InvocationTargetException;<br>import java.lang.reflect.Method;<br>import java.util.Arrays;</p>
+<p>public class InvokeMain {<br>    public static void main(String… args) {<br>    try {<br>        Class&lt;?&gt; c = Class.forName(args[0]);<br>        Class[] argTypes = new Class[] { String[].class };<br>        Method main = c.getDeclaredMethod(“main”, argTypes);<br>          String[] mainArgs = Arrays.copyOfRange(args, 1, args.length);<br>        System.out.format(“invoking %s.main()%n”, c.getName());<br>        main.invoke(null, (Object)mainArgs);</p>
+<pre><code>    // production code should handle these exceptions more gracefully
+} catch (ClassNotFoundException x) {
+    x.printStackTrace();
+} catch (NoSuchMethodException x) {
+    x.printStackTrace();
+} catch (IllegalAccessException x) {
+    x.printStackTrace();
+} catch (InvocationTargetException x) {
+    x.printStackTrace();
+}
+}
+</code></pre><p>}<br>First, to find the main() method the code searches for a class with the name “main” with a single parameter that is an array of String Since main() is static, null is the first argument to Method.invoke(). The second argument is the array of arguments to be passed.</p>
+<p>$ java InvokeMain Deet Deet ja JP JP<br>invoking Deet.main()<br>invoking testDeet()<br>Locale = Japanese (Japan,JP),<br>ISO Language Code = jpn<br>testDeet() returned true</p>
+<h4 id="Troubleshooting-covers-common-errors-encountered-when-finding-or-invoking-methods"><a href="#Troubleshooting-covers-common-errors-encountered-when-finding-or-invoking-methods" class="headerlink" title="Troubleshooting covers common errors encountered when finding or invoking methods"></a>Troubleshooting covers common errors encountered when finding or invoking methods</h4><h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>The Reflection APIs for constructors are defined in java.lang.reflect.Constructor and are similar to those for methods, with two major exceptions: first, constructors have no return values; second, the invocation of a constructor creates a new instance of an object for a given class.</p>
+<h4 id="Finding-Constructors-illustrates-how-to-retrieve-constructors-with-specific-parameters"><a href="#Finding-Constructors-illustrates-how-to-retrieve-constructors-with-specific-parameters" class="headerlink" title="Finding Constructors illustrates how to retrieve constructors with specific parameters"></a>Finding Constructors illustrates how to retrieve constructors with specific parameters</h4><h4 id="Retrieving-and-Parsing-Constructor-Modifiers-shows-how-to-obtain-the-modifiers-of-a-constructor-declaration-and-other-information-about-the-constructor"><a href="#Retrieving-and-Parsing-Constructor-Modifiers-shows-how-to-obtain-the-modifiers-of-a-constructor-declaration-and-other-information-about-the-constructor" class="headerlink" title="Retrieving and Parsing Constructor Modifiers shows how to obtain the modifiers of a constructor declaration and other information about the constructor"></a>Retrieving and Parsing Constructor Modifiers shows how to obtain the modifiers of a constructor declaration and other information about the constructor</h4><h4 id="Creating-New-Class-Instances-shows-how-to-instantiate-an-instance-of-an-object-by-invoking-its-constructor"><a href="#Creating-New-Class-Instances-shows-how-to-instantiate-an-instance-of-an-object-by-invoking-its-constructor" class="headerlink" title="Creating New Class Instances shows how to instantiate an instance of an object by invoking its constructor"></a>Creating New Class Instances shows how to instantiate an instance of an object by invoking its constructor</h4><h4 id="Troubleshooting-describes-common-errors-which-may-be-encountered-while-finding-or-invoking-constructors"><a href="#Troubleshooting-describes-common-errors-which-may-be-encountered-while-finding-or-invoking-constructors" class="headerlink" title="Troubleshooting describes common errors which may be encountered while finding or invoking constructors"></a>Troubleshooting describes common errors which may be encountered while finding or invoking constructors</h4>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

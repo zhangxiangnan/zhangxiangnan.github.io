@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        guava的不可变集合 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#jdk的Collections-ImmutableXXX例子"><span class="toc-text">jdk的Collections.ImmutableXXX例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#guava例子"><span class="toc-text">guava例子:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用不可变对象的原因"><span class="toc-text">使用不可变对象的原因</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何使用"><span class="toc-text">如何使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#智能拷贝"><span class="toc-text">智能拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#asList"><span class="toc-text">asList</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jdk可变集合与guava不可变集合对应关系？"><span class="toc-text">jdk可变集合与guava不可变集合对应关系？</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        guava的不可变集合
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2016-10-20 13:10:12</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#guava" title="guava">guava</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#immutableCollections" title="immutableCollections">immutableCollections</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>guava的不可变集合讲解-Immutable*<br><a id="more"></a></p>
+<h3 id="jdk的Collections-ImmutableXXX例子"><a href="#jdk的Collections-ImmutableXXX例子" class="headerlink" title="jdk的Collections.ImmutableXXX例子"></a>jdk的Collections.ImmutableXXX例子</h3><pre><code>package cn.zxn.guava.collections;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+// jdk的方法修改原始集合会导致不可变集合发生变化
+public class ImmutableCollectionsExplained {
+
+public static void main(String[] args) {
+    List&lt;String&gt; originalList = new ArrayList&lt;String&gt;();
+    originalList.add(&quot;S&quot;);
+    originalList.add(&quot;Q&quot;);
+
+    List&lt;String&gt; unmodifiableList = Collections.unmodifiableList(originalList);
+    System.out.println(unmodifiableList.size());// 输出2
+
+    // 原始集合新增一个item
+    originalList.add(&quot;T&quot;);
+    // 不可变集合的大小变化,变为3
+    System.out.println(unmodifiableList.size());// 输出3
+}
+}
+</code></pre><h3 id="guava例子"><a href="#guava例子" class="headerlink" title="guava例子:"></a>guava例子:</h3><pre><code>// 不可变set声明示例
+public static final ImmutableSet&lt;String&gt; COLOR_NAMES = ImmutableSet.of(
+  &quot;red&quot;,
+  &quot;orange&quot;,
+  &quot;yellow&quot;,
+  &quot;green&quot;,
+  &quot;blue&quot;,
+  &quot;purple&quot;);
+
+ class Foo {
+    final ImmutableSet&lt;Bar&gt; immutableBars;
+    Foo(Set&lt;Bar&gt; bars) {
+      this.immutableBars = ImmutableSet.copyOf(bars);
+      // 保护性拷贝，使集合immutableBars不可被删除增加元素，但是可以调用元素自身的方法进行元素的修改
+    }
+  }
+</code></pre><h3 id="使用不可变对象的原因"><a href="#使用不可变对象的原因" class="headerlink" title="使用不可变对象的原因"></a>使用不可变对象的原因</h3><p>不可变对象有许多好处，包括：</p>
+<ul>
+<li>安全地被不受信任的类库使用</li>
+<li>线程安全：可以在多线程中使用而不用考虑(静态条件)加锁同步</li>
+<li>不需要支持可变性（自动扩充等机制），可以更好的节省空间、时间。所有的不可变集合实现都比对应的可变集合更能高效的使用内存。</li>
+<li>可以当做常量使用，其会保持不变</li>
+</ul>
+<p>对对象objects做不可变的拷贝使一项很好的保护性编程技巧。Guava为每一个标准的集合类型提供简单、易用及不可变的版本，包含Guava自己的集合。</p>
+<p>JDK提供Collections.unmodifiableXXX类似的方法，但在我们看来:</p>
+<ul>
+<li>笨拙且冗长：在你想做保护性拷贝的地方使用起来不方便</li>
+<li>不安全：返回的集合仅仅在其他地方没有持有对原始集合的引用前提下才真正不可变，guava则对原始集合的操作（删除、增加）不影响不可变集合。</li>
+<li><p>效率低下：内部数据结构仍然有可变集合会有的开销，包括并发修改检查，hash表中额外的空间等。</p>
+<p><strong>当你不想改变一个集合，或者希望一个集合保持不变，进行保护性拷贝原集合到一个不可变集合是一个不错的实践</strong></p>
+<p>重点：每一个Guava不可变集合实现类不能存放null值。我们做了一个彻底的对Google内部代码库调查，发现null元素仅仅在5%的情形里允许，其余95%则是若是null则会快速失败。如果你需要使用null值，考虑使用Collections.unmodifiableList及它的相关方法，可以允许null。更多细节见：<a href="https://github.com/google/guava/wiki/UsingAndAvoidingNullExplained" target="_blank" rel="noopener">here</a></p>
+</li>
+</ul>
+<h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><p>一个InmutableXXX集合可以通过以下几种方式创建：</p>
+<ul>
+<li>使用copyOf方法，例如，ImmutableSet.copyOf(set)；</li>
+<li>使用Of方法，如，ImmutableSet.of(“a”, “b”, “c”)或者ImmutableMap.of(“a”, “1”, “b”, 2);</li>
+<li><p>使用一个创建器Builder，如，   </p>
+<pre><code>public static final ImmutableSet&lt;Color&gt; GOOGLE_COLORS =
+   ImmutableSet.&lt;Color&gt;builder()
+       .addAll(WEBSAFE_COLORS)
+       .add(new Color(0, 191, 255))
+       .build();
+</code></pre><p>除了排序集合，元素顺序在构建时被保持。<br>如，ImmutableSet.of(“a”, “b”, “c”, “a”, “d”, “b”) 迭代输出会得到结果： “a”, “b”, “c”, “d”.</p>
+</li>
+</ul>
+<h4 id="智能拷贝"><a href="#智能拷贝" class="headerlink" title="智能拷贝"></a>智能拷贝</h4><p>  有必要记住ImmutableXXX.copyOf尝试避免拷贝数据（如果这么做安全地话）– 确切的细节未指定，但是实现通常是智能的，如，</p>
+<pre><code>ImmutableSet&lt;String&gt; foobar = ImmutableSet.of(&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;);
+thingamajig(foobar);
+
+void thingamajig(Collection&lt;String&gt; collection) {
+  ImmutableList&lt;String&gt; defensiveCopy = ImmutableList.copyOf(collection);
+  ...
+}
+</code></pre><p>以上代码中，ImmutableList.copyOf(foobar) 将足够智能仅仅返回foobar.asList()，这是ImmutableSet的一个O(1)时间复杂度的方法。</p>
+<p>ImmutableXXX.copyOf(ImmutableCollection)通常会在符合以下条件下来尝试来避免线性时间的拷贝：</p>
+<ul>
+<li>在常数时间内使用底层数据结果是可能的话：如, ImmutableSet.copyOf(ImmutableList) 不能在常数时间内完成.</li>
+<li>不会导致内存泄漏 – 如，如果你有ImmutableList<string> hugeList（超大list）,如果执行ImmutableList.copyOf(hugeList.subList(0, 10)), 就会执行一个显示的拷贝, 以便避免意外地持有hugeList中不必要的引用</string></li>
+<li>不会改变语义 – 所以ImmutableSet.copyOf(myImmutableSortedSet) 将会执行显示的拷贝, 因为ImmutableSet使用的hashCode()和equals拥有跟ImmutableSortedSet的基于comparator的行为不同的语义。<br>这有助于减少良好的防御性编程风格的性能开销。</li>
+</ul>
+<h4 id="asList"><a href="#asList" class="headerlink" title="asList"></a>asList</h4><p>所有的不可变集合通过asList()返回一个不可变的ImmutableList视图，所以 – 如 – 即使你有使用ImmutableSortedSet排序的数据，你也可以使用sortedSet.asList().get(k).来得到第k个最小的元素。</p>
+<p>返回ImmutableList是普遍的 – 不总是，但是经常 – 一个常数级开销的视图，而不是执行显示拷贝。即，它比平常的List通常更智能 – 如，它底层使用更高效的contains方法。</p>
+<h3 id="jdk可变集合与guava不可变集合对应关系？"><a href="#jdk可变集合与guava不可变集合对应关系？" class="headerlink" title="jdk可变集合与guava不可变集合对应关系？"></a>jdk可变集合与guava不可变集合对应关系？</h3><table>
+<thead>
+<tr>
+<th>接口</th>
+<th>接口属于jdk或guava</th>
+<th>不可变版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Collection</td>
+<td>JDK</td>
+<td>ImmutableCollection</td>
+</tr>
+<tr>
+<td>List</td>
+<td>JDK</td>
+<td>ImmutableList</td>
+</tr>
+<tr>
+<td>Set</td>
+<td>JDK</td>
+<td>ImmutableSet</td>
+</tr>
+<tr>
+<td>SortedSet/NavigableSet</td>
+<td>JDK</td>
+<td>ImmutableSortedSet</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>JDK</td>
+<td>ImmutableMap</td>
+</tr>
+<tr>
+<td>SortedMap</td>
+<td>JDK</td>
+<td>ImmutableSortedMap</td>
+</tr>
+<tr>
+<td>Multiset</td>
+<td>Guava</td>
+<td>ImmutableMultiset</td>
+</tr>
+<tr>
+<td>SortedMultiset</td>
+<td>Guava</td>
+<td>ImmutableSortedMultiset</td>
+</tr>
+<tr>
+<td>Multimap</td>
+<td>Guava</td>
+<td>ImmutableMultimap</td>
+</tr>
+<tr>
+<td>ListMultimap</td>
+<td>Guava</td>
+<td>ImmutableListMultimap</td>
+</tr>
+<tr>
+<td>SetMultimap</td>
+<td>Guava</td>
+<td>ImmutableSetMultimap</td>
+</tr>
+<tr>
+<td>BiMap</td>
+<td>Guava</td>
+<td>ImmutableBiMap</td>
+</tr>
+<tr>
+<td>ClassToInstanceMap</td>
+<td>Guava</td>
+<td>ImmutableClassToInstanceMap</td>
+</tr>
+<tr>
+<td>Table</td>
+<td>Guava</td>
+<td>ImmutableTable</td>
+</tr>
+</tbody>
+</table>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
