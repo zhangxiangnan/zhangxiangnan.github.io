@@ -150,199 +150,44 @@
 </ul>
 </li>
 <li>箭头标记</li>
-<li><p>一个单独表达式或者代码块,如:</p>
-<pre><code>p.getGender() == Person.Sex.MALE
-    &amp;&amp; p.getAge() &gt;= 18
-    &amp;&amp; p.getAge() &lt;= 25
-</code></pre><p>如果是一个单独的表达式,jvm计算表达式的值并返回;此外,也可以使用return语句:</p>
-<pre><code>p -&gt; {
-    return p.getGender() == Person.Sex.MALE
-        &amp;&amp; p.getAge() &gt;= 18
-        &amp;&amp; p.getAge() &lt;= 25;
-}
-</code></pre><p> return语句不是一个表达式。在lambda表达式里,必须使用{}把return的语句块包起来,但若{}包的语句块中的方法为void方法,则可以省略{},如:</p>
-<pre><code>email -&gt; System.out.println(email)
-</code></pre><p> lambda表达式看着很像一个方法声明,可以将lambda表达式认为是匿名的方法调用。</p>
-</li>
+<li>一个单独表达式或者代码块,如:</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p.getGender() == Person.Sex.MALE</span><br><span class="line">    &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">    &amp;&amp; p.getAge() &lt;= 25</span><br></pre></td></tr></table></figure>
+<p>如果是一个单独的表达式,jvm计算表达式的值并返回;此外,也可以使用return语句:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">p -&gt; &#123;</span><br><span class="line">    return p.getGender() == Person.Sex.MALE</span><br><span class="line">        &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">        &amp;&amp; p.getAge() &lt;= 25;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>return语句不是一个表达式。在lambda表达式里,必须使用{}把return的语句块包起来,但若{}包的语句块中的方法为void方法,则可以省略{},如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">email -&gt; System.out.println(email)</span><br></pre></td></tr></table></figure>
+<p>lambda表达式看着很像一个方法声明,可以将lambda表达式认为是匿名的方法调用。</p>
 <p>lambda表达式也可以有多个形参,如:</p>
-<pre><code>public class Calculator {
-    interface IntegerMath {
-        int operation(int a, int b);   
-    }
-    public int operateBinary(int a, int b, IntegerMath op) {
-        return op.operation(a, b);
-    }
-    public static void main(String... args) {
-        Calculator myApp = new Calculator();
-        IntegerMath addition = (a, b) -&gt; a + b;
-        IntegerMath subtraction = (a, b) -&gt; a - b;
-        System.out.println(&quot;40 + 2 = &quot; + myApp.operateBinary(40, 2, addition));
-        System.out.println(&quot;20 - 10 = &quot; + myApp.operateBinary(20, 10, subtraction));    
-    }
-}
-</code></pre><h4 id="lambda表达式理想用例"><a href="#lambda表达式理想用例" class="headerlink" title="lambda表达式理想用例"></a>lambda表达式理想用例</h4><h5 id="创建找出符合某一个特征的人员的搜索方法-找出年龄大于指定值的人"><a href="#创建找出符合某一个特征的人员的搜索方法-找出年龄大于指定值的人" class="headerlink" title="创建找出符合某一个特征的人员的搜索方法(找出年龄大于指定值的人?)"></a>创建找出符合某一个特征的人员的搜索方法(找出年龄大于指定值的人?)</h5><pre><code>public static void printPersonsOlderThan(List&lt;Person&gt; roster, int age) {
-    for (Person p : roster) {
-        if (p.getAge() &gt;= age) {
-            p.printPerson();
-        }
-    }
-}
-</code></pre><p>   思考: 不支持泛型,改变Person类型就需要重写方法&amp;只支持大于某个年龄,想要找出小于某个年龄的就..</p>
-<h5 id="创建更通用的搜索方法"><a href="#创建更通用的搜索方法" class="headerlink" title="创建更通用的搜索方法"></a>创建更通用的搜索方法</h5><pre><code>public static void printPersonsWithinAgeRange(
-    List&lt;Person&gt; roster, int low, int high) {
-    for (Person p : roster) {
-        if (low &lt;= p.getAge() &amp;&amp; p.getAge() &lt; high) {
-            p.printPerson();
-        }
-    }
-}
-</code></pre><p>思考:支持小于某个年龄,但是假如想找出某个指定性别、或者指定性别结合年龄条件? 假如Person类增加了关系、地域等属性呢?每种属性定义一个搜索方法也可以,但会散乱,<br>可以将搜索条件单独隔离到其他方法里。</p>
-<h5 id="在局部类中指定搜索条件的代码"><a href="#在局部类中指定搜索条件的代码" class="headerlink" title="在局部类中指定搜索条件的代码"></a>在局部类中指定搜索条件的代码</h5><pre><code>public static void printPersons(
-    List&lt;Person&gt; roster, CheckPerson tester) {
-    for (Person p : roster) {
-        if (tester.test(p)) {
-            p.printPerson();
-        }
-    }
-}
-
-interface CheckPerson {
-    boolean test(Person p);
-}
-
-class CheckPersonSelectiveService implements CheckPerson {
-    public boolean test(Person p) {
-        return p.gender == Person.Sex.MALE &amp;&amp;
-            p.getAge() &gt;= 18 &amp;&amp;
-            p.getAge() &lt;= 25;
-    }
-}
-</code></pre><p>  调用:</p>
-<pre><code>printPersons(
-    roster, new CheckPersonEligibleForSelectiveService());
-</code></pre><p>  思考:改变person类型不需要重写printPersons方法,但引入一个接口及每一种搜索一个局部实现类,可以将局部实现类改为匿名类。</p>
-<h5 id="匿名类中指定搜索条件代码"><a href="#匿名类中指定搜索条件代码" class="headerlink" title="匿名类中指定搜索条件代码"></a>匿名类中指定搜索条件代码</h5><pre><code>printPersons(
-    roster,
-    new CheckPerson() {
-        public boolean test(Person p) {
-            return p.getGender() == Person.Sex.MALE
-                &amp;&amp; p.getAge() &gt;= 18
-                &amp;&amp; p.getAge() &lt;= 25;
-        }
-    }
-);
-</code></pre><p>  思考:改为了匿名类,省去局部类的定义,但是匿名类仍然较烦琐,由于CheckPerson接口只有一个方法,则可以考虑使用lambda表达式替换</p>
-<h5 id="使用lambda表达式替换搜索代码"><a href="#使用lambda表达式替换搜索代码" class="headerlink" title="使用lambda表达式替换搜索代码"></a>使用lambda表达式替换搜索代码</h5><p>CheckPerson是一个函数接口,函数接口是仅有一个抽象方法的任何接口(可能包含多个静态方法或默认方法)。由于函数接口仅有一个方法,因为实现该接口时可以忽略方法名称,如下:</p>
-<pre><code>printPersons(
-    roster,
-    (Person p) -&gt; p.getGender() == Person.Sex.MALE
-        &amp;&amp; p.getAge() &gt;= 18
-        &amp;&amp; p.getAge() &lt;= 25
-);
-</code></pre><p>思考:可以使用标准函数接口来进一步减少代码</p>
-<h5 id="使用lambda表达式的标准函数接口"><a href="#使用lambda表达式的标准函数接口" class="headerlink" title="使用lambda表达式的标准函数接口"></a>使用lambda表达式的标准函数接口</h5><p>由于CheckPerson接口仅有一个方法,返回bool值,很简单,不必要在程序中自己定义,所以JDK在java.util.function中提供了若干标准函数接口,可以使用Predicate<t>替换CheckPerson:</t></p>
-<pre><code>interface Predicate&lt;T&gt; {
-    boolean test(T t);
-}
-</code></pre><p>  这是一个泛型接口,替换CheckPerson,如下:</p>
-<pre><code>public static void printPersonsWithPredicate(
-    List&lt;Person&gt; roster, Predicate&lt;Person&gt; tester) {
-    for (Person p : roster) {
-        if (tester.test(p)) {
-            p.printPerson();
-        }
-    }
-}
-</code></pre><p>  经过匿名类替换+使用lambda表达式,调用方式如下:</p>
-<pre><code>printPersonsWithPredicate(
-    roster,
-    p -&gt; p.getGender() == Person.Sex.MALE
-        &amp;&amp; p.getAge() &gt;= 18
-        &amp;&amp; p.getAge() &lt;= 25
-);
-</code></pre><h5 id="整个程序中使用lambda表达式"><a href="#整个程序中使用lambda表达式" class="headerlink" title="整个程序中使用lambda表达式"></a>整个程序中使用lambda表达式</h5><p> 再考虑这个方法:</p>
-<pre><code>public static void printPersonsWithPredicate(
-    List&lt;Person&gt; roster, Predicate&lt;Person&gt; tester) {
-    for (Person p : roster) {
-        if (tester.test(p)) {
-            p.printPerson();
-        }
-    }
-}
-</code></pre><p> p.printPerson()是一个void方法,对p操作,假如不是执行printPerson操作而是执行其他类似void操作,那么就需要修改printPersonsWithPredicate方法,考虑将这个操作使用<br>  lambda表达式,JDK提供了Consumer<t>标准函数接口,可改进如下:</t></p>
-<pre><code>public static void processPersons(
-    List&lt;Person&gt; roster,
-    Predicate&lt;Person&gt; tester,
-    Consumer&lt;Person&gt; block) {
-        for (Person p : roster) {
-            if (tester.test(p)) {
-                block.accept(p);
-            }
-        }
-}
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class Calculator &#123;</span><br><span class="line">    interface IntegerMath &#123;</span><br><span class="line">        int operation(int a, int b);   </span><br><span class="line">    &#125;</span><br><span class="line">    public int operateBinary(int a, int b, IntegerMath op) &#123;</span><br><span class="line">        return op.operation(a, b);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void main(String... args) &#123;</span><br><span class="line">        Calculator myApp = new Calculator();</span><br><span class="line">        IntegerMath addition = (a, b) -&gt; a + b;</span><br><span class="line">        IntegerMath subtraction = (a, b) -&gt; a - b;</span><br><span class="line">        System.out.println(&quot;40 + 2 = &quot; + myApp.operateBinary(40, 2, addition));</span><br><span class="line">        System.out.println(&quot;20 - 10 = &quot; + myApp.operateBinary(20, 10, subtraction));    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="lambda表达式理想用例"><a href="#lambda表达式理想用例" class="headerlink" title="lambda表达式理想用例"></a>lambda表达式理想用例</h4><h5 id="创建找出符合某一个特征的人员的搜索方法-找出年龄大于指定值的人"><a href="#创建找出符合某一个特征的人员的搜索方法-找出年龄大于指定值的人" class="headerlink" title="创建找出符合某一个特征的人员的搜索方法(找出年龄大于指定值的人?)"></a>创建找出符合某一个特征的人员的搜索方法(找出年龄大于指定值的人?)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static void printPersonsOlderThan(List&lt;Person&gt; roster, int age) &#123;</span><br><span class="line">    for (Person p : roster) &#123;</span><br><span class="line">        if (p.getAge() &gt;= age) &#123;</span><br><span class="line">            p.printPerson();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>思考: 不支持泛型,改变Person类型就需要重写方法&amp;只支持大于某个年龄,想要找出小于某个年龄的就..</p>
+<h5 id="创建更通用的搜索方法"><a href="#创建更通用的搜索方法" class="headerlink" title="创建更通用的搜索方法"></a>创建更通用的搜索方法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static void printPersonsWithinAgeRange(</span><br><span class="line">    List&lt;Person&gt; roster, int low, int high) &#123;</span><br><span class="line">    for (Person p : roster) &#123;</span><br><span class="line">        if (low &lt;= p.getAge() &amp;&amp; p.getAge() &lt; high) &#123;</span><br><span class="line">            p.printPerson();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>思考:支持小于某个年龄,但是假如想找出某个指定性别、或者指定性别结合年龄条件? 假如Person类增加了关系、地域等属性呢?每种属性定义一个搜索方法也可以,但会散乱,<br>可以将搜索条件单独隔离到其他方法里。</p>
+<h5 id="在局部类中指定搜索条件的代码"><a href="#在局部类中指定搜索条件的代码" class="headerlink" title="在局部类中指定搜索条件的代码"></a>在局部类中指定搜索条件的代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public static void printPersons(</span><br><span class="line">    List&lt;Person&gt; roster, CheckPerson tester) &#123;</span><br><span class="line">    for (Person p : roster) &#123;</span><br><span class="line">        if (tester.test(p)) &#123;</span><br><span class="line">            p.printPerson();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface CheckPerson &#123;</span><br><span class="line">    boolean test(Person p);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class CheckPersonSelectiveService implements CheckPerson &#123;</span><br><span class="line">    public boolean test(Person p) &#123;</span><br><span class="line">        return p.gender == Person.Sex.MALE &amp;&amp;</span><br><span class="line">            p.getAge() &gt;= 18 &amp;&amp;</span><br><span class="line">            p.getAge() &lt;= 25;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  调用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">printPersons(</span><br><span class="line">    roster, new CheckPersonEligibleForSelectiveService());</span><br></pre></td></tr></table></figure></p>
+<p>  思考:改变person类型不需要重写printPersons方法,但引入一个接口及每一种搜索一个局部实现类,可以将局部实现类改为匿名类。</p>
+<h5 id="匿名类中指定搜索条件代码"><a href="#匿名类中指定搜索条件代码" class="headerlink" title="匿名类中指定搜索条件代码"></a>匿名类中指定搜索条件代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">printPersons(</span><br><span class="line">    roster,</span><br><span class="line">    new CheckPerson() &#123;</span><br><span class="line">        public boolean test(Person p) &#123;</span><br><span class="line">            return p.getGender() == Person.Sex.MALE</span><br><span class="line">                &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">                &amp;&amp; p.getAge() &lt;= 25;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>  思考:改为了匿名类,省去局部类的定义,但是匿名类仍然较烦琐,由于CheckPerson接口只有一个方法,则可以考虑使用lambda表达式替换</p>
+<h5 id="使用lambda表达式替换搜索代码"><a href="#使用lambda表达式替换搜索代码" class="headerlink" title="使用lambda表达式替换搜索代码"></a>使用lambda表达式替换搜索代码</h5><p>CheckPerson是一个函数接口,函数接口是仅有一个抽象方法的任何接口(可能包含多个静态方法或默认方法)。由于函数接口仅有一个方法,因为实现该接口时可以忽略方法名称,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">printPersons(</span><br><span class="line">    roster,</span><br><span class="line">    (Person p) -&gt; p.getGender() == Person.Sex.MALE</span><br><span class="line">        &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">        &amp;&amp; p.getAge() &lt;= 25</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>思考:可以使用标准函数接口来进一步减少代码</p>
+<h5 id="使用lambda表达式的标准函数接口"><a href="#使用lambda表达式的标准函数接口" class="headerlink" title="使用lambda表达式的标准函数接口"></a>使用lambda表达式的标准函数接口</h5><p>由于CheckPerson接口仅有一个方法,返回bool值,很简单,不必要在程序中自己定义,所以JDK在java.util.function中提供了若干标准函数接口,可以使用Predicate<t>替换CheckPerson:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface Predicate&lt;T&gt; &#123;</span><br><span class="line">    boolean test(T t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></t></p>
+<p>  这是一个泛型接口,替换CheckPerson,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static void printPersonsWithPredicate(</span><br><span class="line">    List&lt;Person&gt; roster, Predicate&lt;Person&gt; tester) &#123;</span><br><span class="line">    for (Person p : roster) &#123;</span><br><span class="line">        if (tester.test(p)) &#123;</span><br><span class="line">            p.printPerson();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  经过匿名类替换+使用lambda表达式,调用方式如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">printPersonsWithPredicate(</span><br><span class="line">    roster,</span><br><span class="line">    p -&gt; p.getGender() == Person.Sex.MALE</span><br><span class="line">        &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">        &amp;&amp; p.getAge() &lt;= 25</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h5 id="整个程序中使用lambda表达式"><a href="#整个程序中使用lambda表达式" class="headerlink" title="整个程序中使用lambda表达式"></a>整个程序中使用lambda表达式</h5><p> 再考虑这个方法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static void printPersonsWithPredicate(</span><br><span class="line">    List&lt;Person&gt; roster, Predicate&lt;Person&gt; tester) &#123;</span><br><span class="line">    for (Person p : roster) &#123;</span><br><span class="line">        if (tester.test(p)) &#123;</span><br><span class="line">            p.printPerson();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p> p.printPerson()是一个void方法,对p操作,假如不是执行printPerson操作而是执行其他类似void操作,那么就需要修改printPersonsWithPredicate方法,考虑将这个操作使用<br>  lambda表达式,JDK提供了Consumer<t>标准函数接口,可改进如下:</t></p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public static void processPersons(</span><br><span class="line">    List&lt;Person&gt; roster,</span><br><span class="line">    Predicate&lt;Person&gt; tester,</span><br><span class="line">    Consumer&lt;Person&gt; block) &#123;</span><br><span class="line">        for (Person p : roster) &#123;</span><br><span class="line">            if (tester.test(p)) &#123;</span><br><span class="line">                block.accept(p);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </code></pre><p> 调用:</p>
-<pre><code>processPersons(
-     roster,
-     p -&gt; p.getGender() == Person.Sex.MALE
-         &amp;&amp; p.getAge() &gt;= 18
-         &amp;&amp; p.getAge() &lt;= 25,
-     p -&gt; p.printPerson()
-);
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">processPersons(</span><br><span class="line">     roster,</span><br><span class="line">     p -&gt; p.getGender() == Person.Sex.MALE</span><br><span class="line">         &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">         &amp;&amp; p.getAge() &lt;= 25,</span><br><span class="line">     p -&gt; p.printPerson()</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 </code></pre><p> 假如想验证人员身份或获取联系信息呢?需要一个函数接口,其有一个抽象方法,返回一个值,The Function&lt;T,R&gt;标准接口有一个R apply(T t)方法,应用到如下示例:</p>
-<pre><code>public static void processPersonsWithFunction(
-    List&lt;Person&gt; roster,
-    Predicate&lt;Person&gt; tester,
-    Function&lt;Person, String&gt; mapper,
-    Consumer&lt;String&gt; block) {
-    for (Person p : roster) {
-        if (tester.test(p)) {
-            String data = mapper.apply(p);
-            block.accept(data);
-        }
-    }
-}
-</code></pre><p>调用(获取每一个人的邮箱信息,并打印):</p>
-<pre><code>processPersonsWithFunction(
-    roster,
-    p -&gt; p.getGender() == Person.Sex.MALE
-        &amp;&amp; p.getAge() &gt;= 18
-        &amp;&amp; p.getAge() &lt;= 25,
-    p -&gt; p.getEmailAddress(),
-    email -&gt; System.out.println(email)
-);
-</code></pre><h5 id="使用泛型使扩展性更强"><a href="#使用泛型使扩展性更强" class="headerlink" title="使用泛型使扩展性更强"></a>使用泛型使扩展性更强</h5><p>processPersonsWithFunction方法的泛型版本如下:</p>
-<pre><code>public static &lt;X, Y&gt; void processElements(
-    Iterable&lt;X&gt; source,
-    Predicate&lt;X&gt; tester,
-    Function &lt;X, Y&gt; mapper,
-    Consumer&lt;Y&gt; block) {
-    for (X p : source) {
-        if (tester.test(p)) {
-            Y data = mapper.apply(p);
-            block.accept(data);
-        }
-    }
-}
-</code></pre><p>  调用:</p>
-<pre><code>processElements(
-    roster,
-    p -&gt; p.getGender() == Person.Sex.MALE
-        &amp;&amp; p.getAge() &gt;= 18
-        &amp;&amp; p.getAge() &lt;= 25,
-    p -&gt; p.getEmailAddress(),
-    email -&gt; System.out.println(email)
-);
-</code></pre><h4 id="聚合操作"><a href="#聚合操作" class="headerlink" title="聚合操作"></a>聚合操作</h4><p>如下聚合操作:</p>
-<pre><code>roster
-    .stream()
-    .filter(
-        p -&gt; p.getGender() == Person.Sex.MALE
-            &amp;&amp; p.getAge() &gt;= 18
-            &amp;&amp; p.getAge() &lt;= 25)
-    .map(p -&gt; p.getEmailAddress())
-    .forEach(email -&gt; System.out.println(email));
-</code></pre><p> filter、map、foreach都是聚合操作,聚会操作从stream流中获取元素,而不是从集合中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static void processPersonsWithFunction(</span><br><span class="line">    List&lt;Person&gt; roster,</span><br><span class="line">    Predicate&lt;Person&gt; tester,</span><br><span class="line">    Function&lt;Person, String&gt; mapper,</span><br><span class="line">    Consumer&lt;String&gt; block) &#123;</span><br><span class="line">    for (Person p : roster) &#123;</span><br><span class="line">        if (tester.test(p)) &#123;</span><br><span class="line">            String data = mapper.apply(p);</span><br><span class="line">            block.accept(data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用(获取每一个人的邮箱信息,并打印):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">processPersonsWithFunction(</span><br><span class="line">    roster,</span><br><span class="line">    p -&gt; p.getGender() == Person.Sex.MALE</span><br><span class="line">        &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">        &amp;&amp; p.getAge() &lt;= 25,</span><br><span class="line">    p -&gt; p.getEmailAddress(),</span><br><span class="line">    email -&gt; System.out.println(email)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h5 id="使用泛型使扩展性更强"><a href="#使用泛型使扩展性更强" class="headerlink" title="使用泛型使扩展性更强"></a>使用泛型使扩展性更强</h5><p>processPersonsWithFunction方法的泛型版本如下:</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;X, Y&gt; void processElements(</span><br><span class="line">    Iterable&lt;X&gt; source,</span><br><span class="line">    Predicate&lt;X&gt; tester,</span><br><span class="line">    Function &lt;X, Y&gt; mapper,</span><br><span class="line">    Consumer&lt;Y&gt; block) &#123;</span><br><span class="line">    for (X p : source) &#123;</span><br><span class="line">        if (tester.test(p)) &#123;</span><br><span class="line">            Y data = mapper.apply(p);</span><br><span class="line">            block.accept(data);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre><p>  调用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">processElements(</span><br><span class="line">    roster,</span><br><span class="line">    p -&gt; p.getGender() == Person.Sex.MALE</span><br><span class="line">        &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">        &amp;&amp; p.getAge() &lt;= 25,</span><br><span class="line">    p -&gt; p.getEmailAddress(),</span><br><span class="line">    email -&gt; System.out.println(email)</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h4 id="聚合操作"><a href="#聚合操作" class="headerlink" title="聚合操作"></a>聚合操作</h4><p>如下聚合操作:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">roster</span><br><span class="line">    .stream()</span><br><span class="line">    .filter(</span><br><span class="line">        p -&gt; p.getGender() == Person.Sex.MALE</span><br><span class="line">            &amp;&amp; p.getAge() &gt;= 18</span><br><span class="line">            &amp;&amp; p.getAge() &lt;= 25)</span><br><span class="line">    .map(p -&gt; p.getEmailAddress())</span><br><span class="line">    .forEach(email -&gt; System.out.println(email));</span><br></pre></td></tr></table></figure></p>
+<p> filter、map、foreach都是聚合操作,聚会操作从stream流中获取元素,而不是从集合中。</p>
 <p> 流是一系列元素,跟集合不同,流不是存储元素的数据结构,流从数据源如集合中通过管道/流水线传输元素。<br> 管道/流水线是一系列流操作,一系列聚合操作,如filter-map-foreach。聚合操作通常接受lambda表达式作为参数,来自定义行为。</p>
 <p>管道/流水线包含以下几部分:</p>
 <ul>
@@ -351,312 +196,62 @@ class CheckPersonSelectiveService implements CheckPerson {
 <li>一个结束操作<br>如forEach生成一个非流的结果,如void、基本类型数据、一个集合。<h5 id="聚合操作与迭代的区别"><a href="#聚合操作与迭代的区别" class="headerlink" title="聚合操作与迭代的区别"></a>聚合操作与迭代的区别</h5>聚合操作如forEach,与迭代器看起来类似,但是有一个根本区别:</li>
 <li>聚合操作使用内部迭代<br>聚合操作使用内部迭代,只需要提供迭代集合,内部迭代可以是顺序迭代,也可以是并行迭代(并行计算,合并结果);迭代器是外部迭代,需要提供迭代集合与迭代方式,是顺序迭代方式。</li>
 <li>聚合操作从流获取数据来处理<br>聚合操作从流获取数据,非集合,所以聚合操作也称为流操作。</li>
-<li><p>支持传递代码/行为为参数(lambada表达式作为参数)</p>
-<h4 id="归约操作"><a href="#归约操作" class="headerlink" title="归约操作"></a>归约操作</h4><p>   double average = roster</p>
-<pre><code>.stream()
-.filter(p -&gt; p.getGender() == Person.Sex.MALE)
-.mapToInt(Person::getAge)
-.average()
-.getAsDouble();
-</code></pre></li>
+<li>支持传递代码/行为为参数(lambada表达式作为参数)<h4 id="归约操作"><a href="#归约操作" class="headerlink" title="归约操作"></a>归约操作</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">double average = roster</span><br><span class="line">    .stream()</span><br><span class="line">    .filter(p -&gt; p.getGender() == Person.Sex.MALE)</span><br><span class="line">    .mapToInt(Person::getAge)</span><br><span class="line">    .average()</span><br><span class="line">    .getAsDouble();</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <p>JDK有很多结束操作,如average、sum、min、max、count,这些操作通过组合流的元素内容来返回一个值,这些操作叫做归约操作(reduction operations)。<br>JDK也有返回一个集合的归约操作,很多归约操作都是执行一个指定的任务,如计算平均值,元素分组。JDK提供了通用的归约操作,Stream.reduce&amp;Stream.collect</p>
-<h5 id="Stream-reduce"><a href="#Stream-reduce" class="headerlink" title="Stream.reduce"></a>Stream.reduce</h5><p>Stream.reduce是通用的归约操作,如下例则使用了Stream.sum 归约操作:</p>
-<pre><code>Integer totalAge = roster
-    .stream()
-    .mapToInt(Person::getAge)
-    .sum();
-</code></pre><p>使用Stream.reduce实现相同的逻辑如下:</p>
-<pre><code>Integer totalAgeReduce = roster
-   .stream()
-   .map(Person::getAge)
-   .reduce(
-       0,
-       (a, b) -&gt; a + b);
-</code></pre><p>reduce操作有2个参数:</p>
-<pre><code>- 第一个为标识元素
-    是归约的初始值和当流中无元素时的默认返回值
-- 累加器函数
-    累加器函数有2个参数,归约的部分结果值和流中的下一个要计算的元素
-</code></pre><p>reduce操作每次都返回一个新值,累加器每次处理完一个元素后也是返回一个新值,所以如果想要归约流的元素为一个更复杂的对象,如集合,由于每次会返回一个新的集合,性能低下,可以用Stream.collect</p>
-<h5 id="Stream-collect"><a href="#Stream-collect" class="headerlink" title="Stream.collect"></a>Stream.collect</h5><p>reduce方法每处理一个元素会新建一个值,collect方法则是修改、转换一个已经存在的值。考虑如何计算流中元素的平均值?需要两份数据,一个是所有元素的个数,一个是其和,和reduce方法以及其他所有<br>归约方法一样,collect也只返回一个值,可以创建一个新的数据类型,包含这两个计数,如下:</p>
-<pre><code>class Averager implements IntConsumer {
-    private int total = 0;
-    private int count = 0;
-
-    public double average() {
-        return count &gt; 0 ? ((double) total)/count : 0;
-    }
-
-    public void accept(int i) { total += i; count++; }
-
-    public void combine(Averager other) {
-        total += other.total;
-        count += other.count;
-    }
-}
-
-
-Averager averageCollect = roster.stream()
-    .filter(p -&gt; p.getGender() == Person.Sex.MALE)
-    .map(Person::getAge)
-    .collect(Averager::new, Averager::accept, Averager::combine);
-
-System.out.println(&quot;Average age of male members: &quot; +
-    averageCollect.average());
-</code></pre><p>该例collect方法有三个参数:</p>
-<pre><code>- supplier
-    结果容器创建函数,工厂方法,为collect操作创建一个新实例,创建结果容器的实例,本例则是创建Averager的实例。
-- accumulator
-    累加器函数合并一个流元素到结果容器中,本例中,即修改Averager的2个计数
-- combiner
-    合并函数将两个结果容器的内容进行合并,本例中,为对两个Averager容器中的2个计数进行合并相加。
-</code></pre><p>注意:</p>
-<pre><code>- supplier是一个lambda表达式或者方法引用,而非reduce操作中的identity元素是一个值。
-- accumulator累加器和combiner合并函数不返回值
-- 可以结合并行流使用collect操作
-</code></pre><p>尽管JDK提供了average操作来计算平均值,当我们需要计算流中元素的几个值时就可以使用collect操作+自定义类。<br>collect操作最适合集合,如下:</p>
-<pre><code>List&lt;String&gt; namesOfMaleMembersCollect = roster
-    .stream()
-    .filter(p -&gt; p.getGender() == Person.Sex.MALE)
-    .map(p -&gt; p.getName())
-    .collect(Collectors.toList());
-</code></pre><p>该例collect只需要一个Collector类型参数,该类封装了collect操作所需的三个参数(supplier、accumulator、combiner),Collectors类包含许多有用的操作,如累加元素到集合,根据不同条件分类元素等。<br>Collectors.toList返回的Collector会累加流元素到一个新list。</p>
-<p>按性别分类:</p>
-<pre><code>Map&lt;Person.Sex, List&lt;Person&gt;&gt; byGender =
-    roster
-        .stream()
-        .collect(
-            Collectors.groupingBy(Person::getGender));
-</code></pre><p>groupingBy方法根据指定的分类函数(getGener)来分类,返回的map的key为getGender的返回值。</p>
-<p>获取集合中的成员姓名并按性别分类:</p>
-<pre><code>Map&lt;Person.Sex, List&lt;String&gt;&gt; namesByGender =
-    roster
-        .stream()
-        .collect(
-            Collectors.groupingBy(
-                Person::getGender,                      
-                Collectors.mapping(
-                    Person::getName,
-                    Collectors.toList())));
-</code></pre><p>本例的groupingBy方法有2个参数,一个分类函数,一个Collector实例,Collector参数称为下游收集器,该收集器应用到另一个收集器的结果。</p>
+<h5 id="Stream-reduce"><a href="#Stream-reduce" class="headerlink" title="Stream.reduce"></a>Stream.reduce</h5><p>Stream.reduce是通用的归约操作,如下例则使用了Stream.sum 归约操作:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Integer totalAge = roster</span><br><span class="line">    .stream()</span><br><span class="line">    .mapToInt(Person::getAge)</span><br><span class="line">    .sum();</span><br></pre></td></tr></table></figure></p>
+<p>使用Stream.reduce实现相同的逻辑如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Integer totalAgeReduce = roster</span><br><span class="line">   .stream()</span><br><span class="line">   .map(Person::getAge)</span><br><span class="line">   .reduce(</span><br><span class="line">       0,</span><br><span class="line">       (a, b) -&gt; a + b);</span><br></pre></td></tr></table></figure></p>
+<p>reduce操作有2个参数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- 第一个为标识元素</span><br><span class="line">    是归约的初始值和当流中无元素时的默认返回值</span><br><span class="line">- 累加器函数</span><br><span class="line">    累加器函数有2个参数,归约的部分结果值和流中的下一个要计算的元素</span><br></pre></td></tr></table></figure></p>
+<p>reduce操作每次都返回一个新值,累加器每次处理完一个元素后也是返回一个新值,所以如果想要归约流的元素为一个更复杂的对象,如集合,由于每次会返回一个新的集合,性能低下,可以用Stream.collect</p>
+<h5 id="Stream-collect"><a href="#Stream-collect" class="headerlink" title="Stream.collect"></a>Stream.collect</h5><p>reduce方法每处理一个元素会新建一个值,collect方法则是修改、转换一个已经存在的值。考虑如何计算流中元素的平均值?需要两份数据,一个是所有元素的个数,一个是其和,和reduce方法以及其他所有<br>归约方法一样,collect也只返回一个值,可以创建一个新的数据类型,包含这两个计数,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class Averager implements IntConsumer &#123;</span><br><span class="line">    private int total = 0;</span><br><span class="line">    private int count = 0;</span><br><span class="line"></span><br><span class="line">    public double average() &#123;</span><br><span class="line">        return count &gt; 0 ? ((double) total)/count : 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void accept(int i) &#123; total += i; count++; &#125;</span><br><span class="line"></span><br><span class="line">    public void combine(Averager other) &#123;</span><br><span class="line">        total += other.total;</span><br><span class="line">        count += other.count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Averager averageCollect = roster.stream()</span><br><span class="line">    .filter(p -&gt; p.getGender() == Person.Sex.MALE)</span><br><span class="line">    .map(Person::getAge)</span><br><span class="line">    .collect(Averager::new, Averager::accept, Averager::combine);</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;Average age of male members: &quot; +</span><br><span class="line">    averageCollect.average());</span><br></pre></td></tr></table></figure></p>
+<p>该例collect方法有三个参数:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- supplier</span><br><span class="line">    结果容器创建函数,工厂方法,为collect操作创建一个新实例,创建结果容器的实例,本例则是创建Averager的实例。</span><br><span class="line">- accumulator</span><br><span class="line">    累加器函数合并一个流元素到结果容器中,本例中,即修改Averager的2个计数</span><br><span class="line">- combiner</span><br><span class="line">    合并函数将两个结果容器的内容进行合并,本例中,为对两个Averager容器中的2个计数进行合并相加。</span><br></pre></td></tr></table></figure></p>
+<p>注意:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- supplier是一个lambda表达式或者方法引用,而非reduce操作中的identity元素是一个值。</span><br><span class="line">- accumulator累加器和combiner合并函数不返回值</span><br><span class="line">- 可以结合并行流使用collect操作</span><br></pre></td></tr></table></figure></p>
+<p>尽管JDK提供了average操作来计算平均值,当我们需要计算流中元素的几个值时就可以使用collect操作+自定义类。<br>collect操作最适合集合,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; namesOfMaleMembersCollect = roster</span><br><span class="line">    .stream()</span><br><span class="line">    .filter(p -&gt; p.getGender() == Person.Sex.MALE)</span><br><span class="line">    .map(p -&gt; p.getName())</span><br><span class="line">    .collect(Collectors.toList());</span><br></pre></td></tr></table></figure></p>
+<p>该例collect只需要一个Collector类型参数,该类封装了collect操作所需的三个参数(supplier、accumulator、combiner),Collectors类包含许多有用的操作,如累加元素到集合,根据不同条件分类元素等。<br>Collectors.toList返回的Collector会累加流元素到一个新list。</p>
+<p>按性别分类:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Person.Sex, List&lt;Person&gt;&gt; byGender =</span><br><span class="line">    roster</span><br><span class="line">        .stream()</span><br><span class="line">        .collect(</span><br><span class="line">            Collectors.groupingBy(Person::getGender));</span><br></pre></td></tr></table></figure></p>
+<p>groupingBy方法根据指定的分类函数(getGener)来分类,返回的map的key为getGender的返回值。</p>
+<p>获取集合中的成员姓名并按性别分类:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Person.Sex, List&lt;String&gt;&gt; namesByGender =</span><br><span class="line">    roster</span><br><span class="line">        .stream()</span><br><span class="line">        .collect(</span><br><span class="line">            Collectors.groupingBy(</span><br><span class="line">                Person::getGender,                      </span><br><span class="line">                Collectors.mapping(</span><br><span class="line">                    Person::getName,</span><br><span class="line">                    Collectors.toList())));</span><br></pre></td></tr></table></figure></p>
+<p>本例的groupingBy方法有2个参数,一个分类函数,一个Collector实例,Collector参数称为下游收集器,该收集器应用到另一个收集器的结果。</p>
 <p>因此,groupingBy操作使你可以应用collect方法到groupingBy操作创建的List结果值上。</p>
 <p>该例中,collector mapping将mapping函数应用到流中的每一个元素上,返回的结果流由会员名称组成;包含一个或多个下流收集器的流水线如本例称作多级归约。</p>
-<p>如下例,获取每一种性别的会员的年龄总和:</p>
-<pre><code>Map&lt;Person.Sex, Integer&gt; totalAgeByGender =
-    roster
-        .stream()
-        .collect(
-            Collectors.groupingBy(
-                Person::getGender,                      
-                Collectors.reducing(
-                    0,
-                    Person::getAge,
-                    Integer::sum)));
-</code></pre><p>Collectors.reducing归约操作有三个参数:</p>
+<p>如下例,获取每一种性别的会员的年龄总和:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Person.Sex, Integer&gt; totalAgeByGender =</span><br><span class="line">    roster</span><br><span class="line">        .stream()</span><br><span class="line">        .collect(</span><br><span class="line">            Collectors.groupingBy(</span><br><span class="line">                Person::getGender,                      </span><br><span class="line">                Collectors.reducing(</span><br><span class="line">                    0,</span><br><span class="line">                    Person::getAge,</span><br><span class="line">                    Integer::sum)));</span><br></pre></td></tr></table></figure></p>
+<p>Collectors.reducing归约操作有三个参数:</p>
 <ul>
 <li>identity:<br> 如Stream.reduce操作一样,identity是归约的初始值和默认值(如果流中没有元素),上例中,identity为0</li>
 <li>mapper:<br>归约操作将mapper函数应用到所有流元素,本例是获取每个成员的年龄</li>
 <li>operation:<br>操作函数用来归约映射的值,本例是对年龄求和</li>
 </ul>
-<p>下例是获取每种性别的会员的平均年龄:</p>
-<pre><code>Map&lt;Person.Sex, Double&gt; averageAgeByGender = roster
-    .stream()
-    .collect(
-        Collectors.groupingBy(
-            Person::getGender,                      
-            Collectors.averagingInt(Person::getAge)));
-</code></pre><h4 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h4><p>并行计算涉及到将一个问题分为多个子问题,同时解决子问题(并行中,每一个子问题在一个独立线程中运行),然后合并各个子问题的结果。<br>JavaSE提供了fork/join框架,可以让我们很方便地实现并行计算,然而用这个框架的话,必须指定如何划分问题,通过聚合操作就可以进行问题划分和结果合并。</p>
+<p>下例是获取每种性别的会员的平均年龄:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Person.Sex, Double&gt; averageAgeByGender = roster</span><br><span class="line">    .stream()</span><br><span class="line">    .collect(</span><br><span class="line">        Collectors.groupingBy(</span><br><span class="line">            Person::getGender,                      </span><br><span class="line">            Collectors.averagingInt(Person::getAge)));</span><br></pre></td></tr></table></figure></p>
+<h4 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h4><p>并行计算涉及到将一个问题分为多个子问题,同时解决子问题(并行中,每一个子问题在一个独立线程中运行),然后合并各个子问题的结果。<br>JavaSE提供了fork/join框架,可以让我们很方便地实现并行计算,然而用这个框架的话,必须指定如何划分问题,通过聚合操作就可以进行问题划分和结果合并。</p>
 <p>对于使用集合的情形,并行计算的一个难点就是操作集合时的线程安全问题,虽然集合框架的同步方法是线程安全的,但是会导致线程竞争,达不到并行的目的。<br>聚合操作以及并行流使我们能够实现提供的非线程安全性集合的并行性,在操作集合时不需要修改集合。<br>注意,并行并不一定比串行快,当有足够的数据和处理器核心时可能并行更有优势。所以,即使聚合操作让我们更容易实现并行计算,但是也要考虑是否适合并行。</p>
-<h5 id="并行执行流操作"><a href="#并行执行流操作" class="headerlink" title="并行执行流操作"></a>并行执行流操作</h5><p>流可以串行执行,也可以并行执行,当并行执行流时,jvm将流分为多个子流,聚合操作并行的迭代处理这些流,并把结果合并。<br>当创建一个流时,默认是串行流,除非使用Collection.parallelStream或者BaseStream.parallel指定为并行流。如下例,并行计算男士的平均年龄:</p>
-<pre><code>double average = roster
-    .parallelStream()
-    .filter(p -&gt; p.getGender() == Person.Sex.MALE)
-    .mapToInt(Person::getAge)
-    .average()
-    .getAsDouble();
-</code></pre><h5 id="并发归约"><a href="#并发归约" class="headerlink" title="并发归约"></a>并发归约</h5><p>再考虑如下例子:</p>
-<pre><code>Map&lt;Person.Sex, List&lt;Person&gt;&gt; byGender =
-    roster
-        .stream()
-        .collect(
-            Collectors.groupingBy(Person::getGender));
-</code></pre><p>对应的并行代码:</p>
-<pre><code>ConcurrentMap&lt;Person.Sex, List&lt;Person&gt;&gt; byGender =
-    roster
-        .parallelStream()
-        .collect(
-            Collectors.groupingByConcurrent(Person::getGender));
-</code></pre><p>上例称作并发归约,jvm在以下条件都为真时会为包含collect操作的指定流水线执行并发归约:</p>
+<h5 id="并行执行流操作"><a href="#并行执行流操作" class="headerlink" title="并行执行流操作"></a>并行执行流操作</h5><p>流可以串行执行,也可以并行执行,当并行执行流时,jvm将流分为多个子流,聚合操作并行的迭代处理这些流,并把结果合并。<br>当创建一个流时,默认是串行流,除非使用Collection.parallelStream或者BaseStream.parallel指定为并行流。如下例,并行计算男士的平均年龄:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">double average = roster</span><br><span class="line">    .parallelStream()</span><br><span class="line">    .filter(p -&gt; p.getGender() == Person.Sex.MALE)</span><br><span class="line">    .mapToInt(Person::getAge)</span><br><span class="line">    .average()</span><br><span class="line">    .getAsDouble();</span><br></pre></td></tr></table></figure></p>
+<h5 id="并发归约"><a href="#并发归约" class="headerlink" title="并发归约"></a>并发归约</h5><p>再考虑如下例子:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Person.Sex, List&lt;Person&gt;&gt; byGender =</span><br><span class="line">    roster</span><br><span class="line">        .stream()</span><br><span class="line">        .collect(</span><br><span class="line">            Collectors.groupingBy(Person::getGender));</span><br></pre></td></tr></table></figure></p>
+<p>对应的并行代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentMap&lt;Person.Sex, List&lt;Person&gt;&gt; byGender =</span><br><span class="line">    roster</span><br><span class="line">        .parallelStream()</span><br><span class="line">        .collect(</span><br><span class="line">            Collectors.groupingByConcurrent(Person::getGender));</span><br></pre></td></tr></table></figure></p>
+<p>上例称作并发归约,jvm在以下条件都为真时会为包含collect操作的指定流水线执行并发归约:</p>
 <ul>
 <li>流是并行流</li>
 <li>collect操作的collector参数的Collector.Characteristics为并发模式,通过Collector.characteristics方法设置</li>
 <li>无论流式无序,或者collector设置了Collector.Characteristics.UNORDERED;确保流式无序的,可以通过BaseStream.unordered操作</li>
 </ul>
-<h5 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h5><p>pipeline处理流中元素的顺序依赖于流是串行执行还是并行执行,以及流的数据源本身和中间操作,如下例:</p>
-<pre><code>Integer[] intArray = {1, 2, 3, 4, 5, 6, 7, 8 };
-List&lt;Integer&gt; listOfIntegers =
-    new ArrayList&lt;&gt;(Arrays.asList(intArray));
-
-System.out.println(&quot;listOfIntegers:&quot;);
-listOfIntegers
-    .stream()
-    .forEach(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-System.out.println(&quot;listOfIntegers sorted in reverse order:&quot;);
-Comparator&lt;Integer&gt; normal = Integer::compare;
-Comparator&lt;Integer&gt; reversed = normal.reversed();
-Collections.sort(listOfIntegers, reversed);  
-listOfIntegers
-    .stream()
-    .forEach(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-System.out.println(&quot;Parallel stream&quot;);
-listOfIntegers
-    .parallelStream()
-    .forEach(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-System.out.println(&quot;Another parallel stream:&quot;);
-listOfIntegers
-    .parallelStream()
-    .forEach(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-System.out.println(&quot;With forEachOrdered:&quot;);
-listOfIntegers
-    .parallelStream()
-    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-
-listOfIntegers:
-1 2 3 4 5 6 7 8
-listOfIntegers sorted in reverse order:
-8 7 6 5 4 3 2 1
-Parallel stream:
-3 4 1 6 2 5 7 8
-Another parallel stream:
-6 3 1 5 7 8 4 2
-With forEachOrdered:
-8 7 6 5 4 3 2 1
-</code></pre><h4 id="副作用"><a href="#副作用" class="headerlink" title="副作用"></a>副作用</h4><p>一个方法或一个表达式除了返回值及生成一个值,还有一个副作用就是会修改计算机的状态,如可变的reductions操作(collect操作)及System.out.println。<br>JDK对某些副作用处理的很好,特别地,collect方法就是设计针对并行安全有副作用的场景下来执行最常见的stream操作。类似forEach、peek操作可以消除副作用;lambda表达式即使返回void,但如果内部调用了System.out.println,<br>也会产生副作用。</p>
+<h5 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h5><p>pipeline处理流中元素的顺序依赖于流是串行执行还是并行执行,以及流的数据源本身和中间操作,如下例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">Integer[] intArray = &#123;1, 2, 3, 4, 5, 6, 7, 8 &#125;;</span><br><span class="line">List&lt;Integer&gt; listOfIntegers =</span><br><span class="line">    new ArrayList&lt;&gt;(Arrays.asList(intArray));</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;listOfIntegers:&quot;);</span><br><span class="line">listOfIntegers</span><br><span class="line">    .stream()</span><br><span class="line">    .forEach(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;listOfIntegers sorted in reverse order:&quot;);</span><br><span class="line">Comparator&lt;Integer&gt; normal = Integer::compare;</span><br><span class="line">Comparator&lt;Integer&gt; reversed = normal.reversed();</span><br><span class="line">Collections.sort(listOfIntegers, reversed);  </span><br><span class="line">listOfIntegers</span><br><span class="line">    .stream()</span><br><span class="line">    .forEach(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;Parallel stream&quot;);</span><br><span class="line">listOfIntegers</span><br><span class="line">    .parallelStream()</span><br><span class="line">    .forEach(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;Another parallel stream:&quot;);</span><br><span class="line">listOfIntegers</span><br><span class="line">    .parallelStream()</span><br><span class="line">    .forEach(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">System.out.println(&quot;With forEachOrdered:&quot;);</span><br><span class="line">listOfIntegers</span><br><span class="line">    .parallelStream()</span><br><span class="line">    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">listOfIntegers:</span><br><span class="line">1 2 3 4 5 6 7 8</span><br><span class="line">listOfIntegers sorted in reverse order:</span><br><span class="line">8 7 6 5 4 3 2 1</span><br><span class="line">Parallel stream:</span><br><span class="line">3 4 1 6 2 5 7 8</span><br><span class="line">Another parallel stream:</span><br><span class="line">6 3 1 5 7 8 4 2</span><br><span class="line">With forEachOrdered:</span><br><span class="line">8 7 6 5 4 3 2 1</span><br></pre></td></tr></table></figure></p>
+<h4 id="副作用"><a href="#副作用" class="headerlink" title="副作用"></a>副作用</h4><p>一个方法或一个表达式除了返回值及生成一个值,还有一个副作用就是会修改计算机的状态,如可变的reductions操作(collect操作)及System.out.println。<br>JDK对某些副作用处理的很好,特别地,collect方法就是设计针对并行安全有副作用的场景下来执行最常见的stream操作。类似forEach、peek操作可以消除副作用;lambda表达式即使返回void,但如果内部调用了System.out.println,<br>也会产生副作用。</p>
 <h5 id="延迟计算-惰性计算"><a href="#延迟计算-惰性计算" class="headerlink" title="延迟计算/惰性计算"></a>延迟计算/惰性计算</h5><p>所有中间操作都是延迟执行的,表达式、方法或算法如果仅仅在需要的时候才计算其值,则就是延迟计算。中间操作是延迟计算因为当终结操作开始时,才会处理流中的数据。延迟处理流的机制让java编译器及运行时<br>能够优化处理流的方式。比如filter-mapToInt-average流水线操作average可以先从mapToInt操作创建的流中获取几个数,mapToInt则是从filter操作获取元素,average操作则重复着这个流程直至获取所有的数据,然后计算平均值。</p>
-<h5 id="干扰"><a href="#干扰" class="headerlink" title="干扰"></a>干扰</h5><p>流操作中的lambda表达式不应该有干扰。干扰发生在一个流水线处理流时,流的数据源被修改,如下例:</p>
-<pre><code>try {
-    List&lt;String&gt; listOfStrings =
-        new ArrayList&lt;&gt;(Arrays.asList(&quot;one&quot;, &quot;two&quot;));
-
-    String concatenatedString = listOfStrings
-        .stream()
-
-        // 不要在处理流时,对流的数据源进行修改,会发生干扰,导致报错
-        .peek(s -&gt; listOfStrings.add(&quot;three&quot;))
-        .reduce((a, b) -&gt; a + &quot; &quot; + b)
-        .get();
-
-    System.out.println(&quot;Concatenated string: &quot; + concatenatedString);
-} catch (Exception e) {
-    System.out.println(&quot;Exception caught: &quot; + e.toString());
-}
-</code></pre><h5 id="有状态的lambda表达式"><a href="#有状态的lambda表达式" class="headerlink" title="有状态的lambda表达式"></a>有状态的lambda表达式</h5><p>在流操作中避免使用有状态的lambda表达式当做参数,有状态的lambda表达式是指其结果依赖于在流水线执行过程中可能改变的任何状态,如下例:</p>
-<pre><code>List&lt;Integer&gt; serialStorage = new ArrayList&lt;&gt;();
-System.out.println(&quot;Serial stream:&quot;);
-listOfIntegers
-    .stream()
-    // 不要这么做,其使用了有状态的lambda表达式
-    .map(e -&gt; { serialStorage.add(e); return e; })
-
-    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-serialStorage
-    .stream()
-    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-
-System.out.println(&quot;Parallel stream:&quot;);
-List&lt;Integer&gt; parallelStorage = Collections.synchronizedList(
-    new ArrayList&lt;&gt;());
-listOfIntegers
-    .parallelStream()
-
-    // 使用了有状态的lambda表达式
-    .map(e -&gt; { parallelStorage.add(e); return e; })
-
-    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-
-parallelStorage
-    .stream()
-    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));
-System.out.println(&quot;&quot;);
-</code></pre><p>lambda表达式 e -&gt; { parallelStorage.add(e); return e; } 是有状态的lambda表达式,因为每次代码运行其结果都会不同:</p>
-<pre><code>Serial stream:
-8 7 6 5 4 3 2 1
-8 7 6 5 4 3 2 1
-Parallel stream:
-8 7 6 5 4 3 2 1
-1 3 6 2 4 5 8 7
-</code></pre><p>若想要可预测性及确定性结果,要确保流操作中的lambda表达式参数是无状态的。</p>
-<p>注意:ArrayList是非线程安全的,即多个线程不能同时访问指定集合,否则会导致不可预料结果,如下:</p>
-<pre><code>Parallel stream:
-8 7 6 5 4 3 2 1
-null 3 5 4 7 8 1 2
-</code></pre><h4 id="访问外部范围的局部变量"><a href="#访问外部范围的局部变量" class="headerlink" title="访问外部范围的局部变量"></a>访问外部范围的局部变量</h4><p> 和局部和匿名类类似,lambda表达式也能够捕捉变量,也可以访问外部范围的局部变量,但是不会覆盖外部范围的局部变量。</p>
-<p> 这是因为lambda表达式从词法上被隔离,不会从超类继承任何变量,也不会引入新的变量作用范围,<br> lambda表达式里声明的变量被封闭在lambda表达式里, 如下例:</p>
-<pre><code>import java.util.function.Consumer;
-public class LambdaScopeTest {
-    public int x = 0;
-
-    class FirstLevel {
-        public int x = 1;
-        void methodInFirstLevel(int x) {
-
-            Consumer&lt;Integer&gt; myConsumer = (y) -&gt;
-            {
-                System.out.println(&quot;x = &quot; + x); // Statement A
-                System.out.println(&quot;y = &quot; + y);
-                System.out.println(&quot;this.x = &quot; + this.x);
-                System.out.println(&quot;LambdaScopeTest.this.x = &quot; + LambdaScopeTest.this.x);
-            };
-            myConsumer.accept(x);
-        }
-    }
-
-    public static void main(String... args) {
-        LambdaScopeTest st = new LambdaScopeTest();
-        LambdaScopeTest.FirstLevel fl = st.new FirstLevel();
-        fl.methodInFirstLevel(23);
-    }
-}
-
-x = 23
-y = 23
-this.x = 1
-LambdaScopeTest.this.x = 0
-</code></pre><p>假如把lambda表达式声明替换为如下:</p>
-<pre><code>Consumer&lt;Integer&gt; myConsumer = (x) -&gt; {
-}
-</code></pre><p>则会报x已定义的错,这是因为lambda表达式不会引入新的变量作用范围,因此在lambda表达式内部可以直接访问外部范围的字段、方法、局部变量,比如可以直接访问methodInFirstLevel方法形参x,但是要访问FirstLevel<br>的字段x,则需要使用this.</p>
+<h5 id="干扰"><a href="#干扰" class="headerlink" title="干扰"></a>干扰</h5><p>流操作中的lambda表达式不应该有干扰。干扰发生在一个流水线处理流时,流的数据源被修改,如下例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">    List&lt;String&gt; listOfStrings =</span><br><span class="line">        new ArrayList&lt;&gt;(Arrays.asList(&quot;one&quot;, &quot;two&quot;));</span><br><span class="line"></span><br><span class="line">    String concatenatedString = listOfStrings</span><br><span class="line">        .stream()</span><br><span class="line"></span><br><span class="line">        // 不要在处理流时,对流的数据源进行修改,会发生干扰,导致报错</span><br><span class="line">        .peek(s -&gt; listOfStrings.add(&quot;three&quot;))</span><br><span class="line">        .reduce((a, b) -&gt; a + &quot; &quot; + b)</span><br><span class="line">        .get();</span><br><span class="line"></span><br><span class="line">    System.out.println(&quot;Concatenated string: &quot; + concatenatedString);</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">    System.out.println(&quot;Exception caught: &quot; + e.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="有状态的lambda表达式"><a href="#有状态的lambda表达式" class="headerlink" title="有状态的lambda表达式"></a>有状态的lambda表达式</h5><p>在流操作中避免使用有状态的lambda表达式当做参数,有状态的lambda表达式是指其结果依赖于在流水线执行过程中可能改变的任何状态,如下例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; serialStorage = new ArrayList&lt;&gt;();</span><br><span class="line">System.out.println(&quot;Serial stream:&quot;);</span><br><span class="line">listOfIntegers</span><br><span class="line">    .stream()</span><br><span class="line">    // 不要这么做,其使用了有状态的lambda表达式</span><br><span class="line">    .map(e -&gt; &#123; serialStorage.add(e); return e; &#125;)</span><br><span class="line"></span><br><span class="line">    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">serialStorage</span><br><span class="line">    .stream()</span><br><span class="line">    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">System.out.println(&quot;Parallel stream:&quot;);</span><br><span class="line">List&lt;Integer&gt; parallelStorage = Collections.synchronizedList(</span><br><span class="line">    new ArrayList&lt;&gt;());</span><br><span class="line">listOfIntegers</span><br><span class="line">    .parallelStream()</span><br><span class="line"></span><br><span class="line">    // 使用了有状态的lambda表达式</span><br><span class="line">    .map(e -&gt; &#123; parallelStorage.add(e); return e; &#125;)</span><br><span class="line"></span><br><span class="line">    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br><span class="line"></span><br><span class="line">parallelStorage</span><br><span class="line">    .stream()</span><br><span class="line">    .forEachOrdered(e -&gt; System.out.print(e + &quot; &quot;));</span><br><span class="line">System.out.println(&quot;&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>lambda表达式 e -&gt; { parallelStorage.add(e); return e; } 是有状态的lambda表达式,因为每次代码运行其结果都会不同:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Serial stream:</span><br><span class="line">8 7 6 5 4 3 2 1</span><br><span class="line">8 7 6 5 4 3 2 1</span><br><span class="line">Parallel stream:</span><br><span class="line">8 7 6 5 4 3 2 1</span><br><span class="line">1 3 6 2 4 5 8 7</span><br></pre></td></tr></table></figure></p>
+<p>若想要可预测性及确定性结果,要确保流操作中的lambda表达式参数是无状态的。</p>
+<p>注意:ArrayList是非线程安全的,即多个线程不能同时访问指定集合,否则会导致不可预料结果,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Parallel stream:</span><br><span class="line">8 7 6 5 4 3 2 1</span><br><span class="line">null 3 5 4 7 8 1 2</span><br></pre></td></tr></table></figure></p>
+<h4 id="访问外部范围的局部变量"><a href="#访问外部范围的局部变量" class="headerlink" title="访问外部范围的局部变量"></a>访问外部范围的局部变量</h4><p> 和局部和匿名类类似,lambda表达式也能够捕捉变量,也可以访问外部范围的局部变量,但是不会覆盖外部范围的局部变量。</p>
+<p> 这是因为lambda表达式从词法上被隔离,不会从超类继承任何变量,也不会引入新的变量作用范围,<br> lambda表达式里声明的变量被封闭在lambda表达式里, 如下例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import java.util.function.Consumer;</span><br><span class="line">public class LambdaScopeTest &#123;</span><br><span class="line">    public int x = 0;</span><br><span class="line"></span><br><span class="line">    class FirstLevel &#123;</span><br><span class="line">        public int x = 1;</span><br><span class="line">        void methodInFirstLevel(int x) &#123;</span><br><span class="line"></span><br><span class="line">            Consumer&lt;Integer&gt; myConsumer = (y) -&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                System.out.println(&quot;x = &quot; + x); // Statement A</span><br><span class="line">                System.out.println(&quot;y = &quot; + y);</span><br><span class="line">                System.out.println(&quot;this.x = &quot; + this.x);</span><br><span class="line">                System.out.println(&quot;LambdaScopeTest.this.x = &quot; + LambdaScopeTest.this.x);</span><br><span class="line">            &#125;;</span><br><span class="line">            myConsumer.accept(x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String... args) &#123;</span><br><span class="line">        LambdaScopeTest st = new LambdaScopeTest();</span><br><span class="line">        LambdaScopeTest.FirstLevel fl = st.new FirstLevel();</span><br><span class="line">        fl.methodInFirstLevel(23);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">x = 23</span><br><span class="line">y = 23</span><br><span class="line">this.x = 1</span><br><span class="line">LambdaScopeTest.this.x = 0</span><br></pre></td></tr></table></figure></p>
+<p>假如把lambda表达式声明替换为如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;Integer&gt; myConsumer = (x) -&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>则会报x已定义的错,这是因为lambda表达式不会引入新的变量作用范围,因此在lambda表达式内部可以直接访问外部范围的字段、方法、局部变量,比如可以直接访问methodInFirstLevel方法形参x,但是要访问FirstLevel<br>的字段x,则需要使用this.</p>
 <h4 id="目标类型"><a href="#目标类型" class="headerlink" title="目标类型"></a>目标类型</h4><p>lambda表达式的类型如何确定呢?是通过目标类型,即如public static void printPersons(List<person> roster, CheckPerson tester)需要CheckPerson类型,则lambda表达式就是该类型(方法声明需要的参数类型)。</person></p>
-<p>java编译器根据lambda表达式使用的上下文或场景里找到目标类型当做lambda表达式的类型,也就是lambda只能用在java编译器能确定目标类型的场景里:</p>
-<pre><code>- 变量声明
-- 赋值
-- return 语句
-- 数组初始化
-- 方法或者构造函数参数
-- lambda表达式体
-- ? : 三元表达式
-- 转换语句
-</code></pre><p>对于方法参数,java编译器确定lambda表达式类型通过2个特征:重载解析&amp;类型参数推导</p>
+<p>java编译器根据lambda表达式使用的上下文或场景里找到目标类型当做lambda表达式的类型,也就是lambda只能用在java编译器能确定目标类型的场景里:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- 变量声明</span><br><span class="line">- 赋值</span><br><span class="line">- return 语句</span><br><span class="line">- 数组初始化</span><br><span class="line">- 方法或者构造函数参数</span><br><span class="line">- lambda表达式体</span><br><span class="line">- ? : 三元表达式</span><br><span class="line">- 转换语句</span><br></pre></td></tr></table></figure></p>
+<p>对于方法参数,java编译器确定lambda表达式类型通过2个特征:重载解析&amp;类型参数推导</p>
 <h4 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h4><p>如同非静态内部类一样,强烈建议禁止lambda表达式的序列化。</p>
-<h4 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h4><p>我们使用lambda表达式来创建匿名方法时,有时lambda表达式啥也没做只是调用了一个已经存在的方法,针对这些情形,通过方法名称来引用已经存在的方法更简洁直观,方法引用可以做到这点。</p>
-<pre><code>Arrays.sort(rosterAsArray, Person::compareByAge);
-</code></pre><h5 id="方法引用的种类"><a href="#方法引用的种类" class="headerlink" title="方法引用的种类"></a>方法引用的种类</h5><ul>
+<h4 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h4><p>我们使用lambda表达式来创建匿名方法时,有时lambda表达式啥也没做只是调用了一个已经存在的方法,针对这些情形,通过方法名称来引用已经存在的方法更简洁直观,方法引用可以做到这点。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays.sort(rosterAsArray, Person::compareByAge);</span><br></pre></td></tr></table></figure></p>
+<h5 id="方法引用的种类"><a href="#方法引用的种类" class="headerlink" title="方法引用的种类"></a>方法引用的种类</h5><ul>
 <li>引用静态方法<br>  ContainingClass::staticMethodName</li>
 <li>引用非静态实例方法<br>containingObject::instanceMethodName</li>
 <li>引用某个类型的任意对象的实例方法<br>  ContainingType::methodName,如String::compareToIgnoreCase</li>

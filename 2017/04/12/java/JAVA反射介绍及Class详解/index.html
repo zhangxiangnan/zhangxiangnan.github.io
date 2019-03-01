@@ -155,41 +155,19 @@
 <h3 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h3><p>每一个对象要么是引用类型要么是基本类型。引用类型全部继承自java.lang.Object。Classes、enums、arrays及interfaces都是引用类型。基本类型只包括8种：boolean、byte、short、long、char、int、float、double。引用类型例如java.lang.String，所有基本类型的包装类型如java.lang.Double，接口java.io.Serializable，及枚举javax.swing.SortOrder。</p>
 <p>针对每一种对象类型，Java虚拟机实例化java.lang.Class的一份不可变实例。Class提供了方法来检查对象的运行时属性，包括成员和类型信息，同时Class也提供了创建新的classes及对象的功能。更重要的是，Class是所有反射API的入口。</p>
 <h4 id="重新获取Class对象"><a href="#重新获取Class对象" class="headerlink" title="重新获取Class对象"></a>重新获取Class对象</h4><p>  所有反射操作的入口是java.lang.Class。除了java.lang.reflect.ReflectPermission类，java.lang.reflect包下的其他类都没有公共构造函数。要获得这些类，有必要调取Class的相应地方法。有几种方法来来获取Class，根据是代码否有权限访问一个对象，类的名称，类型或一个已存在的Class。</p>
-<h5 id="Object-getClass"><a href="#Object-getClass" class="headerlink" title="Object.getClass()"></a>Object.getClass()</h5><p>  如果能取到类的某个实例对象，最简单的获取其Class对象的方式是调用Object.getClass()方法。当然，这种方式只适合于全部继承自Object类的引用类型。如：</p>
-<pre><code>Class c = &quot;foo&quot;.getClass();
-</code></pre><p>  返回String类的Class对象</p>
-<pre><code>Class c = System.console().getClass();
-</code></pre><p>  和虚拟机关联的有一个唯一的console对象，通过System.console()对象返回，getClass()返回的是java.io.Console类的Class对象。</p>
-<pre><code>enum E { A, B }
-Class c = A.getClass();
-</code></pre><p>  A是枚举类型E的一个实例，getClass()方法返回枚举类型E对应的Class对象</p>
-<pre><code>byte[] bytes = new byte[1024];
-Class c = bytes.getClass();
-</code></pre><p>  由于数组是Object对象，所以也能对数组的实例调用getClass()方法。返回的Class对应组件类型为byte的数组</p>
-<pre><code>import java.util.HashSet;
-import java.util.Set;
-
-Set&lt;String&gt; s = new HashSet&lt;String&gt;();
-Class c = s.getClass();
-</code></pre><p>  该例中，java.util.Set是java.util.HashSet类型的实例对象实现的一个接口。getClass()返回的Class对应于java.util.HashSet。</p>
-<h5 id="class语法"><a href="#class语法" class="headerlink" title=".class语法"></a>.class语法</h5><p>如果有类型但是没有实例对象，通过追加”.class”到类型的名称后面也可以获取到Class。这也是基本类型最简单的方式获取Class。</p>
-<pre><code>  boolean b;
-  Class c = b.getClass();   // 编译报错
-
-  Class c = boolean.class;  // 正确
-注意boolean.getClass()会产生编译错误，因为boolean类型时基本类型，不能被引用。.class语法返回类型boolean对应的Class。
-
-  Class c = java.io.PrintStream.class;
-返回java.io.PrintStream类型对应的Class对象
-
-  Class c = int[][][].class;
-The .class也用来获取多维数组类型对应的Class
-</code></pre><h5 id="Class-forName"><a href="#Class-forName" class="headerlink" title="Class.forName()"></a>Class.forName()</h5><p>如果有一个类的全限定名称，使用静态方法Class.forName()能获取到对应的Class对象。该方式不能用来加载基本类型。</p>
-<pre><code>Class c = Class.forName(&quot;com.duke.MyLocaleServiceProvider&quot;);
-</code></pre><p>该语句根据传入的全限定名来创建一个class对象</p>
-<pre><code>Class cDoubleArray = Class.forName(&quot;[D&quot;);
-Class cStringArray = Class.forName(&quot;[[Ljava.lang.String;&quot;);
-</code></pre><p>如果是数组类型传入的名称，则按下面Class.getName的描述；变量cDoubleArray表示基本类型double数组对应的Class（和double[].class一样），变量cStringArray表示String的二维数组对应的Class（和String[][].class一样）。</p>
+<h5 id="Object-getClass"><a href="#Object-getClass" class="headerlink" title="Object.getClass()"></a>Object.getClass()</h5><p>  如果能取到类的某个实例对象，最简单的获取其Class对象的方式是调用Object.getClass()方法。当然，这种方式只适合于全部继承自Object类的引用类型。如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class c = &quot;foo&quot;.getClass();</span><br></pre></td></tr></table></figure></p>
+<p>  返回String类的Class对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class c = System.console().getClass();</span><br></pre></td></tr></table></figure></p>
+<p>  和虚拟机关联的有一个唯一的console对象，通过System.console()对象返回，getClass()返回的是java.io.Console类的Class对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">enum E &#123; A, B &#125;</span><br><span class="line">Class c = A.getClass();</span><br></pre></td></tr></table></figure></p>
+<p>  A是枚举类型E的一个实例，getClass()方法返回枚举类型E对应的Class对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">byte[] bytes = new byte[1024];</span><br><span class="line">Class c = bytes.getClass();</span><br></pre></td></tr></table></figure>
+<p>  由于数组是Object对象，所以也能对数组的实例调用getClass()方法。返回的Class对应组件类型为byte的数组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import java.util.HashSet;</span><br><span class="line">import java.util.Set;</span><br><span class="line"></span><br><span class="line">Set&lt;String&gt; s = new HashSet&lt;String&gt;();</span><br><span class="line">Class c = s.getClass();</span><br></pre></td></tr></table></figure>
+<p>  该例中，java.util.Set是java.util.HashSet类型的实例对象实现的一个接口。getClass()返回的Class对应于java.util.HashSet。</p>
+<h5 id="class语法"><a href="#class语法" class="headerlink" title=".class语法"></a>.class语法</h5><p>如果有类型但是没有实例对象，通过追加”.class”到类型的名称后面也可以获取到Class。这也是基本类型最简单的方式获取Class。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">boolean b;</span><br><span class="line">Class c = b.getClass();   // 编译报错</span><br><span class="line"></span><br><span class="line">Class c = boolean.class;  // 正确</span><br></pre></td></tr></table></figure></p>
+<p>注意boolean.getClass()会产生编译错误，因为boolean类型时基本类型，不能被引用。.class语法返回类型boolean对应的Class。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  Class c = java.io.PrintStream.class;</span><br><span class="line">返回java.io.PrintStream类型对应的Class对象</span><br><span class="line"></span><br><span class="line">  Class c = int[][][].class;</span><br><span class="line">The .class也用来获取多维数组类型对应的Class</span><br></pre></td></tr></table></figure></p>
+<h5 id="Class-forName"><a href="#Class-forName" class="headerlink" title="Class.forName()"></a>Class.forName()</h5><p>如果有一个类的全限定名称，使用静态方法Class.forName()能获取到对应的Class对象。该方式不能用来加载基本类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class c = Class.forName(&quot;com.duke.MyLocaleServiceProvider&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>该语句根据传入的全限定名来创建一个class对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Class cDoubleArray = Class.forName(&quot;[D&quot;);</span><br><span class="line">Class cStringArray = Class.forName(&quot;[[Ljava.lang.String;&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>如果是数组类型传入的名称，则按下面Class.getName的描述；变量cDoubleArray表示基本类型double数组对应的Class（和double[].class一样），变量cStringArray表示String的二维数组对应的Class（和String[][].class一样）。</p>
 <h5 id="Class-getName-："><a href="#Class-getName-：" class="headerlink" title="Class.getName()："></a>Class.getName()：</h5><p>  返回Class对象代表的实体的字符串名称（类、接口、数组、基本类型或void）</p>
 <ul>
 <li>如果该class对象表示一个引用类型（非数组类型）就依据java语言规范，返回类的二进制名称。</li>
@@ -270,35 +248,14 @@ Class cStringArray = Class.forName(&quot;[[Ljava.lang.String;&quot;);
 <h5 id="基本类型包装类的TYPE字段"><a href="#基本类型包装类的TYPE字段" class="headerlink" title="基本类型包装类的TYPE字段"></a>基本类型包装类的TYPE字段</h5><p>对于基本类型来说.Class语法获取其Class对象非常方便，也是首选方式；还有另一种方式来获取Class。每一个基本类型和void类型都有一个包装类在java.lang中，将基本类型装箱为包装类型。每一个包装类型有一个TYPE字段，即是基本类型对应的Class对象</p>
 <p>Class c = Double.TYPE;// 相等于double.class<br>Class c = Void.TYPE;//相等于void.class.</p>
 <h5 id="返回Classes的方法"><a href="#返回Classes的方法" class="headerlink" title="返回Classes的方法"></a>返回Classes的方法</h5><p>有几个反射API可以返回classes，但是只有当某个Class已经直接或间接得到才能访问那几个API。    </p>
-<p><strong>Class.getSuperclass()</strong><br>  返回指定class的超类class</p>
-<pre><code>Class c = javax.swing.JButton.class.getSuperclass();// 返回javax.swing.AbstractButton.    
-</code></pre><p><strong>Class.getClasses()</strong><br>返回指定class的所有的公共classes、接口及枚举成员，包含继承的成员。</p>
-<pre><code>Class&lt;?&gt;[] c = Character.class.getClasses();//返回内部多个公共class成员   
-</code></pre><p><strong>Class.getDeclaredClasses()</strong><br>返回class里所有显示声明的类、接口、枚举（公共、私有等都包含）</p>
-<pre><code>Class&lt;?&gt;[] c = Character.class.getDeclaredClasses();//返回显示声明的几个类
-</code></pre><p><strong>Class.getDeclaringClass()</strong><br>如果Class对象表示的接口或类是另一个类的成员，则返回声明该成员的类对应的Class对象；否则如果不是任何其他类的成员则返回null。如果该Class对象表示一个数组类型、基本类型、或void，则返回null。<br>匿名类的声明没有声明类但有一个封闭类    </p>
-<pre><code>public class MyClass {
-    static Object o = new Object() {
-        public void m() {}
-    };
-    static Class&lt;c&gt; = o.getClass().getDeclaringClass();
-}
-</code></pre><p>o定义的匿名类的声明类为null</p>
-<p><strong>Class.getEnclosingClass()</strong><br>返回class的直接封闭类   </p>
-<pre><code>Class c = Thread.State.class().getEnclosingClass();//枚举类Thread.State的封闭类是Thread
-
-public class MyClass {
-    static Object o = new Object() {
-        public void m() {}
-    };
-    static Class&lt;c&gt; = o.getClass().getEnclosingClass();
-}
-o定义的匿名内部类的封闭类是Mycalss
-</code></pre><p><strong>java.lang.reflect.Field.getDeclaringClass()</strong><br>返回这些成员被声明的Class。    </p>
-<pre><code>import java.lang.reflect.Field;
-Field f = System.class.getField(&quot;out&quot;);
-Class c = f.getDeclaringClass();//返回System,out字段在System类里定义
-</code></pre><p><strong>java.lang.reflect.Method.getDeclaringClass()</strong><br>返回这些成员被声明的Class。</p>
+<p><strong>Class.getSuperclass()</strong><br>  返回指定class的超类class<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class c = javax.swing.JButton.class.getSuperclass();// 返回javax.swing.AbstractButton.</span><br></pre></td></tr></table></figure></p>
+<p><strong>Class.getClasses()</strong><br>返回指定class的所有的公共classes、接口及枚举成员，包含继承的成员。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt;[] c = Character.class.getClasses();//返回内部多个公共class成员</span><br></pre></td></tr></table></figure></p>
+<p><strong>Class.getDeclaredClasses()</strong><br>返回class里所有显示声明的类、接口、枚举（公共、私有等都包含）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt;[] c = Character.class.getDeclaredClasses();//返回显示声明的几个类</span><br></pre></td></tr></table></figure></p>
+<p><strong>Class.getDeclaringClass()</strong><br>如果Class对象表示的接口或类是另一个类的成员，则返回声明该成员的类对应的Class对象；否则如果不是任何其他类的成员则返回null。如果该Class对象表示一个数组类型、基本类型、或void，则返回null。<br>匿名类的声明没有声明类但有一个封闭类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class MyClass &#123;</span><br><span class="line">    static Object o = new Object() &#123;</span><br><span class="line">        public void m() &#123;&#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    static Class&lt;c&gt; = o.getClass().getDeclaringClass();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>o定义的匿名类的声明类为null</p>
+<p><strong>Class.getEnclosingClass()</strong><br>返回class的直接封闭类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Class c = Thread.State.class().getEnclosingClass();//枚举类Thread.State的封闭类是Thread</span><br><span class="line"></span><br><span class="line">public class MyClass &#123;</span><br><span class="line">    static Object o = new Object() &#123;</span><br><span class="line">        public void m() &#123;&#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    static Class&lt;c&gt; = o.getClass().getEnclosingClass();</span><br><span class="line">&#125;</span><br><span class="line">o定义的匿名内部类的封闭类是Mycalss</span><br></pre></td></tr></table></figure></p>
+<p><strong>java.lang.reflect.Field.getDeclaringClass()</strong><br>返回这些成员被声明的Class。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.Field;</span><br><span class="line">Field f = System.class.getField(&quot;out&quot;);</span><br><span class="line">Class c = f.getDeclaringClass();//返回System,out字段在System类里定义</span><br></pre></td></tr></table></figure></p>
+<p><strong>java.lang.reflect.Method.getDeclaringClass()</strong><br>返回这些成员被声明的Class。</p>
 <p><strong>java.lang.reflect.Constructor.getDeclaringClass()</strong><br>返回这些成员被声明的Class。    </p>
 <p><strong>Class.getGenericInterfaces()</strong></p>
 <p>返回该对象表示的类或接口直接实现的接口的类型(Type类型)</p>
@@ -334,162 +291,10 @@ Class c = f.getDeclaringClass();//返回System,out字段在System类里定义
 <li>强制执行严格的浮点行为的修饰符：strictfp</li>
 <li>注解<br>并不是所有的修饰符可以用在所有类上，如接口不能用final修饰，enum不能用abstract修饰。java.lang.reflect.Modifier包含了所有可能的修饰符的声明，也包含了对Class.getModifiers()方法返回的修饰符标记的解码方法。</li>
 </ul>
-<p>如下例展示了如何获取类的声明的组件类型包括修饰符、泛型参数、实现的接口及继承的父类的路径。如果累实现了java.lang.reflect.AnnotatedElement接口，也能拿到运行时的注解信息<br>    import java.lang.annotation.Annotation;<br>    import java.lang.reflect.Modifier;<br>    import java.lang.reflect.Type;<br>    import java.lang.reflect.TypeVariable;<br>    import java.util.Arrays;<br>    import java.util.ArrayList;<br>    import java.util.List;<br>    import static java.lang.System.out;</p>
-<pre><code>public class ClassDeclarationSpy {
-    public static void main(String... args) {
-        try {
-            Class&lt;?&gt; c = Class.forName(args[0]);//根据类名称得到class对象
-            out.format(&quot;Class:%n  %s%n%n&quot;, c.getCanonicalName());// 类的规范名称
-            out.format(&quot;Modifiers:%n  %s%n%n&quot;,
-                   Modifier.toString(c.getModifiers()));// 输出类的修饰符
-
-            out.format(&quot;Type Parameters:%n&quot;);
-            TypeVariable[] tv = c.getTypeParameters();// 获取类型参数
-            if (tv.length != 0) {
-                out.format(&quot;  &quot;);
-                for (TypeVariable t : tv)
-                    out.format(&quot;%s &quot;, t.getName());
-                out.format(&quot;%n%n&quot;);
-            } else {
-                  out.format(&quot;  -- No Type Parameters --%n%n&quot;);
-            }
-
-            out.format(&quot;Implemented Interfaces:%n&quot;);
-            Type[] intfs = c.getGenericInterfaces();// 实现接口
-            if (intfs.length != 0) {
-                for (Type intf : intfs)
-                    out.format(&quot;  %s%n&quot;, intf.toString());
-                out.format(&quot;%n&quot;);
-            } else {
-                  out.format(&quot;  -- No Implemented Interfaces --%n%n&quot;);
-            }
-
-            out.format(&quot;Inheritance Path:%n&quot;);// 继承路径
-            List&lt;Class&gt; l = new ArrayList&lt;Class&gt;();
-            printAncestor(c, l);
-            if (l.size() != 0) {
-                for (Class&lt;?&gt; cl : l)
-                    out.format(&quot;  %s%n&quot;, cl.getCanonicalName());
-                out.format(&quot;%n&quot;);
-            } else {
-                  out.format(&quot;  -- No Super Classes --%n%n&quot;);
-            }
-
-            out.format(&quot;Annotations:%n&quot;);
-            Annotation[] ann = c.getAnnotations();// 注解
-            if (ann.length != 0) {
-                for (Annotation a : ann)
-                    out.format(&quot;  %s%n&quot;, a.toString());
-                out.format(&quot;%n&quot;);
-            } else {
-                  out.format(&quot;  -- No Annotations --%n%n&quot;);
-            }
-
-            // production code should handle this exception more gracefully
-        } catch (ClassNotFoundException x) {
-            x.printStackTrace();
-        }
-    }
-
-    private static void printAncestor(Class&lt;?&gt; c, List&lt;Class&gt; l) {
-        Class&lt;?&gt; ancestor = c.getSuperclass();// 实现的父类
-         if (ancestor != null) {
-            l.add(ancestor);
-            printAncestor(ancestor, l);
-         }
-    }
-}
-</code></pre><p>几个不同输入参数下的结果示例如下:</p>
-<pre><code>$ java ClassDeclarationSpy java.util.concurrent.ConcurrentNavigableMap
-Class:
-  java.util.concurrent.ConcurrentNavigableMap
-
-Modifiers:
-  public abstract interface
-
-Type Parameters:
-  K V
-
-Implemented Interfaces:
-  java.util.concurrent.ConcurrentMap&lt;K, V&gt;
-  java.util.NavigableMap&lt;K, V&gt;
-
-Inheritance Path:
-  -- No Super Classes --
-
-Annotations:
-  -- No Annotations --
-This is the actual declaration for java.util.concurrent.ConcurrentNavigableMap in the source code:
-
-public interface ConcurrentNavigableMap&lt;K,V&gt;
-    extends ConcurrentMap&lt;K,V&gt;, NavigableMap&lt;K,V&gt;
-注意由于上述例子参数是接口，隐含abstract修饰符。编译器为每个接口添加该修饰符。同样，该接口有2个泛型参数，K、V。K、V具体的额外信息可通过TypeVariable的方法得到。上述说明接口也可以实现接口。
-
-$ java ClassDeclarationSpy &quot;[Ljava.lang.String;&quot;
-Class:
-  java.lang.String[]
-
-Modifiers:
-  public abstract final
-
-Type Parameters:
-  -- No Type Parameters --
-
-Implemented Interfaces:
-  interface java.lang.Cloneable
-  interface java.io.Serializable
-
-Inheritance Path:
-  java.lang.Object
-
-Annotations:
-  -- No Annotations --
-由于数组是运行时对象，所有的类型信息都由java虚拟机提供。特别的，数组实现了Cloneable、java.io.Serializable接口，并且数组的直接父类总是Object类。
-
-$ java ClassDeclarationSpy java.io.InterruptedIOException
-Class:
-  java.io.InterruptedIOException
-
-Modifiers:
-  public
-
-Type Parameters:
-  -- No Type Parameters --
-
-Implemented Interfaces:
-  -- No Implemented Interfaces --
-
-Inheritance Path:
-  java.io.IOException
-  java.lang.Exception
-  java.lang.Throwable
-  java.lang.Object
-
-Annotations:
-  -- No Annotations --
-
-$ java ClassDeclarationSpy java.security.Identity
-Class:
-  java.security.Identity
-
-Modifiers:
-  public abstract
-
-Type Parameters:
-  -- No Type Parameters --
-
-Implemented Interfaces:
-  interface java.security.Principal
-  interface java.io.Serializable
-
-Inheritance Path:
-  java.lang.Object
-
-Annotations:
-  @java.lang.Deprecated()
-java.security.Identity被注解标记为过时的api，可以用来通过反射代码来监测过时API
-注意：并不是所有的注解都能通过反射拿到，需要注解的保留策略的类型为Runtime类型（ java.lang.annotation.RetentionPolicy of RUNTIME）的注解才能在运行时拿到。
-</code></pre><h4 id="获取Class的成员"><a href="#获取Class的成员" class="headerlink" title="获取Class的成员"></a>获取Class的成员</h4><p>Class里提供了2类方法来访问字段、方法、构造函数：枚举所有成员的方法及查找某个指定成员的方法。还有不同的方法来访问类本身直接声明的成员及查找实现的接口或实现类继承下来的成员。</p>
+<p>如下例展示了如何获取类的声明的组件类型包括修饰符、泛型参数、实现的接口及继承的父类的路径。如果累实现了java.lang.reflect.AnnotatedElement接口，也能拿到运行时的注解信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.annotation.Annotation;</span><br><span class="line">import java.lang.reflect.Modifier;</span><br><span class="line">import java.lang.reflect.Type;</span><br><span class="line">import java.lang.reflect.TypeVariable;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line">import static java.lang.System.out;</span><br><span class="line"></span><br><span class="line">public class ClassDeclarationSpy &#123;</span><br><span class="line">    public static void main(String... args) &#123;</span><br><span class="line">    	try &#123;</span><br><span class="line">    	    Class&lt;?&gt; c = Class.forName(args[0]);//根据类名称得到class对象</span><br><span class="line">    	    out.format(&quot;Class:%n  %s%n%n&quot;, c.getCanonicalName());// 类的规范名称</span><br><span class="line">    	    out.format(&quot;Modifiers:%n  %s%n%n&quot;,</span><br><span class="line">    		       Modifier.toString(c.getModifiers()));// 输出类的修饰符</span><br><span class="line"></span><br><span class="line">    	    out.format(&quot;Type Parameters:%n&quot;);</span><br><span class="line">    	    TypeVariable[] tv = c.getTypeParameters();// 获取类型参数</span><br><span class="line">    	    if (tv.length != 0) &#123;</span><br><span class="line">        		out.format(&quot;  &quot;);</span><br><span class="line">        		for (TypeVariable t : tv)</span><br><span class="line">        		    out.format(&quot;%s &quot;, t.getName());</span><br><span class="line">        		out.format(&quot;%n%n&quot;);</span><br><span class="line">    	    &#125; else &#123;</span><br><span class="line">    		      out.format(&quot;  -- No Type Parameters --%n%n&quot;);</span><br><span class="line">    	    &#125;</span><br><span class="line"></span><br><span class="line">    	    out.format(&quot;Implemented Interfaces:%n&quot;);</span><br><span class="line">    	    Type[] intfs = c.getGenericInterfaces();// 实现接口</span><br><span class="line">    	    if (intfs.length != 0) &#123;</span><br><span class="line">        		for (Type intf : intfs)</span><br><span class="line">        		    out.format(&quot;  %s%n&quot;, intf.toString());</span><br><span class="line">        		out.format(&quot;%n&quot;);</span><br><span class="line">    	    &#125; else &#123;</span><br><span class="line">    		      out.format(&quot;  -- No Implemented Interfaces --%n%n&quot;);</span><br><span class="line">    	    &#125;</span><br><span class="line"></span><br><span class="line">    	    out.format(&quot;Inheritance Path:%n&quot;);// 继承路径</span><br><span class="line">    	    List&lt;Class&gt; l = new ArrayList&lt;Class&gt;();</span><br><span class="line">    	    printAncestor(c, l);</span><br><span class="line">    	    if (l.size() != 0) &#123;</span><br><span class="line">        		for (Class&lt;?&gt; cl : l)</span><br><span class="line">        		    out.format(&quot;  %s%n&quot;, cl.getCanonicalName());</span><br><span class="line">        		out.format(&quot;%n&quot;);</span><br><span class="line">    	    &#125; else &#123;</span><br><span class="line">  		        out.format(&quot;  -- No Super Classes --%n%n&quot;);</span><br><span class="line">    	    &#125;</span><br><span class="line"></span><br><span class="line">    	    out.format(&quot;Annotations:%n&quot;);</span><br><span class="line">    	    Annotation[] ann = c.getAnnotations();// 注解</span><br><span class="line">    	    if (ann.length != 0) &#123;</span><br><span class="line">        		for (Annotation a : ann)</span><br><span class="line">        		    out.format(&quot;  %s%n&quot;, a.toString());</span><br><span class="line">        		out.format(&quot;%n&quot;);</span><br><span class="line">    	    &#125; else &#123;</span><br><span class="line">  		        out.format(&quot;  -- No Annotations --%n%n&quot;);</span><br><span class="line">    	    &#125;</span><br><span class="line"></span><br><span class="line">            // production code should handle this exception more gracefully</span><br><span class="line">    	&#125; catch (ClassNotFoundException x) &#123;</span><br><span class="line">    	    x.printStackTrace();</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void printAncestor(Class&lt;?&gt; c, List&lt;Class&gt; l) &#123;</span><br><span class="line">    	Class&lt;?&gt; ancestor = c.getSuperclass();// 实现的父类</span><br><span class="line">     	if (ancestor != null) &#123;</span><br><span class="line">    	    l.add(ancestor);</span><br><span class="line">    	    printAncestor(ancestor, l);</span><br><span class="line">     	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>几个不同输入参数下的结果示例如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">$ java ClassDeclarationSpy java.util.concurrent.ConcurrentNavigableMap</span><br><span class="line">Class:</span><br><span class="line">  java.util.concurrent.ConcurrentNavigableMap</span><br><span class="line"></span><br><span class="line">Modifiers:</span><br><span class="line">  public abstract interface</span><br><span class="line"></span><br><span class="line">Type Parameters:</span><br><span class="line">  K V</span><br><span class="line"></span><br><span class="line">Implemented Interfaces:</span><br><span class="line">  java.util.concurrent.ConcurrentMap&lt;K, V&gt;</span><br><span class="line">  java.util.NavigableMap&lt;K, V&gt;</span><br><span class="line"></span><br><span class="line">Inheritance Path:</span><br><span class="line">  -- No Super Classes --</span><br><span class="line"></span><br><span class="line">Annotations:</span><br><span class="line">  -- No Annotations --</span><br><span class="line">This is the actual declaration for java.util.concurrent.ConcurrentNavigableMap in the source code:</span><br><span class="line"></span><br><span class="line">public interface ConcurrentNavigableMap&lt;K,V&gt;</span><br><span class="line">    extends ConcurrentMap&lt;K,V&gt;, NavigableMap&lt;K,V&gt;</span><br><span class="line">注意由于上述例子参数是接口，隐含abstract修饰符。编译器为每个接口添加该修饰符。同样，该接口有2个泛型参数，K、V。K、V具体的额外信息可通过TypeVariable的方法得到。上述说明接口也可以实现接口。</span><br><span class="line"></span><br><span class="line">$ java ClassDeclarationSpy &quot;[Ljava.lang.String;&quot;</span><br><span class="line">Class:</span><br><span class="line">  java.lang.String[]</span><br><span class="line"></span><br><span class="line">Modifiers:</span><br><span class="line">  public abstract final</span><br><span class="line"></span><br><span class="line">Type Parameters:</span><br><span class="line">  -- No Type Parameters --</span><br><span class="line"></span><br><span class="line">Implemented Interfaces:</span><br><span class="line">  interface java.lang.Cloneable</span><br><span class="line">  interface java.io.Serializable</span><br><span class="line"></span><br><span class="line">Inheritance Path:</span><br><span class="line">  java.lang.Object</span><br><span class="line"></span><br><span class="line">Annotations:</span><br><span class="line">  -- No Annotations --</span><br><span class="line">由于数组是运行时对象，所有的类型信息都由java虚拟机提供。特别的，数组实现了Cloneable、java.io.Serializable接口，并且数组的直接父类总是Object类。</span><br><span class="line"></span><br><span class="line">$ java ClassDeclarationSpy java.io.InterruptedIOException</span><br><span class="line">Class:</span><br><span class="line">  java.io.InterruptedIOException</span><br><span class="line"></span><br><span class="line">Modifiers:</span><br><span class="line">  public</span><br><span class="line"></span><br><span class="line">Type Parameters:</span><br><span class="line">  -- No Type Parameters --</span><br><span class="line"></span><br><span class="line">Implemented Interfaces:</span><br><span class="line">  -- No Implemented Interfaces --</span><br><span class="line"></span><br><span class="line">Inheritance Path:</span><br><span class="line">  java.io.IOException</span><br><span class="line">  java.lang.Exception</span><br><span class="line">  java.lang.Throwable</span><br><span class="line">  java.lang.Object</span><br><span class="line"></span><br><span class="line">Annotations:</span><br><span class="line">  -- No Annotations --</span><br><span class="line"></span><br><span class="line">$ java ClassDeclarationSpy java.security.Identity</span><br><span class="line">Class:</span><br><span class="line">  java.security.Identity</span><br><span class="line"></span><br><span class="line">Modifiers:</span><br><span class="line">  public abstract</span><br><span class="line"></span><br><span class="line">Type Parameters:</span><br><span class="line">  -- No Type Parameters --</span><br><span class="line"></span><br><span class="line">Implemented Interfaces:</span><br><span class="line">  interface java.security.Principal</span><br><span class="line">  interface java.io.Serializable</span><br><span class="line"></span><br><span class="line">Inheritance Path:</span><br><span class="line">  java.lang.Object</span><br><span class="line"></span><br><span class="line">Annotations:</span><br><span class="line">  @java.lang.Deprecated()</span><br></pre></td></tr></table></figure></p>
+<p>  java.security.Identity被注解标记为过时的api，可以用来通过反射代码来监测过时API<br>  注意：并不是所有的注解都能通过反射拿到，需要注解的保留策略的类型为Runtime类型（ java.lang.annotation.RetentionPolicy of RUNTIME）的注解才能在运行时拿到。</p>
+<h4 id="获取Class的成员"><a href="#获取Class的成员" class="headerlink" title="获取Class的成员"></a>获取Class的成员</h4><p>Class里提供了2类方法来访问字段、方法、构造函数：枚举所有成员的方法及查找某个指定成员的方法。还有不同的方法来访问类本身直接声明的成员及查找实现的接口或实现类继承下来的成员。</p>
 <p>定义字段的Class方法  </p>
 <table>
 <thead>
@@ -601,210 +406,14 @@ java.security.Identity被注解标记为过时的api，可以用来通过反射�
 </tr>
 </tbody>
 </table>
-<p>构造函数不能被继承</p>
-<pre><code>import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Member;
-import static java.lang.System.out;
-
-enum ClassMember { CONSTRUCTOR, FIELD, METHOD, CLASS, ALL }
-
-public class ClassSpy {
-    public static void main(String... args) {
-        try {
-            Class&lt;?&gt; c = Class.forName(args[0]);
-            out.format(&quot;Class:%n  %s%n%n&quot;, c.getCanonicalName());
-
-            Package p = c.getPackage();
-            out.format(&quot;Package:%n  %s%n%n&quot;,
-                   (p != null ? p.getName() : &quot;-- No Package --&quot;));
-
-            for (int i = 1; i &lt; args.length; i++) {
-                switch (ClassMember.valueOf(args[i])) {
-                  case CONSTRUCTOR:
-                      printMembers(c.getConstructors(), &quot;Constructor&quot;);
-                      break;
-                  case FIELD:
-                      printMembers(c.getFields(), &quot;Fields&quot;);
-                      break;
-                  case METHOD:
-                      printMembers(c.getMethods(), &quot;Methods&quot;);
-                      break;
-                  case CLASS:
-                      printClasses(c);
-                      break;
-                  case ALL:
-                      printMembers(c.getConstructors(), &quot;Constuctors&quot;);
-                      printMembers(c.getFields(), &quot;Fields&quot;);
-                      printMembers(c.getMethods(), &quot;Methods&quot;);
-                      printClasses(c);
-                      break;
-                  default:
-                      assert false;
-                }
-            }
-        } catch (ClassNotFoundException x) {
-            x.printStackTrace();
-        }
-    }
-
-    private static void printMembers(Member[] mbrs, String s) {
-        out.format(&quot;%s:%n&quot;, s);
-        for (Member mbr : mbrs) {
-            if (mbr instanceof Field)
-                out.format(&quot;  %s%n&quot;, ((Field)mbr).toGenericString());
-            else if (mbr instanceof Constructor)
-                out.format(&quot;  %s%n&quot;, ((Constructor)mbr).toGenericString());// 返回泛型化String
-            else if (mbr instanceof Method)
-                out.format(&quot;  %s%n&quot;, ((Method)mbr).toGenericString());
-         }
-        if (mbrs.length == 0)
-            out.format(&quot;  -- No %s --%n&quot;, s);
-        out.format(&quot;%n&quot;);
-    }
-
-    private static void printClasses(Class&lt;?&gt; c) {
-        out.format(&quot;Classes:%n&quot;);
-        Class&lt;?&gt;[] clss = c.getClasses();
-        for (Class&lt;?&gt; cls : clss)
-            out.format(&quot;  %s%n&quot;, cls.getCanonicalName());
-        if (clss.length == 0)
-            out.format(&quot;  -- No member interfaces, classes, or enums --%n&quot;);
-        out.format(&quot;%n&quot;);
-    }
-}
-</code></pre><p>以下是几个示例：</p>
-<pre><code>$ java ClassSpy java.lang.ClassCastException CONSTRUCTOR
-Class:
-  java.lang.ClassCastException
-
-Package:
-  java.lang
-
-Constructor:
-  public java.lang.ClassCastException()
-  public java.lang.ClassCastException(java.lang.String)// 构造函数不能被继承
-
-$ java ClassSpy java.nio.channels.ReadableByteChannel METHOD
-Class:
-  java.nio.channels.ReadableByteChannel
-
-Package:
-  java.nio.channels
-
-Methods:
-  public abstract int java.nio.channels.ReadableByteChannel.read
-    (java.nio.ByteBuffer) throws java.io.IOException
-  // 从实现接口继承的方法
-  public abstract void java.nio.channels.Channel.close() throws
-    java.io.IOException
-  public abstract boolean java.nio.channels.Channel.isOpen()
-
-$ java ClassSpy ClassMember FIELD METHOD
-Class:
-  ClassMember
-
-Package:
-  -- No Package --
-
-Fields:
-  // 可以根据 java.lang.reflect.Field.isEnumConstant()来区分枚举字段
-  public static final ClassMember ClassMember.CONSTRUCTOR
-  public static final ClassMember ClassMember.FIELD
-  public static final ClassMember ClassMember.METHOD
-  public static final ClassMember ClassMember.CLASS
-  public static final ClassMember ClassMember.ALL
-
-Methods:
-  // 方法名都带有类名，这样可以区分如toString()方法是Enum类的，而不是继承自Object的
-  public static ClassMember ClassMember.valueOf(java.lang.String)
-  public static ClassMember[] ClassMember.values()
-  public final int java.lang.Enum.hashCode()
-  public final int java.lang.Enum.compareTo(E)
-  public int java.lang.Enum.compareTo(java.lang.Object)
-  public final java.lang.String java.lang.Enum.name()
-  public final boolean java.lang.Enum.equals(java.lang.Object)
-  public java.lang.String java.lang.Enum.toString()
-  public static &lt;T&gt; T java.lang.Enum.valueOf
-    (java.lang.Class&lt;T&gt;,java.lang.String)
-  public final java.lang.Class&lt;E&gt; java.lang.Enum.getDeclaringClass()
-  public final int java.lang.Enum.ordinal()
-  public final native java.lang.Class&lt;?&gt; java.lang.Object.getClass()
-  public final native void java.lang.Object.wait(long) throws
-    java.lang.InterruptedException
-  public final void java.lang.Object.wait(long,int) throws
-    java.lang.InterruptedException
-  public final void java.lang.Object.wait() hrows java.lang.InterruptedException
-  public final native void java.lang.Object.notify()
-  public final native void java.lang.Object.notifyAll()
-
-// 获取字段的声明类
-if (mbr instanceof Field) {
-    Field f = (Field)mbr;
-    out.format(&quot;  %s%n&quot;, f.toGenericString());
-    out.format(&quot;  -- declared in: %s%n&quot;, f.getDeclaringClass());
-}
-</code></pre><h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><h5 id="编译警告"><a href="#编译警告" class="headerlink" title="编译警告"></a>编译警告</h5><p>可能发生的警告为：”Note: … uses unchecked or unsafe operations”<br>当调用一个方法时，参数值的类型经过校验，很可能经过转化。如下例getMethod()方法引起常见的未收校验的转换警告：</p>
-<pre><code>import java.lang.reflect.Method;
-
-public class ClassWarning {
-    void m() {
-    try {
-        Class c = ClassWarning.class;
-        Method m = c.getMethod(&quot;m&quot;);  // warning
-
-        // production code should handle this exception more gracefully
-    } catch (NoSuchMethodException x) {
-            x.printStackTrace();
-        }
-    }
-}
-
-$ javac ClassWarning.java
-Note: ClassWarning.java uses unchecked or unsafe operations.
-Note: Recompile with -Xlint:unchecked for details.
-
-$ javac -Xlint:unchecked ClassWarning.java
-ClassWarning.java:6: warning: [unchecked] unchecked call to getMethod
-  (String,Class&lt;?&gt;...) as a member of the raw type Class
-Method m = c.getMethod(&quot;m&quot;);  // warning
-                      ^
-</code></pre><p>因为c被声明为原始类型（不带有类型参数），但是getMethod()方法是一个参数化类型，所以发生未经转换的警告<br>有2中解决方法，更倾向于修改c的声明，使其带有合适的泛型类型，该例的声明应该为：</p>
-<pre><code>Class&lt;?&gt; c = warn.getClass();
-</code></pre><p>或者可以使用@SuppressWarnings来抑制警告</p>
-<pre><code>Class c = ClassWarning.class;
-@SuppressWarnings(&quot;unchecked&quot;)
-Method m = c.getMethod(&quot;m&quot;);  
-</code></pre><p>建议：通常的原则是,警告不应该被忽略， 因为警告可能表明一个bug。参数化声明应该合理使用。如果参数化声明不可能（如和厂商的类库代码交互），则可以使用@SuppressWarnings.</p>
-<h5 id="构造函数不可访问时构造异常"><a href="#构造函数不可访问时构造异常" class="headerlink" title="构造函数不可访问时构造异常"></a>构造函数不可访问时构造异常</h5><p>如果在类的无参构造函数不可访问时，调用Class.newInstance()方法会抛出InstantiationException异常。</p>
-<pre><code>class Cls {
-    private Cls() {}
-}
-
-public class ClassTrouble {
-    public static void main(String... args) {
-    try {
-        Class&lt;?&gt; c = Class.forName(&quot;Cls&quot;);
-        c.newInstance();  // InstantiationException
-    } catch (InstantiationException x) {
-        x.printStackTrace();
-    } catch (IllegalAccessException x) {
-        x.printStackTrace();
-    } catch (ClassNotFoundException x) {
-        x.printStackTrace();
-    }
-    }
-}
-
-$ java ClassTrouble
-java.lang.IllegalAccessException: Class ClassTrouble can not access a member of
-  class Cls with modifiers &quot;private&quot;
-        at sun.reflect.Reflection.ensureMemberAccess(Reflection.java:65)
-        at java.lang.Class.newInstance0(Class.java:349)
-        at java.lang.Class.newInstance(Class.java:308)
-        at ClassTrouble.main(ClassTrouble.java:9)
-</code></pre><p>Class.newInstance()的行为和new关键字很类似，会因为new关键失败的相同原因失败。反射里通用的解决方案是利用java.lang.reflect.AccessibleObject类提供的抑制访问控制校验的功能；然而由于java.lang.Class没继承AccessibleObject，所以不会有效。唯一的方案是使使用Constructor.newInstance()方法的类继承AccessibleObject。<br>建议：通常，更倾向于使用Constructor.newInstance()</p>
+<p>构造函数不能被继承<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.Constructor;</span><br><span class="line">import java.lang.reflect.Field;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line">import java.lang.reflect.Member;</span><br><span class="line">import static java.lang.System.out;</span><br><span class="line"></span><br><span class="line">enum ClassMember &#123; CONSTRUCTOR, FIELD, METHOD, CLASS, ALL &#125;</span><br><span class="line"></span><br><span class="line">public class ClassSpy &#123;</span><br><span class="line">    public static void main(String... args) &#123;</span><br><span class="line">    	try &#123;</span><br><span class="line">    	    Class&lt;?&gt; c = Class.forName(args[0]);</span><br><span class="line">    	    out.format(&quot;Class:%n  %s%n%n&quot;, c.getCanonicalName());</span><br><span class="line"></span><br><span class="line">    	    Package p = c.getPackage();</span><br><span class="line">    	    out.format(&quot;Package:%n  %s%n%n&quot;,</span><br><span class="line">    		       (p != null ? p.getName() : &quot;-- No Package --&quot;));</span><br><span class="line"></span><br><span class="line">    	    for (int i = 1; i &lt; args.length; i++) &#123;</span><br><span class="line">        		switch (ClassMember.valueOf(args[i])) &#123;</span><br><span class="line">          		case CONSTRUCTOR:</span><br><span class="line">          		    printMembers(c.getConstructors(), &quot;Constructor&quot;);</span><br><span class="line">          		    break;</span><br><span class="line">          		case FIELD:</span><br><span class="line">          		    printMembers(c.getFields(), &quot;Fields&quot;);</span><br><span class="line">          		    break;</span><br><span class="line">          		case METHOD:</span><br><span class="line">          		    printMembers(c.getMethods(), &quot;Methods&quot;);</span><br><span class="line">          		    break;</span><br><span class="line">          		case CLASS:</span><br><span class="line">          		    printClasses(c);</span><br><span class="line">          		    break;</span><br><span class="line">          		case ALL:</span><br><span class="line">          		    printMembers(c.getConstructors(), &quot;Constuctors&quot;);</span><br><span class="line">          		    printMembers(c.getFields(), &quot;Fields&quot;);</span><br><span class="line">          		    printMembers(c.getMethods(), &quot;Methods&quot;);</span><br><span class="line">          		    printClasses(c);</span><br><span class="line">          		    break;</span><br><span class="line">          		default:</span><br><span class="line">          		    assert false;</span><br><span class="line">        		&#125;</span><br><span class="line">    	    &#125;</span><br><span class="line">    	&#125; catch (ClassNotFoundException x) &#123;</span><br><span class="line">    	    x.printStackTrace();</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void printMembers(Member[] mbrs, String s) &#123;</span><br><span class="line">    	out.format(&quot;%s:%n&quot;, s);</span><br><span class="line">    	for (Member mbr : mbrs) &#123;</span><br><span class="line">    	    if (mbr instanceof Field)</span><br><span class="line">        		out.format(&quot;  %s%n&quot;, ((Field)mbr).toGenericString());</span><br><span class="line">    	    else if (mbr instanceof Constructor)</span><br><span class="line">    		    out.format(&quot;  %s%n&quot;, ((Constructor)mbr).toGenericString());// 返回泛型化String</span><br><span class="line">    	    else if (mbr instanceof Method)</span><br><span class="line">        		out.format(&quot;  %s%n&quot;, ((Method)mbr).toGenericString());</span><br><span class="line">    	 &#125;</span><br><span class="line">    	if (mbrs.length == 0)</span><br><span class="line">    	    out.format(&quot;  -- No %s --%n&quot;, s);</span><br><span class="line">    	out.format(&quot;%n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void printClasses(Class&lt;?&gt; c) &#123;</span><br><span class="line">    	out.format(&quot;Classes:%n&quot;);</span><br><span class="line">    	Class&lt;?&gt;[] clss = c.getClasses();</span><br><span class="line">    	for (Class&lt;?&gt; cls : clss)</span><br><span class="line">    	    out.format(&quot;  %s%n&quot;, cls.getCanonicalName());</span><br><span class="line">    	if (clss.length == 0)</span><br><span class="line">    	    out.format(&quot;  -- No member interfaces, classes, or enums --%n&quot;);</span><br><span class="line">    	out.format(&quot;%n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以下是几个示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">$ java ClassSpy java.lang.ClassCastException CONSTRUCTOR</span><br><span class="line">Class:</span><br><span class="line">  java.lang.ClassCastException</span><br><span class="line"></span><br><span class="line">Package:</span><br><span class="line">  java.lang</span><br><span class="line"></span><br><span class="line">Constructor:</span><br><span class="line">  public java.lang.ClassCastException()</span><br><span class="line">  public java.lang.ClassCastException(java.lang.String)// 构造函数不能被继承</span><br><span class="line"></span><br><span class="line">$ java ClassSpy java.nio.channels.ReadableByteChannel METHOD</span><br><span class="line">Class:</span><br><span class="line">  java.nio.channels.ReadableByteChannel</span><br><span class="line"></span><br><span class="line">Package:</span><br><span class="line">  java.nio.channels</span><br><span class="line"></span><br><span class="line">Methods:</span><br><span class="line">  public abstract int java.nio.channels.ReadableByteChannel.read</span><br><span class="line">    (java.nio.ByteBuffer) throws java.io.IOException</span><br><span class="line">  // 从实现接口继承的方法</span><br><span class="line">  public abstract void java.nio.channels.Channel.close() throws</span><br><span class="line">    java.io.IOException</span><br><span class="line">  public abstract boolean java.nio.channels.Channel.isOpen()</span><br><span class="line"></span><br><span class="line">$ java ClassSpy ClassMember FIELD METHOD</span><br><span class="line">Class:</span><br><span class="line">  ClassMember</span><br><span class="line"></span><br><span class="line">Package:</span><br><span class="line">  -- No Package --</span><br><span class="line"></span><br><span class="line">Fields:</span><br><span class="line">  // 可以根据 java.lang.reflect.Field.isEnumConstant()来区分枚举字段</span><br><span class="line">  public static final ClassMember ClassMember.CONSTRUCTOR</span><br><span class="line">  public static final ClassMember ClassMember.FIELD</span><br><span class="line">  public static final ClassMember ClassMember.METHOD</span><br><span class="line">  public static final ClassMember ClassMember.CLASS</span><br><span class="line">  public static final ClassMember ClassMember.ALL</span><br><span class="line"></span><br><span class="line">Methods:</span><br><span class="line">  // 方法名都带有类名，这样可以区分如toString()方法是Enum类的，而不是继承自Object的</span><br><span class="line">  public static ClassMember ClassMember.valueOf(java.lang.String)</span><br><span class="line">  public static ClassMember[] ClassMember.values()</span><br><span class="line">  public final int java.lang.Enum.hashCode()</span><br><span class="line">  public final int java.lang.Enum.compareTo(E)</span><br><span class="line">  public int java.lang.Enum.compareTo(java.lang.Object)</span><br><span class="line">  public final java.lang.String java.lang.Enum.name()</span><br><span class="line">  public final boolean java.lang.Enum.equals(java.lang.Object)</span><br><span class="line">  public java.lang.String java.lang.Enum.toString()</span><br><span class="line">  public static &lt;T&gt; T java.lang.Enum.valueOf</span><br><span class="line">    (java.lang.Class&lt;T&gt;,java.lang.String)</span><br><span class="line">  public final java.lang.Class&lt;E&gt; java.lang.Enum.getDeclaringClass()</span><br><span class="line">  public final int java.lang.Enum.ordinal()</span><br><span class="line">  public final native java.lang.Class&lt;?&gt; java.lang.Object.getClass()</span><br><span class="line">  public final native void java.lang.Object.wait(long) throws</span><br><span class="line">    java.lang.InterruptedException</span><br><span class="line">  public final void java.lang.Object.wait(long,int) throws</span><br><span class="line">    java.lang.InterruptedException</span><br><span class="line">  public final void java.lang.Object.wait() hrows java.lang.InterruptedException</span><br><span class="line">  public final native void java.lang.Object.notify()</span><br><span class="line">  public final native void java.lang.Object.notifyAll()</span><br><span class="line"></span><br><span class="line">// 获取字段的声明类</span><br><span class="line">if (mbr instanceof Field) &#123;</span><br><span class="line">    Field f = (Field)mbr;</span><br><span class="line">    out.format(&quot;  %s%n&quot;, f.toGenericString());</span><br><span class="line">    out.format(&quot;  -- declared in: %s%n&quot;, f.getDeclaringClass());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h4><h5 id="编译警告"><a href="#编译警告" class="headerlink" title="编译警告"></a>编译警告</h5><p>可能发生的警告为：”Note: … uses unchecked or unsafe operations”<br>当调用一个方法时，参数值的类型经过校验，很可能经过转化。如下例getMethod()方法引起常见的未收校验的转换警告：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line">public class ClassWarning &#123;</span><br><span class="line">    void m() &#123;</span><br><span class="line">	try &#123;</span><br><span class="line">	    Class c = ClassWarning.class;</span><br><span class="line">	    Method m = c.getMethod(&quot;m&quot;);  // warning</span><br><span class="line"></span><br><span class="line">        // production code should handle this exception more gracefully</span><br><span class="line">	&#125; catch (NoSuchMethodException x) &#123;</span><br><span class="line">    	    x.printStackTrace();</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ javac ClassWarning.java</span><br><span class="line">Note: ClassWarning.java uses unchecked or unsafe operations.</span><br><span class="line">Note: Recompile with -Xlint:unchecked for details.</span><br><span class="line"></span><br><span class="line">$ javac -Xlint:unchecked ClassWarning.java</span><br><span class="line">ClassWarning.java:6: warning: [unchecked] unchecked call to getMethod</span><br><span class="line">  (String,Class&lt;?&gt;...) as a member of the raw type Class</span><br><span class="line">Method m = c.getMethod(&quot;m&quot;);  // warning</span><br><span class="line">                      ^</span><br></pre></td></tr></table></figure></p>
+<p>因为c被声明为原始类型（不带有类型参数），但是getMethod()方法是一个参数化类型，所以发生未经转换的警告<br>有2中解决方法，更倾向于修改c的声明，使其带有合适的泛型类型，该例的声明应该为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; c = warn.getClass();</span><br></pre></td></tr></table></figure></p>
+<p>或者可以使用@SuppressWarnings来抑制警告<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class c = ClassWarning.class;</span><br><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">Method m = c.getMethod(&quot;m&quot;);</span><br></pre></td></tr></table></figure></p>
+<p>建议：通常的原则是,警告不应该被忽略， 因为警告可能表明一个bug。参数化声明应该合理使用。如果参数化声明不可能（如和厂商的类库代码交互），则可以使用@SuppressWarnings.</p>
+<h5 id="构造函数不可访问时构造异常"><a href="#构造函数不可访问时构造异常" class="headerlink" title="构造函数不可访问时构造异常"></a>构造函数不可访问时构造异常</h5><p>如果在类的无参构造函数不可访问时，调用Class.newInstance()方法会抛出InstantiationException异常。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">class Cls &#123;</span><br><span class="line">    private Cls() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ClassTrouble &#123;</span><br><span class="line">    public static void main(String... args) &#123;</span><br><span class="line">	try &#123;</span><br><span class="line">	    Class&lt;?&gt; c = Class.forName(&quot;Cls&quot;);</span><br><span class="line">	    c.newInstance();  // InstantiationException</span><br><span class="line">	&#125; catch (InstantiationException x) &#123;</span><br><span class="line">	    x.printStackTrace();</span><br><span class="line">	&#125; catch (IllegalAccessException x) &#123;</span><br><span class="line">	    x.printStackTrace();</span><br><span class="line">	&#125; catch (ClassNotFoundException x) &#123;</span><br><span class="line">	    x.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$ java ClassTrouble</span><br><span class="line">java.lang.IllegalAccessException: Class ClassTrouble can not access a member of</span><br><span class="line">  class Cls with modifiers &quot;private&quot;</span><br><span class="line">        at sun.reflect.Reflection.ensureMemberAccess(Reflection.java:65)</span><br><span class="line">        at java.lang.Class.newInstance0(Class.java:349)</span><br><span class="line">        at java.lang.Class.newInstance(Class.java:308)</span><br><span class="line">        at ClassTrouble.main(ClassTrouble.java:9)</span><br></pre></td></tr></table></figure></p>
+<p>Class.newInstance()的行为和new关键字很类似，会因为new关键失败的相同原因失败。反射里通用的解决方案是利用java.lang.reflect.AccessibleObject类提供的抑制访问控制校验的功能；然而由于java.lang.Class没继承AccessibleObject，所以不会有效。唯一的方案是使使用Constructor.newInstance()方法的类继承AccessibleObject。<br>建议：通常，更倾向于使用Constructor.newInstance()</p>
 
         
         <br>

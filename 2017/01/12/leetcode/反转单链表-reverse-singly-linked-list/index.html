@@ -146,93 +146,15 @@
 <p>  4、继续重复过程3，修改c的next使其指向b，那么我得到c（oldHead）—&gt;b（newHead）-&gt;a-&gt;null，d（nextNode）-&gt;null，更新几个变量指向后，2段链表为c(newHead)-&gt;b-&gt;a-&gt;null，d(oldHead)-null(nextNode)</p>
 <p>  5、再重复过程3，修改d的next=newHead,2段链表分别为d(oldHead)-&gt;c(newHead)-&gt;b-&gt;a-null，null(nextNode)，此时已经反转完成，然后迭代结束条件就是nextNode==null</p>
 <p>  6、总的来说，需要newHead、oldHead、nextNode3个变量，在原链表还是一段的时候，我们的oldHead指向a，nextNode=a.next，newHead则等于null,三个变量的表示意思为：oldHead表示待反转链表的头结点，newHead表示已反转链表的头结点（所以一开始初始值为null），nextNode表示带反转链表的头结点的下一个结点（所以初始值为oldHead.next)。</p>
-<h4 id="迭代（循环）实现"><a href="#迭代（循环）实现" class="headerlink" title="迭代（循环）实现"></a>迭代（循环）实现</h4><pre><code>`/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */`
-public class Solution {
-    public ListNode reverseList(ListNode head) {
-       if(head == null) return null;
-       ListNode newHead = null;
-       ListNode oldHead = head;
-       ListNode nextNode = head.next;// nextNode定义为待反转链表头结点的next结点，初始化为head的next结点
-       while(nextNode != null){//  待反转链表头结点的next结点不为null作为条件
-          oldHead.next = newHead;
-          newHead =oldHead;
-          oldHead = nextNode;
-          nextNode = nextNode.next;
-       }
-       oldHead.next = newHead;// 需要手动更改待反转链表的最后一个头结点的指向
-       newHead = oldHead;// 该步可以省略，直接返回oldHead，为了更清晰。
-       return newHeadNode;
-    }
-}
-为什么while循环要以nextNode！= null作为结束条件？考虑以下实现，只是不同的初始化方式：
-`/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */`
-public class Solution {
-    public ListNode reverseList(ListNode head) {
-        if(head == null) return null;
-        ListNode newHead = null;// 定义为已反转链表头结点
-        ListNode oldHead = head;// 定义为待反转链表头结点
-        ListNode next = null;// 定义为待反转链表的头结点的next结点，初始化为null
-        while(oldHead != null){//迭代结束条件是待反转链表的头结点不为null，为null说明反转结束
-            next = oldHead.next;// 保存next指向
-            oldHead.next = newHead;
-            newHead = oldHead;
-            oldHead = next;
-        }
-        return newHead;// newHead结点即为新链表的头结点
-    }
-}
-</code></pre><h4 id="递归方式思路"><a href="#递归方式思路" class="headerlink" title="递归方式思路"></a>递归方式思路</h4><p>前面分析的过程可以概括为一个已反转链表（初始为null）部分，一个未反转链表部分（初始为待反转链表），每次都是从待反转链表拿出头结点，作为已反转链表部分的头结点，不断重复这个过程，直到待反转链表部分只剩下null结点。这个过程和递归很类似，递归就是在函数里调用函数本身，重复调用函数本身说明解决的问题结构很类似，刚才的分析过程中一直存在的结构或变量有2个，一个是已反转链表、一个未反转链表，那递归函数是不是可以这么定义？</p>
-<pre><code>private ListNode reverse(ListNode oldHead, ListNode newHead)
-</code></pre><p>  我在这个函数里要调用函数自身进行递归，所以：    </p>
-<pre><code>private ListNode reverse(ListNode oldHead, ListNode newHead){
-  return reverse(oldHead, newHead);
-}
-</code></pre><p>  貌似需要在递归里做些处理，回想我们在每一次的从待反转链表结点里拿出头结点oldHead（拿出前需要先记住oldHead的next结点，否则修改oldHead的next指向后，便找不到原next结点了），将其next指向已反转链表的头结点，这样未反转链表和已反转链表的头结点都发生了变化，我们需要更新oldHead和newHead的指向。</p>
-<pre><code>private ListNode reverse(ListNode oldHead, ListNode newHead){
-  ListNode next = oldHead.next;// 记住待反转链表头结点的next结点
-  oldHead.next = newHead;// 将oldHead结点从待反转链表结点拿出，使其成为已反转链表结点的头结点
-  newHead = oldHead;// 更新newHead结点指向
-  oldHead = next;// 更新oldHead结点指向，指向此时待反转链表结点的头结点（为先前保存的next指向的结点）
-  return reverse(oldHead, newHead);
-}
-</code></pre><p>   貌似递归还缺少递归出口，拿什么作为出口？回想刚才分析过程，最终是以待反转链表的头结点未null，结束，此时已反转链表的头结点就是反转后新链表的头结点。</p>
-<pre><code>private ListNode reverse(ListNode oldHead, ListNode newHead){
-  if(oldHead == null) return newHead;
-  ListNode next = oldHead.next;// 记住待反转链表头结点的next结点
-  oldHead.next = newHead;// 将oldHead结点从待反转链表结点拿出，使其成为已反转链表结点的头结点
-  newHead = oldHead;// 更新newHead结点指向
-  oldHead = next;// 更新oldHead结点指向，指向此时待反转链表结点的头结点（为先前保存的next指向的结点）
-  return reverse(oldHead, newHead);
-}
-</code></pre><h4 id="递归方式实现"><a href="#递归方式实现" class="headerlink" title="递归方式实现"></a>递归方式实现</h4><pre><code>public ListNode reverseList(ListNode head) {
-    if(head == null) return null;
-    return reverse(head, null);// 一开始已反转链表为null，因此头结点未null
-}
-private ListNode reverse(ListNode oldHead, ListNode newHead){
-  if(oldHead == null) return newHead;
-  ListNode next = oldHead.next;// 记住待反转链表头结点的next结点
-  oldHead.next = newHead;// 将oldHead结点从待反转链表结点拿出，使其成为已反转链表结点的头结点
-
-  // 以下2个更新可以省略，为了清晰
-  newHead = oldHead;// 更新newHead结点指向
-  oldHead = next;// 更新oldHead结点指向，指向此时待反转链表结点的头结点（为先前保存的next指向的结点）
-  return reverse(oldHead, newHead);
-}
-</code></pre>
+<h4 id="迭代（循环）实现"><a href="#迭代（循环）实现" class="headerlink" title="迭代（循环）实现"></a>迭代（循环）实现</h4>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">`/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * public class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123; val = x; &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */`</span><br><span class="line">public class Solution &#123;</span><br><span class="line">    public ListNode reverseList(ListNode head) &#123;</span><br><span class="line">       if(head == null) return null;</span><br><span class="line">       ListNode newHead = null;</span><br><span class="line">       ListNode oldHead = head;</span><br><span class="line">       ListNode nextNode = head.next;// nextNode定义为待反转链表头结点的next结点，初始化为head的next结点</span><br><span class="line">       while(nextNode != null)&#123;//  待反转链表头结点的next结点不为null作为条件</span><br><span class="line">          oldHead.next = newHead;</span><br><span class="line">          newHead =oldHead;</span><br><span class="line">          oldHead = nextNode;</span><br><span class="line">          nextNode = nextNode.next;</span><br><span class="line">       &#125;</span><br><span class="line">       oldHead.next = newHead;// 需要手动更改待反转链表的最后一个头结点的指向</span><br><span class="line">       newHead = oldHead;// 该步可以省略，直接返回oldHead，为了更清晰。</span><br><span class="line">       return newHeadNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  为什么while循环要以nextNode！= null作为结束条件？考虑以下实现，只是不同的初始化方式：<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">`/**</span><br><span class="line"> * Definition for singly-linked list.</span><br><span class="line"> * public class ListNode &#123;</span><br><span class="line"> *     int val;</span><br><span class="line"> *     ListNode next;</span><br><span class="line"> *     ListNode(int x) &#123; val = x; &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> */`</span><br><span class="line">public class Solution &#123;</span><br><span class="line">    public ListNode reverseList(ListNode head) &#123;</span><br><span class="line">        if(head == null) return null;</span><br><span class="line">        ListNode newHead = null;// 定义为已反转链表头结点</span><br><span class="line">        ListNode oldHead = head;// 定义为待反转链表头结点</span><br><span class="line">        ListNode next = null;// 定义为待反转链表的头结点的next结点，初始化为null</span><br><span class="line">        while(oldHead != null)&#123;//迭代结束条件是待反转链表的头结点不为null，为null说明反转结束</span><br><span class="line">            next = oldHead.next;// 保存next指向</span><br><span class="line">            oldHead.next = newHead;</span><br><span class="line">            newHead = oldHead;</span><br><span class="line">            oldHead = next;</span><br><span class="line">        &#125;</span><br><span class="line">        return newHead;// newHead结点即为新链表的头结点</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="递归方式思路"><a href="#递归方式思路" class="headerlink" title="递归方式思路"></a>递归方式思路</h4><p>前面分析的过程可以概括为一个已反转链表（初始为null）部分，一个未反转链表部分（初始为待反转链表），每次都是从待反转链表拿出头结点，作为已反转链表部分的头结点，不断重复这个过程，直到待反转链表部分只剩下null结点。这个过程和递归很类似，递归就是在函数里调用函数本身，重复调用函数本身说明解决的问题结构很类似，刚才的分析过程中一直存在的结构或变量有2个，一个是已反转链表、一个未反转链表，那递归函数是不是可以这么定义？</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private ListNode reverse(ListNode oldHead, ListNode newHead)</span><br></pre></td></tr></table></figure>
+<p>我在这个函数里要调用函数自身进行递归，所以：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private ListNode reverse(ListNode oldHead, ListNode newHead)&#123;</span><br><span class="line">  return reverse(oldHead, newHead);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  貌似需要在递归里做些处理，回想我们在每一次的从待反转链表结点里拿出头结点oldHead（拿出前需要先记住oldHead的next结点，否则修改oldHead的next指向后，便找不到原next结点了），将其next指向已反转链表的头结点，这样未反转链表和已反转链表的头结点都发生了变化，我们需要更新oldHead和newHead的指向。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private ListNode reverse(ListNode oldHead, ListNode newHead)&#123;</span><br><span class="line">  ListNode next = oldHead.next;// 记住待反转链表头结点的next结点</span><br><span class="line">  oldHead.next = newHead;// 将oldHead结点从待反转链表结点拿出，使其成为已反转链表结点的头结点</span><br><span class="line">  newHead = oldHead;// 更新newHead结点指向</span><br><span class="line">  oldHead = next;// 更新oldHead结点指向，指向此时待反转链表结点的头结点（为先前保存的next指向的结点）</span><br><span class="line">  return reverse(oldHead, newHead);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  貌似递归还缺少递归出口，拿什么作为出口？回想刚才分析过程，最终是以待反转链表的头结点未null，结束，此时已反转链表的头结点就是反转后新链表的头结点。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private ListNode reverse(ListNode oldHead, ListNode newHead)&#123;</span><br><span class="line">  if(oldHead == null) return newHead;</span><br><span class="line">  ListNode next = oldHead.next;// 记住待反转链表头结点的next结点</span><br><span class="line">  oldHead.next = newHead;// 将oldHead结点从待反转链表结点拿出，使其成为已反转链表结点的头结点</span><br><span class="line">  newHead = oldHead;// 更新newHead结点指向</span><br><span class="line">  oldHead = next;// 更新oldHead结点指向，指向此时待反转链表结点的头结点（为先前保存的next指向的结点）</span><br><span class="line">  return reverse(oldHead, newHead);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="递归方式实现"><a href="#递归方式实现" class="headerlink" title="递归方式实现"></a>递归方式实现</h4>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  public ListNode reverseList(ListNode head) &#123;</span><br><span class="line">    if(head == null) return null;</span><br><span class="line">    return reverse(head, null);// 一开始已反转链表为null，因此头结点未null</span><br><span class="line">&#125;</span><br><span class="line">private ListNode reverse(ListNode oldHead, ListNode newHead)&#123;</span><br><span class="line">  if(oldHead == null) return newHead;</span><br><span class="line">  ListNode next = oldHead.next;// 记住待反转链表头结点的next结点</span><br><span class="line">  oldHead.next = newHead;// 将oldHead结点从待反转链表结点拿出，使其成为已反转链表结点的头结点</span><br><span class="line"></span><br><span class="line">  // 以下2个更新可以省略，为了清晰</span><br><span class="line">  newHead = oldHead;// 更新newHead结点指向</span><br><span class="line">  oldHead = next;// 更新oldHead结点指向，指向此时待反转链表结点的头结点（为先前保存的next指向的结点）</span><br><span class="line">  return reverse(oldHead, newHead);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         
         <br>
         <div id="comment-container">

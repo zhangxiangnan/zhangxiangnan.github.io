@@ -141,167 +141,88 @@
 <a id="more"></a>
 <p>注解是元数据的一种形式,提供程序相关的数据,但不是程序本身的一部分,注解不会直接操作他们所标注的代码。</p>
 <p>注解有很多用途:</p>
-<pre><code>- 编译器所需的信息,如编译器可以用注解来检测错误或禁止警告
-- 编译时或发布时处理,如软件工具可以处理注解信息来生成代码、xml文件等
-- 运行时处理,某些注解在运行时也可以检测到
-</code></pre><h4 id="注解基本点"><a href="#注解基本点" class="headerlink" title="注解基本点"></a>注解基本点</h4><h5 id="注解的形式"><a href="#注解的形式" class="headerlink" title="注解的形式"></a>注解的形式</h5><p>最简单的:</p>
-<pre><code>@Entity
-</code></pre><p>@符号后的信息对编译器表明这是一个注解。</p>
-<p>以下注解的名称是Override:</p>
-<pre><code>@Override
-void mySuperMethod() {  }
-</code></pre><p>注解也可以包含元素,元素可以有名称,也可以没有名称,他们也有对应的值:</p>
-<pre><code>@Author(
-   name = &quot;Benjamin Franklin&quot;,
-   date = &quot;3/27/2003&quot;
-)
-class MyClass() { }
-
-@SuppressWarnings(value = &quot;unchecked&quot;)
-void myMethod() { }
-</code></pre><p>如果只有一个命为value的元素,那么名称可以省略,如:</p>
-<pre><code>@SuppressWarnings(&quot;unchecked&quot;)
-void myMethod() {}
-</code></pre><p>如果注解没有元素,那么圆括号可以省略,如@Override注解的例子。</p>
-<p>在相同声明的位置可以使用多个注解:</p>
-<pre><code>@Author(name = &quot;Jane Doe&quot;)
-@EBook
-class MyClass { }
-</code></pre><p>如果注解有相同的类型,称为可重复注解(&gt;=Jdk8):</p>
-<pre><code>@Author(name = &quot;Jane Doe&quot;)
-@Author(name = &quot;John Smith&quot;)
-class MyClass { }
-</code></pre><p>注解可以使用java.lang或java.lang.annotation包下定义的注解,也可以使用自定义注解。</p>
+<ul>
+<li>编译器所需的信息,如编译器可以用注解来检测错误或禁止警告</li>
+<li>编译时或发布时处理,如软件工具可以处理注解信息来生成代码、xml文件等</li>
+<li>运行时处理,某些注解在运行时也可以检测到</li>
+</ul>
+<h4 id="注解基本点"><a href="#注解基本点" class="headerlink" title="注解基本点"></a>注解基本点</h4><h5 id="注解的形式"><a href="#注解的形式" class="headerlink" title="注解的形式"></a>注解的形式</h5><p>最简单的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Entity</span><br></pre></td></tr></table></figure></p>
+<p>@符号后的信息对编译器表明这是一个注解。</p>
+<p>以下注解的名称是Override:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">void mySuperMethod() &#123;  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>注解也可以包含元素,元素可以有名称,也可以没有名称,他们也有对应的值:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Author(</span><br><span class="line">   name = &quot;Benjamin Franklin&quot;,</span><br><span class="line">   date = &quot;3/27/2003&quot;</span><br><span class="line">)</span><br><span class="line">class MyClass() &#123; &#125;</span><br><span class="line"></span><br><span class="line">@SuppressWarnings(value = &quot;unchecked&quot;)</span><br><span class="line">void myMethod() &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果只有一个命为value的元素,那么名称可以省略,如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">void myMethod() &#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果注解没有元素,那么圆括号可以省略,如@Override注解的例子。</p>
+<p>在相同声明的位置可以使用多个注解:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Author(name = &quot;Jane Doe&quot;)</span><br><span class="line">@EBook</span><br><span class="line">class MyClass &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果注解有相同的类型,称为可重复注解(&gt;=Jdk8):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Author(name = &quot;Jane Doe&quot;)</span><br><span class="line">@Author(name = &quot;John Smith&quot;)</span><br><span class="line">class MyClass &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>注解可以使用java.lang或java.lang.annotation包下定义的注解,也可以使用自定义注解。</p>
 <h5 id="注解可以用在哪儿"><a href="#注解可以用在哪儿" class="headerlink" title="注解可以用在哪儿"></a>注解可以用在哪儿</h5><p>注解可以用在声明的地方:</p>
-<pre><code>- 类/接口(含注解类型)/枚举声明
-- 方法声明
-- 字段(含枚举常量)声明
-- 形参声明
-- 构造函数声明
-- 本地变量声明
-- 注解类型声明
-- 包声明
-- 类型参数声明
-- 类型的使用
-</code></pre><p>使用时注解约定占一行。</p>
-<h5 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h5><p>Java8中支持类型使用的注解,称为类型注解,如:<br>实例化对象的表达式:</p>
-<pre><code>new @Interned MyObject();
-</code></pre><p>类型强转:</p>
-<pre><code>myString = (@NonNull String) str;
-</code></pre><p>implements子句:</p>
-<pre><code>class UnmodifiableList&lt;T&gt; implements
-    @Readonly List&lt;@Readonly T&gt; {  }
-</code></pre><p>异常声明:</p>
-<pre><code>void monitorTemperature() throws
-    @Critical TemperatureException {  }
-</code></pre><h4 id="定义注解类型"><a href="#定义注解类型" class="headerlink" title="定义注解类型"></a>定义注解类型</h4><p>注解可以替换注释为代码,设想:</p>
-<pre><code>public class Generation3List extends Generation2List {
-   // Author: John Doe
-   // Date: 3/17/2002
-   // Current revision: 6
-   // Last modified: 4/12/2004
-   // By: Jane Doe
-   // Reviewers: Alice, Bill, Cindy
-   // class code goes here
-}
-</code></pre><p>将这些注释信息如何转化为一个注解?首先必须定一个注解类型,如下:</p>
-<pre><code>@interface ClassPreamble {
-   String author();
-   String date();
-   int currentRevision() default 1;
-   String lastModified() default &quot;N/A&quot;;
-   String lastModifiedBy() default &quot;N/A&quot;;
-   // Note use of array
-   String[] reviewers();
-}
-</code></pre><p>注解类型的定义有点像接口的声明,但是在interface关键字前加@符号。注解是接口的一种形式,其元素的声明像方法,可以指定默认值。</p>
-<pre><code>@ClassPreamble (
-   author = &quot;John Doe&quot;,
-   date = &quot;3/17/2002&quot;,
-   currentRevision = 6,
-   lastModified = &quot;4/12/2004&quot;,
-   lastModifiedBy = &quot;Jane Doe&quot;,
-   // Note array notation
-   reviewers = {&quot;Alice&quot;, &quot;Bob&quot;, &quot;Cindy&quot;}
-)
-public class Generation3List extends Generation2List {}
-</code></pre><p>注意:如果想在Javadoc生成的文档中包含@ClassPreamble中描述的信息,需要在其注解的定义上加@Documented注解。</p>
-<pre><code>@Documented
-@interface ClassPreamble {
-}
-</code></pre><h4 id="已有注解类型"><a href="#已有注解类型" class="headerlink" title="已有注解类型"></a>已有注解类型</h4><p>Java预先定义了一些注解,有些被java编译器使用,有些应用到其他注解中。</p>
+<ul>
+<li>类/接口(含注解类型)/枚举声明</li>
+<li>方法声明</li>
+<li>字段(含枚举常量)声明</li>
+<li>形参声明</li>
+<li>构造函数声明</li>
+<li>本地变量声明</li>
+<li>注解类型声明</li>
+<li>包声明</li>
+<li>类型参数声明</li>
+<li>类型的使用</li>
+</ul>
+<p>使用时注解约定占一行。</p>
+<h5 id="类型注解"><a href="#类型注解" class="headerlink" title="类型注解"></a>类型注解</h5><p>Java8中支持类型使用的注解,称为类型注解,如:<br>实例化对象的表达式:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new @Interned MyObject();</span><br></pre></td></tr></table></figure></p>
+<p>类型强转:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myString = (@NonNull String) str;</span><br></pre></td></tr></table></figure></p>
+<p>implements子句:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class UnmodifiableList&lt;T&gt; implements</span><br><span class="line">    @Readonly List&lt;@Readonly T&gt; &#123;  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>异常声明:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">void monitorTemperature() throws</span><br><span class="line">    @Critical TemperatureException &#123;  &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="定义注解类型"><a href="#定义注解类型" class="headerlink" title="定义注解类型"></a>定义注解类型</h4><p>注解可以替换注释为代码,设想:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Generation3List extends Generation2List &#123;</span><br><span class="line">   // Author: John Doe</span><br><span class="line">   // Date: 3/17/2002</span><br><span class="line">   // Current revision: 6</span><br><span class="line">   // Last modified: 4/12/2004</span><br><span class="line">   // By: Jane Doe</span><br><span class="line">   // Reviewers: Alice, Bill, Cindy</span><br><span class="line">   // class code goes here</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>将这些注释信息如何转化为一个注解?首先必须定一个注解类型,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@interface ClassPreamble &#123;</span><br><span class="line">   String author();</span><br><span class="line">   String date();</span><br><span class="line">   int currentRevision() default 1;</span><br><span class="line">   String lastModified() default &quot;N/A&quot;;</span><br><span class="line">   String lastModifiedBy() default &quot;N/A&quot;;</span><br><span class="line">   // Note use of array</span><br><span class="line">   String[] reviewers();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注解类型的定义有点像接口的声明,但是在interface关键字前加@符号。注解是接口的一种形式,其元素的声明像方法,可以指定默认值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@ClassPreamble (</span><br><span class="line">   author = &quot;John Doe&quot;,</span><br><span class="line">   date = &quot;3/17/2002&quot;,</span><br><span class="line">   currentRevision = 6,</span><br><span class="line">   lastModified = &quot;4/12/2004&quot;,</span><br><span class="line">   lastModifiedBy = &quot;Jane Doe&quot;,</span><br><span class="line">   // Note array notation</span><br><span class="line">   reviewers = &#123;&quot;Alice&quot;, &quot;Bob&quot;, &quot;Cindy&quot;&#125;</span><br><span class="line">)</span><br><span class="line">public class Generation3List extends Generation2List &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>注意:如果想在Javadoc生成的文档中包含@ClassPreamble中描述的信息,需要在其注解的定义上加@Documented注解。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Documented</span><br><span class="line">@interface ClassPreamble &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="已有注解类型"><a href="#已有注解类型" class="headerlink" title="已有注解类型"></a>已有注解类型</h4><p>Java预先定义了一些注解,有些被java编译器使用,有些应用到其他注解中。</p>
 <h5 id="java语言使用的注解"><a href="#java语言使用的注解" class="headerlink" title="java语言使用的注解"></a>java语言使用的注解</h5><p>java.lang定义的注解为:@Deprecated, @Override, and @SuppressWarnings.</p>
-<h6 id="Deprecated"><a href="#Deprecated" class="headerlink" title="@Deprecated"></a>@Deprecated</h6><p>该注解表明被标注的元素已过时,不该再被使用。使用有过时注解标注的方法、类、字段,编译器都会警告。如果元素过时,也应该使用Javadc的过时标记@deprecated来标注,两个注解一个大写,一个小写。</p>
-<pre><code>// Javadoc comment follows
- /**
-  * @deprecated
-  * explanation of why it was deprecated
-  */
- @Deprecated
- static void deprecatedMethod() { }
-</code></pre><h6 id="Override"><a href="#Override" class="headerlink" title="@Override"></a>@Override</h6><p>@Override注解通知编译器被标注元素覆盖了父类的元素:</p>
-<pre><code>// 重写方法约定加覆盖注解
-@Override
-int overriddenMethod() { }
-</code></pre><p>虽然不强制使用覆盖标记,但是使用了有助于发现错误。</p>
-<h6 id="SuppressWarnings"><a href="#SuppressWarnings" class="headerlink" title="@SuppressWarnings"></a>@SuppressWarnings</h6><p>@SuppressWarnings注解告诉编译器忽略可能产生的某种特定的警告,如下忽略了过时方法调用警告:</p>
-<pre><code>@SuppressWarnings(&quot;deprecation&quot;)
- void useDeprecatedMethod() {
-     // deprecation warning
-     // - suppressed
-     objectOne.deprecatedMethod();
- }
-</code></pre><p>每一种编译器警告都属于一个分类,java语言规范定义了2中分类:deprecation and unchecked. 想要忽略多种分类的警告,如下:</p>
-<pre><code>@SuppressWarnings({&quot;unchecked&quot;, &quot;deprecation&quot;})
-</code></pre><h6 id="SafeVarargs"><a href="#SafeVarargs" class="headerlink" title="@SafeVarargs"></a>@SafeVarargs</h6><p>@SafeVarargs注解当使用在方法或构造函数上时,断言了代码不可能对可变参数执行潜在的不安全操作。当使用该注解后,跟可变参数使用相关的unchecked警告会被忽略。</p>
+<h6 id="Deprecated"><a href="#Deprecated" class="headerlink" title="@Deprecated"></a>@Deprecated</h6><p>该注解表明被标注的元素已过时,不该再被使用。使用有过时注解标注的方法、类、字段,编译器都会警告。如果元素过时,也应该使用Javadc的过时标记@deprecated来标注,两个注解一个大写,一个小写。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// Javadoc comment follows</span><br><span class="line"> /**</span><br><span class="line">  * @deprecated</span><br><span class="line">  * explanation of why it was deprecated</span><br><span class="line">  */</span><br><span class="line"> @Deprecated</span><br><span class="line"> static void deprecatedMethod() &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<h6 id="Override"><a href="#Override" class="headerlink" title="@Override"></a>@Override</h6><p>@Override注解通知编译器被标注元素覆盖了父类的元素:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 重写方法约定加覆盖注解</span><br><span class="line">@Override</span><br><span class="line">int overriddenMethod() &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>虽然不强制使用覆盖标记,但是使用了有助于发现错误。</p>
+<h6 id="SuppressWarnings"><a href="#SuppressWarnings" class="headerlink" title="@SuppressWarnings"></a>@SuppressWarnings</h6><p>@SuppressWarnings注解告诉编译器忽略可能产生的某种特定的警告,如下忽略了过时方法调用警告:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&quot;deprecation&quot;)</span><br><span class="line"> void useDeprecatedMethod() &#123;</span><br><span class="line">     // deprecation warning</span><br><span class="line">     // - suppressed</span><br><span class="line">     objectOne.deprecatedMethod();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>每一种编译器警告都属于一个分类,java语言规范定义了2中分类:deprecation and unchecked. 想要忽略多种分类的警告,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&#123;&quot;unchecked&quot;, &quot;deprecation&quot;&#125;)</span><br></pre></td></tr></table></figure></p>
+<h6 id="SafeVarargs"><a href="#SafeVarargs" class="headerlink" title="@SafeVarargs"></a>@SafeVarargs</h6><p>@SafeVarargs注解当使用在方法或构造函数上时,断言了代码不可能对可变参数执行潜在的不安全操作。当使用该注解后,跟可变参数使用相关的unchecked警告会被忽略。</p>
 <h6 id="FunctionalInterface"><a href="#FunctionalInterface" class="headerlink" title="@FunctionalInterface"></a>@FunctionalInterface</h6><p>@FunctionalInterface在java8中引入,表明当前类型声明是一个函数接口。</p>
 <h5 id="应用到其他注解的注解"><a href="#应用到其他注解的注解" class="headerlink" title="应用到其他注解的注解"></a>应用到其他注解的注解</h5><p>这类注解成为元注解, java.lang.annnotation中定义的几个元注解如下:</p>
 <h6 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h6><p>@Retention注解指明了被标记注解如何存储:</p>
-<pre><code>- RetentionPolicy.SOURCE, 被标记注解仅仅在源文件级别保留,编译时被忽略
-- RetentionPolicy.CLASS ,被标记注解在编译时被编译器保留,但是在JVM运行时被忽略
-- RetentionPolicy.RUNTIME ,被标记注解被jvm保留,在运行时环境中可以使用
-</code></pre><h6 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h6><p>@Documented注解表示被标注的注解在使用Javadoc工具生成文档时会被记录到文档中,默认注解是不被记录的。</p>
+<ul>
+<li>RetentionPolicy.SOURCE, 被标记注解仅仅在源文件级别保留,编译时被忽略</li>
+<li>RetentionPolicy.CLASS ,被标记注解在编译时被编译器保留,但是在JVM运行时被忽略</li>
+<li>RetentionPolicy.RUNTIME ,被标记注解被jvm保留,在运行时环境中可以使用</li>
+</ul>
+<h6 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h6><p>@Documented注解表示被标注的注解在使用Javadoc工具生成文档时会被记录到文档中,默认注解是不被记录的。</p>
 <h6 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h6><p>@Target注解标记其他注解来限制注解可以应用的java元素,如:</p>
-<pre><code>- ElementType.CONSTRUCTOR 可应用到构造函数上
-- ElementType.FIELD 可应用到字段或属性上
-- ElementType.LOCAL_VARIABLE 可应用到本地变量上
-- ElementType.METHOD 可应用到方法级别的注解上
-- ElementType.PACKAGE 可应用到包声明上
-- ElementType.PARAMETER 可应用到方法的参数上
-- ElementType.TYPE 可应用到类的任何元素上
-</code></pre><h6 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h6><p>@Inherited表示注解可以从父类继承,默认不可以。 当用户查询注解类型时,若当前类没有该类型的注解,会接着查询父类的该注解。该注解只可用于类声明上。</p>
+<ul>
+<li>ElementType.CONSTRUCTOR 可应用到构造函数上</li>
+<li>ElementType.FIELD 可应用到字段或属性上</li>
+<li>ElementType.LOCAL_VARIABLE 可应用到本地变量上</li>
+<li>ElementType.METHOD 可应用到方法级别的注解上</li>
+<li>ElementType.PACKAGE 可应用到包声明上</li>
+<li>ElementType.PARAMETER 可应用到方法的参数上</li>
+<li>ElementType.TYPE 可应用到类的任何元素上<h6 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h6>@Inherited表示注解可以从父类继承,默认不可以。 当用户查询注解类型时,若当前类没有该类型的注解,会接着查询父类的该注解。该注解只可用于类声明上。</li>
+</ul>
 <h6 id="Repeatable"><a href="#Repeatable" class="headerlink" title="@Repeatable"></a>@Repeatable</h6><p>@Repeatable在java8引入,表示被标记注解可以多次应用到相同声明或类型使用</p>
 <h4 id="类型注解-amp-可插拔类型系统"><a href="#类型注解-amp-可插拔类型系统" class="headerlink" title="类型注解&amp;可插拔类型系统"></a>类型注解&amp;可插拔类型系统</h4><p>Jdk8以前,注解只能应用在声明上,jdk8里注解可以应用到任何类型使用上,这意味着可以在你使用一个类型的任何地方使用。<br>类型注解引入是为了提升java程序的分析来提供更强的类型检查,java8不提供类型检查框架,但是它允许我们来使用多个可插拔类型检查框架来配合java编译器进行更强大的类型检查。</p>
-<p>如,想要确保某一个特定的变量不能被赋值为null,来避免NPE异常的话,可以编写一个自定义插件来检查这一点,类似如下:</p>
-<pre><code>@NonNull String str;
-</code></pre><p>可以加载多种插件来加强类型检查,减少错误。</p>
-<h4 id="可重复注解"><a href="#可重复注解" class="headerlink" title="可重复注解"></a>可重复注解</h4><p>有些情形可能想要使用相同的注解多次,java8引入类型注解。<br>如想要定义多个时间点执行方法,如下:</p>
-<pre><code>@Schedule(dayOfMonth=&quot;last&quot;)
-@Schedule(dayOfWeek=&quot;Fri&quot;, hour=&quot;23&quot;)
-public void doPeriodicCleanup() { }
-</code></pre><p>可重复注解可以在任何使用标准注解的地方使用,如也可在类声明上使用,如:</p>
-<pre><code>@Alert(role=&quot;Manager&quot;)
-@Alert(role=&quot;Administrator&quot;)
-public class UnauthorizedAccessException extends SecurityException { }
-</code></pre><p>为了兼容,可重复注解保存在java编译器自动生成的注解容器里,需要以下两步声明:</p>
+<p>如,想要确保某一个特定的变量不能被赋值为null,来避免NPE异常的话,可以编写一个自定义插件来检查这一点,类似如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@NonNull String str;</span><br></pre></td></tr></table></figure></p>
+<p>可以加载多种插件来加强类型检查,减少错误。</p>
+<h4 id="可重复注解"><a href="#可重复注解" class="headerlink" title="可重复注解"></a>可重复注解</h4><p>有些情形可能想要使用相同的注解多次,java8引入类型注解。<br>如想要定义多个时间点执行方法,如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Schedule(dayOfMonth=&quot;last&quot;)</span><br><span class="line">@Schedule(dayOfWeek=&quot;Fri&quot;, hour=&quot;23&quot;)</span><br><span class="line">public void doPeriodicCleanup() &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可重复注解可以在任何使用标准注解的地方使用,如也可在类声明上使用,如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Alert(role=&quot;Manager&quot;)</span><br><span class="line">@Alert(role=&quot;Administrator&quot;)</span><br><span class="line">public class UnauthorizedAccessException extends SecurityException &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>为了兼容,可重复注解保存在java编译器自动生成的注解容器里,需要以下两步声明:</p>
 <ul>
 <li><p>一是定义可重复注解:</p>
-<pre><code>import java.lang.annotation.Repeatable;
-@Repeatable(Schedules.class)
-public @interface Schedule {
-  String dayOfMonth() default &quot;first&quot;;
-  String dayOfWeek() default &quot;Mon&quot;;
-  int hour() default 12;
-}
-</code></pre><p>  @Repeatable元注解圆括号里定义的是注解容器的类型,java编译器用来存储可重复注解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.annotation.Repeatable;</span><br><span class="line">@Repeatable(Schedules.class)</span><br><span class="line">public @interface Schedule &#123;</span><br><span class="line">  String dayOfMonth() default &quot;first&quot;;</span><br><span class="line">  String dayOfWeek() default &quot;Mon&quot;;</span><br><span class="line">  int hour() default 12;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  @Repeatable元注解圆括号里定义的是注解容器的类型,java编译器用来存储可重复注解。</p>
 <p>  这个例子里,注解容器是Scheudles,所以可重复注解@Schedule存储在@Schedules注解里。</p>
 </li>
 <li><p>二是声明容器枚举类型</p>
 <p>  容器枚举类型必须有一个数组类型的元素,数组的数据类型必须是可重复注解的类型,如:</p>
-<pre><code>public @interface Schedules {
-    Schedule[] value();
-}
-</code></pre></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public @interface Schedules &#123;</span><br><span class="line">    Schedule[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <h5 id="重新获取注解"><a href="#重新获取注解" class="headerlink" title="重新获取注解"></a>重新获取注解</h5><p>反射API中有几个方法可用来获取注解信息,返回一个单独注解的方法,如AnnotatedElement.getAnnotation(Class<t>)的行为不变,因为仅仅返回请求类型的一个注解(如果存在),如果请求类型存在多个注解,可以先得到其容器注解。</t></p>
 <p>java8也引入其他方法来遍历容器注解来一次获取多个注解,如AnnotatedElement.getAnnotationsByType(Class<t>)。</t></p>

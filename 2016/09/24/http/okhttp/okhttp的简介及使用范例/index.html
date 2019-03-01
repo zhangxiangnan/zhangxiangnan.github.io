@@ -155,80 +155,8 @@
 <p>OkHttp当网络出问题时做如下尝试：<br>  它默默地恢复对于常见的连接问题。如果你的服务有多个ip地址，，OkHttp将选择一个其他可用的地址如果第一次连接请求失败的话。这对IPV6 + IPV4以及多数据中心的服务是很有必要的。OkHttp使用现代的TLS特征（SNI、ALPN）发起新连接，如果握手失败则使用TLS1.0进行兜底。</p>
 <p>使用OkHttp很简单，它的请求响应API使用流式创建器及不变性。它同时支持同步调用及带有回调机制的异步调用。</p>
 <p>OKHttp支持android&gt;=2.3，java版本最低1.7</p>
-<h3 id="Get请求示例"><a href="#Get请求示例" class="headerlink" title="Get请求示例"></a>Get请求示例</h3><pre><code>package cn.xiangnan.okhttpdemo;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.io.IOException;
-
-/**get请求数据
-* Created by zhangxiangnan on 16/9/24.
-*/
-public class GetDemo {
-OkHttpClient client = new OkHttpClient();
-
-String doGet(String url) throws IOException {
-    Request request = new Request.Builder()
-            .url(url)
-            .build();
-
-    Response response = client.newCall(request).execute();
-    return response.body().string();
-}
-
-public static void main(String[] args) throws IOException {
-    GetDemo demo = new GetDemo();
-    String response = demo.doGet(&quot;https://raw.github.com/square/okhttp/master/README.md&quot;);
-    System.out.println(response);
-}
-}
-</code></pre><h3 id="POST请求示例（提交json数据）"><a href="#POST请求示例（提交json数据）" class="headerlink" title="POST请求示例（提交json数据）"></a>POST请求示例（提交json数据）</h3><pre><code>package cn.xiangnan.okhttpdemo;
-
-import okhttp3.*;
-
-import java.io.IOException;
-
-/**post请求发送json数据
- * Created by zhangxiangnan on 16/9/24.
- */
-public class PostDemo {
-    public static final MediaType JSON
-            = MediaType.parse(&quot;application/json; charset=utf-8&quot;);
-
-    OkHttpClient client = new OkHttpClient();
-
-    String post(String url, String json) throws IOException {
-        RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-            Response response = client.newCall(request).execute();
-        return response.body().string();
-    }
-
-    String bowlingJson(String player1, String player2) {
-        return &quot;{&apos;winCondition&apos;:&apos;HIGH_SCORE&apos;,&quot;
-                + &quot;&apos;name&apos;:&apos;Bowling&apos;,&quot;
-                + &quot;&apos;round&apos;:4,&quot;
-                + &quot;&apos;lastSaved&apos;:1367702411696,&quot;
-                + &quot;&apos;dateStarted&apos;:1367702378785,&quot;
-                + &quot;&apos;players&apos;:[&quot;
-                + &quot;{&apos;name&apos;:&apos;&quot; + player1 + &quot;&apos;,&apos;history&apos;:[10,8,6,7,8],&apos;color&apos;:-13388315,&apos;total&apos;:39},&quot;
-                + &quot;{&apos;name&apos;:&apos;&quot; + player2 + &quot;&apos;,&apos;history&apos;:[6,10,5,10,10],&apos;color&apos;:-48060,&apos;total&apos;:41}&quot;
-                + &quot;]}&quot;;
-    }
-
-    public static void main(String[] args) throws IOException {
-        PostDemo example = new PostDemo();
-        String json = example.bowlingJson(&quot;Jesse&quot;, &quot;Jake&quot;);
-        String response = example.post(&quot;http://www.roundsapp.com/post&quot;, json);
-        System.out.println(response);
-    }
-}
-</code></pre>
+<h3 id="Get请求示例"><a href="#Get请求示例" class="headerlink" title="Get请求示例"></a>Get请求示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">package cn.xiangnan.okhttpdemo;</span><br><span class="line"></span><br><span class="line">import okhttp3.OkHttpClient;</span><br><span class="line">import okhttp3.Request;</span><br><span class="line">import okhttp3.Response;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line">/**get请求数据</span><br><span class="line">* Created by zhangxiangnan on 16/9/24.</span><br><span class="line">*/</span><br><span class="line">public class GetDemo &#123;</span><br><span class="line">OkHttpClient client = new OkHttpClient();</span><br><span class="line"></span><br><span class="line">String doGet(String url) throws IOException &#123;</span><br><span class="line">    Request request = new Request.Builder()</span><br><span class="line">            .url(url)</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    Response response = client.newCall(request).execute();</span><br><span class="line">    return response.body().string();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) throws IOException &#123;</span><br><span class="line">    GetDemo demo = new GetDemo();</span><br><span class="line">    String response = demo.doGet(&quot;https://raw.github.com/square/okhttp/master/README.md&quot;);</span><br><span class="line">    System.out.println(response);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="POST请求示例（提交json数据）"><a href="#POST请求示例（提交json数据）" class="headerlink" title="POST请求示例（提交json数据）"></a>POST请求示例（提交json数据）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">package cn.xiangnan.okhttpdemo;</span><br><span class="line"></span><br><span class="line">import okhttp3.*;</span><br><span class="line"></span><br><span class="line">import java.io.IOException;</span><br><span class="line"></span><br><span class="line">/**post请求发送json数据</span><br><span class="line"> * Created by zhangxiangnan on 16/9/24.</span><br><span class="line"> */</span><br><span class="line">public class PostDemo &#123;</span><br><span class="line">    public static final MediaType JSON</span><br><span class="line">            = MediaType.parse(&quot;application/json; charset=utf-8&quot;);</span><br><span class="line"></span><br><span class="line">    OkHttpClient client = new OkHttpClient();</span><br><span class="line"></span><br><span class="line">    String post(String url, String json) throws IOException &#123;</span><br><span class="line">        RequestBody body = RequestBody.create(JSON, json);</span><br><span class="line">        Request request = new Request.Builder()</span><br><span class="line">                .url(url)</span><br><span class="line">                .post(body)</span><br><span class="line">                .build();</span><br><span class="line">            Response response = client.newCall(request).execute();</span><br><span class="line">        return response.body().string();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    String bowlingJson(String player1, String player2) &#123;</span><br><span class="line">        return &quot;&#123;&apos;winCondition&apos;:&apos;HIGH_SCORE&apos;,&quot;</span><br><span class="line">                + &quot;&apos;name&apos;:&apos;Bowling&apos;,&quot;</span><br><span class="line">                + &quot;&apos;round&apos;:4,&quot;</span><br><span class="line">                + &quot;&apos;lastSaved&apos;:1367702411696,&quot;</span><br><span class="line">                + &quot;&apos;dateStarted&apos;:1367702378785,&quot;</span><br><span class="line">                + &quot;&apos;players&apos;:[&quot;</span><br><span class="line">                + &quot;&#123;&apos;name&apos;:&apos;&quot; + player1 + &quot;&apos;,&apos;history&apos;:[10,8,6,7,8],&apos;color&apos;:-13388315,&apos;total&apos;:39&#125;,&quot;</span><br><span class="line">                + &quot;&#123;&apos;name&apos;:&apos;&quot; + player2 + &quot;&apos;,&apos;history&apos;:[6,10,5,10,10],&apos;color&apos;:-48060,&apos;total&apos;:41&#125;&quot;</span><br><span class="line">                + &quot;]&#125;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws IOException &#123;</span><br><span class="line">        PostDemo example = new PostDemo();</span><br><span class="line">        String json = example.bowlingJson(&quot;Jesse&quot;, &quot;Jake&quot;);</span><br><span class="line">        String response = example.post(&quot;http://www.roundsapp.com/post&quot;, json);</span><br><span class="line">        System.out.println(response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         
         <br>
         <div id="comment-container">

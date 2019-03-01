@@ -208,18 +208,12 @@
 <p>说明：unicode是统一码，ISO创建的全新的超语言字典，所有语言都可以通过这个字典相互翻译。</p>
 <h3 id="java中哪些场景要编码"><a href="#java中哪些场景要编码" class="headerlink" title="java中哪些场景要编码"></a>java中哪些场景要编码</h3><h4 id="IO编解码"><a href="#IO编解码" class="headerlink" title="IO编解码"></a>IO编解码</h4><p>分磁盘IO与网络IO，网络IO见javaWeb中编解码。<br>读文件（字节到字符）：java使用InputStreamReader关联字节到字符的桥梁，进行字节解码，解码由StreamDecoder使用指定charset，无则默认z中文使用GBK。</p>
 <p>写文件（字符到字节）：java使用OutputStreamWriter做字符到字节的转换桥梁，进行字符的编码，编码由StringEncoder处理，使用指定charset，无默认GBK。</p>
-<h4 id="内存中编解码"><a href="#内存中编解码" class="headerlink" title="内存中编解码"></a>内存中编解码</h4><h5 id="String提供的方法"><a href="#String提供的方法" class="headerlink" title="String提供的方法"></a>String提供的方法</h5><p>如下：</p>
-<pre><code>String s = &quot;hah哈你好&quot;;
-byte[] b = s.getBytes(&quot;UTF-8&quot;);
-String n =new String(b, &quot;UTF-8&quot;);
-</code></pre><h5 id="Charset的encode和decode方法"><a href="#Charset的encode和decode方法" class="headerlink" title="Charset的encode和decode方法"></a>Charset的encode和decode方法</h5><p> 其提供char[]到byte[]编码及byte[]到char[]解码，如下：   </p>
-<pre><code>Charset charset = Charset.forName(&quot;UTF-8&quot;);
-ByteBuffer byteBuffer = charset.encode(string);
-CharBuffer charBuffer = charset.decode(byteBuffer);
-</code></pre><h5 id="ByteBuffer类的软转换"><a href="#ByteBuffer类的软转换" class="headerlink" title="ByteBuffer类的软转换"></a>ByteBuffer类的软转换</h5><p>ByteBuffer提供char与byte的软转换，转换不需要编解码，只是把16bit的char拆分为2个8bit的byte表示，实际值没有修改，仅仅数据类型做转换：   </p>
-<pre><code>ByteBuffer bytebuffer2 = ByteBuffer.allocate(1024);   
-ByteBuffer byteBuffer = bytebuffer2.putChar(c);
-</code></pre><h3 id="javaWeb中涉及的编解码"><a href="#javaWeb中涉及的编解码" class="headerlink" title="javaWeb中涉及的编解码"></a>javaWeb中涉及的编解码</h3><p>网络传输都是以字节为单位，java对象要经过网络传输必须经过序列化，实现Serializable序列化接口。</p>
+<h4 id="内存中编解码"><a href="#内存中编解码" class="headerlink" title="内存中编解码"></a>内存中编解码</h4><h5 id="String提供的方法"><a href="#String提供的方法" class="headerlink" title="String提供的方法"></a>String提供的方法</h5><p>如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String s = &quot;hah哈你好&quot;;</span><br><span class="line">byte[] b = s.getBytes(&quot;UTF-8&quot;);</span><br><span class="line">String n =new String(b, &quot;UTF-8&quot;);</span><br></pre></td></tr></table></figure></p>
+<h5 id="Charset的encode和decode方法"><a href="#Charset的encode和decode方法" class="headerlink" title="Charset的encode和decode方法"></a>Charset的encode和decode方法</h5><p> 其提供char[]到byte[]编码及byte[]到char[]解码，如下：   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Charset charset = Charset.forName(&quot;UTF-8&quot;);</span><br><span class="line">ByteBuffer byteBuffer = charset.encode(string);</span><br><span class="line">CharBuffer charBuffer = charset.decode(byteBuffer);</span><br></pre></td></tr></table></figure>
+<h5 id="ByteBuffer类的软转换"><a href="#ByteBuffer类的软转换" class="headerlink" title="ByteBuffer类的软转换"></a>ByteBuffer类的软转换</h5><p>ByteBuffer提供char与byte的软转换，转换不需要编解码，只是把16bit的char拆分为2个8bit的byte表示，实际值没有修改，仅仅数据类型做转换：   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer bytebuffer2 = ByteBuffer.allocate(1024);   </span><br><span class="line">ByteBuffer byteBuffer = bytebuffer2.putChar(c);</span><br></pre></td></tr></table></figure>
+<h3 id="javaWeb中涉及的编解码"><a href="#javaWeb中涉及的编解码" class="headerlink" title="javaWeb中涉及的编解码"></a>javaWeb中涉及的编解码</h3><p>网络传输都是以字节为单位，java对象要经过网络传输必须经过序列化，实现Serializable序列化接口。</p>
 <p>用户发起http请求，需要编码的地方有URL、Cookie、Parameter服务端收到htt请求，对URI、Cookie、POST表单参数解码，服务端还可能从数据库、本地或网络其他地方的文本文件读取数据，都可能存在解码问题。servlet处理请求，将响应数据编码通过socket返回到浏览器，浏览器解码为文本信息。</p>
 <h4 id="URL的编解码"><a href="#URL的编解码" class="headerlink" title="URL的编解码"></a>URL的编解码</h4><p>URL中可能有中文，需要编码，根据URL的编码规范RFC3986，浏览器将非ASCII字符按照某编码格式编码然后前面加上%，可以设置编码，不同浏览器不一样。</p>
 <p>tomcat对URL的URL部门进行解码的字符集在<connector uriencoding="UTF-8">设置，默认ISO-8859-1，一般URL有中文该项需设置。</connector></p>
@@ -229,12 +223,9 @@ ByteBuffer byteBuffer = bytebuffer2.putChar(c);
 <h4 id="POST表单的编解码"><a href="#POST表单的编解码" class="headerlink" title="POST表单的编解码"></a>POST表单的编解码</h4><p>POST表单提交的参数的解码在第一次调用request.getParameter时发生，POST表单参数通过http的body传递到服务端。<br>整个流程是点提交时，浏览器根据contenttype的charset对表单参数编码，提交到服务端，服务端同样用contenttype中的字符集进行解码，所以post表单的参数一般不会乱码。<br>通过request.setCharacterEncoding(charset)可以设置。</p>
 <p>注意：要在第一次调用request.getParameter方法之前设置request.setCharacterEncoding(charset)，否则POST表单提交的数据可能出现乱码。</p>
 <h4 id="HTTP-BODY的编解码"><a href="#HTTP-BODY的编解码" class="headerlink" title="HTTP BODY的编解码"></a>HTTP BODY的编解码</h4><p>服务端返回的结果经过编码返回浏览器，浏览器解码，然后显示。<br>编码可以通过response.setCharacterEncoding设置，会覆盖request.setCharacterEncoding的值，通过Header的content-type返回给客户端。<br>浏览器首先根据Content-type解码，无则根据HTML的<meta http-equiv="content-type" content="text/html;charset=gbk">来解码，无则使用浏览器默认编码解码。</p>
-<h4 id="数据库连接的编解码"><a href="#数据库连接的编解码" class="headerlink" title="数据库连接的编解码"></a>数据库连接的编解码</h4><p>若使用jdbc，存取数据时要和数据的内置编码保持一致，可在jdbc的url中设置编码指定。</p>
-<pre><code>url=&quot;jdbc:mysql://localhost:3306/db?useUnicode=true&amp;characterEncoding=GBK&quot;
-</code></pre><h4 id="js编解码"><a href="#js编解码" class="headerlink" title="js编解码"></a>js编解码</h4><h5 id="js文件编解码"><a href="#js文件编解码" class="headerlink" title="js文件编解码"></a>js文件编解码</h5><pre><code>&lt;html&gt;
-&lt;head&gt;
-&lt;script src=&quot;xxx/a.js&quot; charset=&quot;gbk&quot;/&gt;
-</code></pre><p>引入的js文件若有中文，和本html页面的编码若不一致则会乱码，可以手动指定编码格式。</p>
+<h4 id="数据库连接的编解码"><a href="#数据库连接的编解码" class="headerlink" title="数据库连接的编解码"></a>数据库连接的编解码</h4><p>若使用jdbc，存取数据时要和数据的内置编码保持一致，可在jdbc的url中设置编码指定。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url=&quot;jdbc:mysql://localhost:3306/db?useUnicode=true&amp;characterEncoding=GBK&quot;</span><br></pre></td></tr></table></figure></p>
+<h4 id="js编解码"><a href="#js编解码" class="headerlink" title="js编解码"></a>js编解码</h4><h5 id="js文件编解码"><a href="#js文件编解码" class="headerlink" title="js文件编解码"></a>js文件编解码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;script src=&quot;xxx/a.js&quot; charset=&quot;gbk&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>引入的js文件若有中文，和本html页面的编码若不一致则会乱码，可以手动指定编码格式。</p>
 <h5 id="js的url编解码"><a href="#js的url编解码" class="headerlink" title="js的url编解码"></a>js的url编解码</h5><p>js中发起ajax请求的url默认编码受浏览器不同影响，可使用escape()、encodeURI()、encodeURIComponent()几个函数搞定。<br>java中的URLEncoder、URLDecoder和js的encodeURIComponent对应。</p>
 <h4 id="xml文件的编解码"><a href="#xml文件的编解码" class="headerlink" title="xml文件的编解码"></a>xml文件的编解码</h4><p>xml文件开始设定encoding</p>
 <h4 id="velocity模板设置编码"><a href="#velocity模板设置编码" class="headerlink" title="velocity模板设置编码"></a>velocity模板设置编码</h4><p>services.VelocityService.input.encoding=UTF-8</p>

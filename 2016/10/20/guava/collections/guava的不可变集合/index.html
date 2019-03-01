@@ -141,45 +141,9 @@
     </div>
     <div class="post-content ">
         <p>guava的不可变集合讲解-Immutable*<br><a id="more"></a></p>
-<h3 id="jdk的Collections-ImmutableXXX例子"><a href="#jdk的Collections-ImmutableXXX例子" class="headerlink" title="jdk的Collections.ImmutableXXX例子"></a>jdk的Collections.ImmutableXXX例子</h3><pre><code>package cn.zxn.guava.collections;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-// jdk的方法修改原始集合会导致不可变集合发生变化
-public class ImmutableCollectionsExplained {
-
-public static void main(String[] args) {
-    List&lt;String&gt; originalList = new ArrayList&lt;String&gt;();
-    originalList.add(&quot;S&quot;);
-    originalList.add(&quot;Q&quot;);
-
-    List&lt;String&gt; unmodifiableList = Collections.unmodifiableList(originalList);
-    System.out.println(unmodifiableList.size());// 输出2
-
-    // 原始集合新增一个item
-    originalList.add(&quot;T&quot;);
-    // 不可变集合的大小变化,变为3
-    System.out.println(unmodifiableList.size());// 输出3
-}
-}
-</code></pre><h3 id="guava例子"><a href="#guava例子" class="headerlink" title="guava例子:"></a>guava例子:</h3><pre><code>// 不可变set声明示例
-public static final ImmutableSet&lt;String&gt; COLOR_NAMES = ImmutableSet.of(
-  &quot;red&quot;,
-  &quot;orange&quot;,
-  &quot;yellow&quot;,
-  &quot;green&quot;,
-  &quot;blue&quot;,
-  &quot;purple&quot;);
-
- class Foo {
-    final ImmutableSet&lt;Bar&gt; immutableBars;
-    Foo(Set&lt;Bar&gt; bars) {
-      this.immutableBars = ImmutableSet.copyOf(bars);
-      // 保护性拷贝，使集合immutableBars不可被删除增加元素，但是可以调用元素自身的方法进行元素的修改
-    }
-  }
-</code></pre><h3 id="使用不可变对象的原因"><a href="#使用不可变对象的原因" class="headerlink" title="使用不可变对象的原因"></a>使用不可变对象的原因</h3><p>不可变对象有许多好处，包括：</p>
+<h3 id="jdk的Collections-ImmutableXXX例子"><a href="#jdk的Collections-ImmutableXXX例子" class="headerlink" title="jdk的Collections.ImmutableXXX例子"></a>jdk的Collections.ImmutableXXX例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">package cn.zxn.guava.collections;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.Collections;</span><br><span class="line">import java.util.List;</span><br><span class="line">// jdk的方法修改原始集合会导致不可变集合发生变化</span><br><span class="line">public class ImmutableCollectionsExplained &#123;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    List&lt;String&gt; originalList = new ArrayList&lt;String&gt;();</span><br><span class="line">    originalList.add(&quot;S&quot;);</span><br><span class="line">    originalList.add(&quot;Q&quot;);</span><br><span class="line"></span><br><span class="line">    List&lt;String&gt; unmodifiableList = Collections.unmodifiableList(originalList);</span><br><span class="line">    System.out.println(unmodifiableList.size());// 输出2</span><br><span class="line"></span><br><span class="line">    // 原始集合新增一个item</span><br><span class="line">    originalList.add(&quot;T&quot;);</span><br><span class="line">    // 不可变集合的大小变化,变为3</span><br><span class="line">    System.out.println(unmodifiableList.size());// 输出3</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="guava例子"><a href="#guava例子" class="headerlink" title="guava例子:"></a>guava例子:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 不可变set声明示例</span><br><span class="line">  public static final ImmutableSet&lt;String&gt; COLOR_NAMES = ImmutableSet.of(</span><br><span class="line">    &quot;red&quot;,</span><br><span class="line">    &quot;orange&quot;,</span><br><span class="line">    &quot;yellow&quot;,</span><br><span class="line">    &quot;green&quot;,</span><br><span class="line">    &quot;blue&quot;,</span><br><span class="line">    &quot;purple&quot;);</span><br><span class="line"></span><br><span class="line">   class Foo &#123;</span><br><span class="line">      final ImmutableSet&lt;Bar&gt; immutableBars;</span><br><span class="line">      Foo(Set&lt;Bar&gt; bars) &#123;</span><br><span class="line">        this.immutableBars = ImmutableSet.copyOf(bars);</span><br><span class="line">        // 保护性拷贝，使集合immutableBars不可被删除增加元素，但是可以调用元素自身的方法进行元素的修改</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用不可变对象的原因"><a href="#使用不可变对象的原因" class="headerlink" title="使用不可变对象的原因"></a>使用不可变对象的原因</h3><p>不可变对象有许多好处，包括：</p>
 <ul>
 <li>安全地被不受信任的类库使用</li>
 <li>线程安全：可以在多线程中使用而不用考虑(静态条件)加锁同步</li>
@@ -200,24 +164,12 @@ public static final ImmutableSet&lt;String&gt; COLOR_NAMES = ImmutableSet.of(
 <ul>
 <li>使用copyOf方法，例如，ImmutableSet.copyOf(set)；</li>
 <li>使用Of方法，如，ImmutableSet.of(“a”, “b”, “c”)或者ImmutableMap.of(“a”, “1”, “b”, 2);</li>
-<li><p>使用一个创建器Builder，如，   </p>
-<pre><code>public static final ImmutableSet&lt;Color&gt; GOOGLE_COLORS =
-   ImmutableSet.&lt;Color&gt;builder()
-       .addAll(WEBSAFE_COLORS)
-       .add(new Color(0, 191, 255))
-       .build();
-</code></pre><p>除了排序集合，元素顺序在构建时被保持。<br>如，ImmutableSet.of(“a”, “b”, “c”, “a”, “d”, “b”) 迭代输出会得到结果： “a”, “b”, “c”, “d”.</p>
+<li>使用一个创建器Builder，如，   <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static final ImmutableSet&lt;Color&gt; GOOGLE_COLORS =</span><br><span class="line">   ImmutableSet.&lt;Color&gt;builder()</span><br><span class="line">       .addAll(WEBSAFE_COLORS)</span><br><span class="line">       .add(new Color(0, 191, 255))</span><br><span class="line">       .build();</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="智能拷贝"><a href="#智能拷贝" class="headerlink" title="智能拷贝"></a>智能拷贝</h4><p>  有必要记住ImmutableXXX.copyOf尝试避免拷贝数据（如果这么做安全地话）– 确切的细节未指定，但是实现通常是智能的，如，</p>
-<pre><code>ImmutableSet&lt;String&gt; foobar = ImmutableSet.of(&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;);
-thingamajig(foobar);
-
-void thingamajig(Collection&lt;String&gt; collection) {
-  ImmutableList&lt;String&gt; defensiveCopy = ImmutableList.copyOf(collection);
-  ...
-}
-</code></pre><p>以上代码中，ImmutableList.copyOf(foobar) 将足够智能仅仅返回foobar.asList()，这是ImmutableSet的一个O(1)时间复杂度的方法。</p>
+<p>除了排序集合，元素顺序在构建时被保持。<br>如，ImmutableSet.of(“a”, “b”, “c”, “a”, “d”, “b”) 迭代输出会得到结果： “a”, “b”, “c”, “d”.</p>
+<h4 id="智能拷贝"><a href="#智能拷贝" class="headerlink" title="智能拷贝"></a>智能拷贝</h4><p>  有必要记住ImmutableXXX.copyOf尝试避免拷贝数据（如果这么做安全地话）– 确切的细节未指定，但是实现通常是智能的，如，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ImmutableSet&lt;String&gt; foobar = ImmutableSet.of(&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;);</span><br><span class="line">thingamajig(foobar);</span><br><span class="line"></span><br><span class="line">void thingamajig(Collection&lt;String&gt; collection) &#123;</span><br><span class="line">  ImmutableList&lt;String&gt; defensiveCopy = ImmutableList.copyOf(collection);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上代码中，ImmutableList.copyOf(foobar) 将足够智能仅仅返回foobar.asList()，这是ImmutableSet的一个O(1)时间复杂度的方法。</p>
 <p>ImmutableXXX.copyOf(ImmutableCollection)通常会在符合以下条件下来尝试来避免线性时间的拷贝：</p>
 <ul>
 <li>在常数时间内使用底层数据结果是可能的话：如, ImmutableSet.copyOf(ImmutableList) 不能在常数时间内完成.</li>

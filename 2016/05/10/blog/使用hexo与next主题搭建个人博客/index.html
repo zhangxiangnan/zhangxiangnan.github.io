@@ -145,56 +145,34 @@
     <div class="post-content ">
         <p>借助于github的github pages，通过hexo创建个人博客，本文描述了如何搭建，以及常见的问题及经验。</p>
 <a id="more"></a>
-<h3 id="本人环境配置"><a href="#本人环境配置" class="headerlink" title="本人环境配置"></a>本人环境配置</h3><pre><code>hexo: 3.2.0
-nodejs:v4.2.1
-npm: 2.14.5
-git: 1.9.5.msysgit.1
-windows:win7 x64
-</code></pre><h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><ul>
+<h3 id="本人环境配置"><a href="#本人环境配置" class="headerlink" title="本人环境配置"></a>本人环境配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hexo: 3.2.0</span><br><span class="line">nodejs:v4.2.1</span><br><span class="line">npm: 2.14.5</span><br><span class="line">git: 1.9.5.msysgit.1</span><br><span class="line">windows:win7 x64</span><br></pre></td></tr></table></figure>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><ul>
 <li><a href="https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%AE%89%E8%A3%85-Git" target="_blank" rel="noopener">安装git</a></li>
 <li><a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">安装nodejs</a></li>
 <li><a href="https://github.com/nodejs-tw/nodejs-wiki-book/blob/master/zh-tw/node_npm.rst" target="_blank" rel="noopener">安装node的npm包</a></li>
 </ul>
 <h3 id="开发配置"><a href="#开发配置" class="headerlink" title="开发配置"></a>开发配置</h3><h4 id="快速搭建博客骨架"><a href="#快速搭建博客骨架" class="headerlink" title="快速搭建博客骨架"></a>快速搭建博客骨架</h4><p><strong>博客目录d:/blog，以下命令均在blog目录下执行：</strong></p>
-<pre><code>//全局安装hexo
-$ npm install -g hexo
-
-// 创建个目录，命令行进入该目录，执行命令，初始化博客目录
-$ hexo init
-
-// 新版本hexo自动安装依赖，旧版本估计需要执行如下：
-$ npm install
-
-// 生成静态页面，简写hexo g
-$ hexo generate
-
-// 本地预览，访问localhost:4000
-hexo server
-</code></pre><p><a href="http://localhost:4000" target="_blank" rel="noopener">点击查看本地预览</a></p>
-<p>// hexo高版本用来安装git部署器，发布博客到github用<br>$ npm install hexo-deployer-git –save</p>
+<p>  全局安装hexo<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo</span><br></pre></td></tr></table></figure></p>
+<p>  创建个目录，命令行进入该目录，执行命令，初始化博客目录<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure></p>
+<p>  新版本hexo自动安装依赖，旧版本估计需要执行如下：<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install</span><br></pre></td></tr></table></figure></p>
+<p>  生成静态页面，简写hexo g<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure></p>
+<p>  本地预览，访问localhost:4000<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://localhost:4000" target="_blank" rel="noopener">点击查看本地预览</a></p>
+<p>hexo高版本用来安装git部署器，发布博客到github用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
 <h3 id="博客部署到github上"><a href="#博客部署到github上" class="headerlink" title="博客部署到github上"></a>博客部署到github上</h3><h4 id="安装git的部署器"><a href="#安装git的部署器" class="headerlink" title="安装git的部署器"></a>安装git的部署器</h4><p><strong>博客目录d:/blog，以下命令均在blog目录下执行：</strong></p>
-<pre><code>// hexo高版本用来安装git部署器，发布博客到github用
-$ npm install hexo-deployer-git --save
-</code></pre><h4 id="github上创建项目"><a href="#github上创建项目" class="headerlink" title="github上创建项目"></a>github上创建项目</h4><h5 id="项目名称注意"><a href="#项目名称注意" class="headerlink" title="项目名称注意"></a>项目名称注意</h5><p>  github上必须创建username.github.io的repository名，才能当作博客，username为你的github用户名。</p>
+<p>hexo高版本用来安装git部署器，发布博客到github用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
+<h4 id="github上创建项目"><a href="#github上创建项目" class="headerlink" title="github上创建项目"></a>github上创建项目</h4><h5 id="项目名称注意"><a href="#项目名称注意" class="headerlink" title="项目名称注意"></a>项目名称注意</h5><p>  github上必须创建username.github.io的repository名，才能当作博客，username为你的github用户名。</p>
 <h5 id="创建时勾选-Initialize-this-repository-with-a-README"><a href="#创建时勾选-Initialize-this-repository-with-a-README" class="headerlink" title="创建时勾选 Initialize this repository with a README"></a>创建时勾选 Initialize this repository with a README</h5><p>  勾选该复选框，可以立即克隆仓库到本地。</p>
 <h5 id="github项目设置deploy-keys"><a href="#github项目设置deploy-keys" class="headerlink" title="github项目设置deploy keys"></a>github项目设置deploy keys</h5><p>  选择刚创建的项目，settings-&gt;左边deploy keys-&gt;添加本机的ssh公钥即可</p>
-<h4 id="站点配置文件-config-xml配置git信息"><a href="#站点配置文件-config-xml配置git信息" class="headerlink" title="站点配置文件_config.xml配置git信息"></a>站点配置文件_config.xml配置git信息</h4><pre><code>//在deploy节点下配置type类型(git、老版本貌似是github)、仓库地址、分支
-deploy:
-type: git
-repository: https://github.com/zhangxiangnan/zhangxiangnan.github.io.git
-branch: master
-</code></pre><h5 id="克隆项目到本地"><a href="#克隆项目到本地" class="headerlink" title="克隆项目到本地"></a>克隆项目到本地</h5><p>  克隆刚创建的项目到本地，把.git文件夹拷贝到博客目录下，或者相反都行，然后即可提交到github上。</p>
-<pre><code>$ git clone 仓库地址
-</code></pre><h4 id="提交项目到github上"><a href="#提交项目到github上" class="headerlink" title="提交项目到github上"></a>提交项目到github上</h4><pre><code>$ hexo clean
-$ hexo generate
-$ hexo deploy  #之后输入用户名、密码
-</code></pre><p>  deploy操作会把blog目录下的public文件夹下的内容发布到github上刚创建的项目。</p>
+<h4 id="站点配置文件-config-xml配置git信息"><a href="#站点配置文件-config-xml配置git信息" class="headerlink" title="站点配置文件_config.xml配置git信息"></a>站点配置文件_config.xml配置git信息</h4><p>  在deploy节点下配置type类型(git、老版本貌似是github)、仓库地址、分支<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">type: git</span><br><span class="line">repository: https://github.com/zhangxiangnan/zhangxiangnan.github.io.git</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure></p>
+<h5 id="克隆项目到本地"><a href="#克隆项目到本地" class="headerlink" title="克隆项目到本地"></a>克隆项目到本地</h5><p>  克隆刚创建的项目到本地，把.git文件夹拷贝到博客目录下，或者相反都行，然后即可提交到github上。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone 仓库地址</span><br></pre></td></tr></table></figure></p>
+<h4 id="提交项目到github上"><a href="#提交项目到github上" class="headerlink" title="提交项目到github上"></a>提交项目到github上</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo generate</span><br><span class="line">$ hexo deploy  #之后输入用户名、密码</span><br></pre></td></tr></table></figure>
+<p>  deploy操作会把blog目录下的public文件夹下的内容发布到github上刚创建的项目。</p>
 <h3 id="主题及其设定、常见第三方服务见"><a href="#主题及其设定、常见第三方服务见" class="headerlink" title="主题及其设定、常见第三方服务见:"></a>主题及其设定、常见第三方服务见:</h3><p>  <a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">http://theme-next.iissnan.com/getting-started.html</a></p>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="清理项目"><a href="#清理项目" class="headerlink" title="清理项目"></a>清理项目</h4><p>  清理项目<br>  hexo clean</p>
-<h4 id="构建生成项目"><a href="#构建生成项目" class="headerlink" title="构建生成项目"></a>构建生成项目</h4><p>hexo generate 或者hexo g</p>
-<h4 id="本地预览项目"><a href="#本地预览项目" class="headerlink" title="本地预览项目"></a>本地预览项目</h4><p>hexo server</p>
-<h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><p>hexo new title “xx”</p>
-
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="清理项目"><a href="#清理项目" class="headerlink" title="清理项目"></a>清理项目</h4><p>  清理项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure></p>
+<h4 id="构建生成项目"><a href="#构建生成项目" class="headerlink" title="构建生成项目"></a>构建生成项目</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate 或者hexo g</span><br></pre></td></tr></table></figure>
+<h4 id="本地预览项目"><a href="#本地预览项目" class="headerlink" title="本地预览项目"></a>本地预览项目</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+<h4 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new title &quot;xx&quot;</span><br></pre></td></tr></table></figure>
         
         <br>
         <div id="comment-container">
