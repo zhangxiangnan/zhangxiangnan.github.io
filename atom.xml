@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>张向南的博客</title>
+  <title>张向南的博客 | zhangxiangnan&#39;s Blog</title>
   <icon>https://www.gravatar.com/avatar/8b49612074cca29633fcf2c5a21f5185</icon>
   <subtitle>progress everyday</subtitle>
   <link href="/atom.xml" rel="self"/>
