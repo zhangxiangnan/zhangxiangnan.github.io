@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        java线程协作通信 - 张向南的博客 | zhangxiangnan&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一道题说起："><span class="toc-text">一道题说起：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主线程睡眠一定时间？？"><span class="toc-text">主线程睡眠一定时间？？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#共享变量"><span class="toc-text">共享变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#wait-amp-notify-notifyall"><span class="toc-text">wait&amp;notify/notifyall</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Condition-amp-Lock"><span class="toc-text">Condition&amp;Lock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CountDownLatch"><span class="toc-text">CountDownLatch</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CyclicBarrier"><span class="toc-text">CyclicBarrier</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        java线程协作通信
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-03-19 23:15:00</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#线程" title="线程">线程</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <p>java线程协作即2个线程如何交互，发信号，告诉对方一些信息，触发对方做一些事情。</p>
+<h3 id="一道题说起："><a href="#一道题说起：" class="headerlink" title="一道题说起："></a>一道题说起：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    System.out.println(&quot;step1&quot;);</span><br><span class="line">    Object obj = new Object();</span><br><span class="line">    magic(obj);</span><br><span class="line">    System.out.println(&quot;step2&quot;);</span><br><span class="line">    synchronized (obj)&#123;</span><br><span class="line">        System.out.println(&quot;step3&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问如何实现magic方法，使输出按如下顺序，且线程停留在为synchronized (obj)这行（注意：不输出step3）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">step1</span><br><span class="line">step2</span><br></pre></td></tr></table></figure>
+<p>很明显，magic方法里需要获取obj的锁，因为需要返回到main函数，没法在magic方法里用主线程一直锁定obj，所以需要单独开一个线程来锁定obj。那么，子线程锁定obj，锁定多长时间呢，两个线程运行具有不确定性，既然不确定，就让子线程一直锁。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">private static void magic(Object obj)  &#123;</span><br><span class="line">       Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">           synchronized (obj)&#123;</span><br><span class="line">               while (true)&#123;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">       thread.setName(&quot;xx&quot;);</span><br><span class="line">       thread.start();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>magic启动子线程后，方法返回，main函数继续执行，此时可能子线程还没有锁定obj，导致和预期不一致。即我们要做的是子线程必须获取到obj锁，才能让magic返回，怎么让子线程告诉主线程我已经获取到了obj锁，你可以继续执行呢？</p>
+<h3 id="主线程睡眠一定时间？？"><a href="#主线程睡眠一定时间？？" class="headerlink" title="主线程睡眠一定时间？？"></a>主线程睡眠一定时间？？</h3><p>这种不靠谱，极端情况下子线程可能在设置的休眠时间内仍然没有得到运行；另外子线程极端时间内得到了锁，但是主线程确休眠，造成cpu浪费</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">private static void magic(Object obj)  &#123;</span><br><span class="line">        Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">            synchronized (obj)&#123;</span><br><span class="line">                while (true)&#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        thread.setName(&quot;xx&quot;);</span><br><span class="line">        thread.start();</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="共享变量"><a href="#共享变量" class="headerlink" title="共享变量"></a>共享变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">private static void magic(Object obj)  &#123;</span><br><span class="line">    final boolean[] getLock = &#123;false&#125;;</span><br><span class="line">    Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">        synchronized (obj)&#123;</span><br><span class="line">            getLock[0] = true;</span><br><span class="line">            while (true)&#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    thread.setName(&quot;xx&quot;);</span><br><span class="line">    thread.start();</span><br><span class="line"></span><br><span class="line">    while (!getLock[0])&#123;//不同处理器可能主线程始终读取到的值为false</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改进如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">private static void magic(Object obj)  &#123;</span><br><span class="line">    AtomicBoolean getLock = new AtomicBoolean(false);</span><br><span class="line">    Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">        synchronized (obj)&#123;</span><br><span class="line">            getLock.set(true);</span><br><span class="line">            while (true)&#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    thread.setName(&quot;xx&quot;);</span><br><span class="line">    thread.start();</span><br><span class="line"></span><br><span class="line">    while (!getLock.get())&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="wait-amp-notify-notifyall"><a href="#wait-amp-notify-notifyall" class="headerlink" title="wait&amp;notify/notifyall"></a>wait&amp;notify/notifyall</h4><p>  wait是已经获取锁的线程释放锁，然后一直阻塞等待其他线程调用相同锁的notify/notifyall方法；notify/notifyall是已经获取锁的线程释放锁，通知其他阻塞在相同锁的wait方法上的其他一个或多个线程中的一个线程继续执行。</p>
+<p>  wait、notify、notifyall与synchronized配合使用</p>
+<p>  可以得出如下方式：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">private static void magic(Object obj)  &#123;</span><br><span class="line">    Object obj2 = new Object();</span><br><span class="line"></span><br><span class="line">    synchronized (obj2)&#123;</span><br><span class="line">        Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">            synchronized (obj)&#123;</span><br><span class="line">                // 锁定obj后，获取obj2的锁，获取成功即可nofity主线程继续执行</span><br><span class="line">                synchronized (obj2)&#123;</span><br><span class="line">                    obj2.notify();</span><br><span class="line">                &#125;</span><br><span class="line">                while (true)&#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        thread.setName(&quot;xx&quot;);</span><br><span class="line">        thread.start();</span><br><span class="line">        try &#123;</span><br><span class="line">            obj2.wait();</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Condition-amp-Lock"><a href="#Condition-amp-Lock" class="headerlink" title="Condition&amp;Lock"></a>Condition&amp;Lock</h4><p>java的ReentrantLock结合Condition，跟notify/wait机制类似.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">private static void magic(Object obj)  &#123;</span><br><span class="line">    ReentrantLock reentrantLock = new ReentrantLock();</span><br><span class="line">    Condition childThreadHasGetLock = reentrantLock.newCondition();</span><br><span class="line"></span><br><span class="line">    reentrantLock.lock();</span><br><span class="line"></span><br><span class="line">    Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">        synchronized (obj)&#123;</span><br><span class="line">            reentrantLock.lock();</span><br><span class="line">            childThreadHasGetLock.signal();</span><br><span class="line">            reentrantLock.unlock();</span><br><span class="line"></span><br><span class="line">            while (true)&#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    thread.setName(&quot;xx&quot;);</span><br><span class="line">    thread.start();</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        childThreadHasGetLock.await();</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    reentrantLock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><p>CountDownLatch，闭锁，基于AQS（AQS基于volatitle&amp;CAS），阻塞的线程（一个或多个）一旦等闭锁的初始设置的计数值变为0就会恢复执行，最常用场景就是主线程等待多个外部调用都完成后（n个外部调用，闭锁的计数值为n），恢复执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">private static void magic(Object obj)  &#123;</span><br><span class="line">    CountDownLatch countDownLatch = new CountDownLatch(1);</span><br><span class="line">    Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">        synchronized (obj)&#123;</span><br><span class="line">            countDownLatch.countDown();</span><br><span class="line">            while (true)&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    thread.setName(&quot;xx&quot;);</span><br><span class="line">    thread.start();</span><br><span class="line">    try &#123;</span><br><span class="line">        countDownLatch.await();</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h4><p>CyclicBarrier，循环屏障，可以重复使用，基于Lock&amp;Condition（Lock，Condition基于volatitle&amp;CAS）,常用场景是一组线程在一个屏障点集合，所有线程到达后才会恢复线程的执行，可以设置在最后一个线程到达后所有线程恢复执行前的执行操作（一个屏障点只执行一次，可以更新一些状态，共享变量等）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">    private static void magic(Object obj)  &#123;</span><br><span class="line">        CyclicBarrier cyclicBarrier = new CyclicBarrier(2);</span><br><span class="line">        Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">            synchronized (obj)&#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    cyclicBarrier.await();</span><br><span class="line">                &#125; catch (InterruptedException |BrokenBarrierException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                while (true)&#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        thread.setName(&quot;xx&quot;);</span><br><span class="line">        thread.start();</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            cyclicBarrier.await();</span><br><span class="line">        &#125; catch (InterruptedException | BrokenBarrierException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">#### Phaser</span><br><span class="line">阶段器，基于volatitle&amp;CAS，多个阶段，多个线程分阶段共同开始去完成每一个阶段（每一个阶段完成线程等待未完成线程）的场景，在这大材小用</span><br></pre></td></tr></table></figure>
+<pre><code>private static void magic(Object obj)  {
+    Phaser phaser = new Phaser(2);
+    Thread thread = new Thread(() -&gt; {
+        synchronized (obj){
+            phaser.arriveAndAwaitAdvance();
+            while (true){
+            }
+        }
+    });
+    thread.setName(&quot;xx&quot;);
+    thread.start();
+
+    phaser.arriveAndAwaitAdvance();
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### Semaphore</span><br><span class="line">信号量，基于AQS，对有限的资源的并发访问控制，相比于加锁性能更高.</span><br></pre></td></tr></table></figure>
+<pre><code>private static void magic(Object obj) {
+    Semaphore semaphore = new Semaphore(0);
+    Thread thread = new Thread(() -&gt; {
+        synchronized (obj) {
+            semaphore.release();// 子线程释放一个信号量，主线程才会继续执行
+            while (true) {
+            }
+        }
+    });
+    thread.setName(&quot;xx&quot;);
+    thread.start();
+
+    try {
+        semaphore.acquire();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 同步队列</span><br><span class="line">SynchronousQueue简单实现，其他类似Queue也行。</span><br></pre></td></tr></table></figure>
+<p>  private static void magic(Object obj) {<br>        SynchronousQueue<boolean> synchronousQueue = new SynchronousQueue();<br>        Thread thread = new Thread(() -&gt; {<br>            synchronized (obj) {<br>                synchronousQueue.offer(true);<br>                while (true) {<br>                }<br>            }<br>        });<br>        thread.setName(“xx”);<br>        thread.start();</boolean></p>
+<pre><code>    try {
+        synchronousQueue.take();//获取不到一直阻塞
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### LockSupport</span><br><span class="line">lock辅助工具类</span><br></pre></td></tr></table></figure>
+<pre><code> private static void magic(Object obj) {
+    Thread mainThread = Thread.currentThread();
+    Thread thread = new Thread(() -&gt; {
+        synchronized (obj) {
+            LockSupport.unpark(mainThread);
+            while (true) {
+            }
+        }
+    });
+    thread.setName(&quot;xx&quot;);
+    thread.start();
+    LockSupport.park();
+}
+</code></pre><p><code>`</code></p>
+<p>###总结<br>线程协作（单进程里的多个线程），通信的方式无非是共享变量即共享内存，锁（java提供的线程通讯机制，wait&amp;notify，lock&amp;condition，CountDownLatch等几个并发辅助类都是），管道（SynchronousQueue是队列，也可以理解为管道一种，PipedInputStream实现类似）</p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
