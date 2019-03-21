@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://zhangxiangnan.com/"/>
-  <updated>2019-03-19T15:20:25.000Z</updated>
+  <updated>2019-03-21T15:05:49.000Z</updated>
   <id>http://zhangxiangnan.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>lombok显示声明构造函数的一个坑-字段值顺序乱掉</title>
+    <link href="http://zhangxiangnan.com/2019/03/21/lombok/lombok%E6%98%BE%E7%A4%BA%E5%A3%B0%E6%98%8E%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9D%91-%E5%AD%97%E6%AE%B5%E5%80%BC%E9%A1%BA%E5%BA%8F%E4%B9%B1%E6%8E%89/"/>
+    <id>http://zhangxiangnan.com/2019/03/21/lombok/lombok显示声明构造函数的一个坑-字段值顺序乱掉/</id>
+    <published>2019-03-21T14:45:01.000Z</published>
+    <updated>2019-03-21T15:05:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>有下例：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">import lombok.Builder;</span><br><span class="line">import lombok.Getter;</span><br><span class="line">import lombok.Setter;</span><br><span class="line">import lombok.ToString;</span><br><span class="line">@Setter</span><br><span class="line">@Getter</span><br><span class="line">@ToString</span><br><span class="line">@Builder</span><br><span class="line">public class Button &#123;</span><br><span class="line">    private String content;</span><br><span class="line"></span><br><span class="line">    private String color;</span><br><span class="line"></span><br><span class="line">    private String url;</span><br><span class="line"></span><br><span class="line">    public Button(String content, String url, String color) &#123;</span><br><span class="line">        this.content = content;</span><br><span class="line">        this.color = color;</span><br><span class="line">        this.url = url;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static final Button DEFAULT_BUTTON = Button.builder()</span><br><span class="line">            .content(&quot;xxcontent&quot;)</span><br><span class="line">            .color(&quot;#FE6D4D&quot;)</span><br><span class="line">            .url(&quot;http://www.xx.com&quot;)</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Button button = Button.DEFAULT_BUTTON;</span><br><span class="line">        System.out.println(button);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>上例子main函数预期输出为:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Button(content=xxcontent, color=#FE6D4D, url=http://www.xx.com)</span><br></pre></td></tr></table></figure><p>而实际为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Button(content=xxcontent, color=http://www.xx.com,url=#FE6D4D)</span><br></pre></td></tr></table></figure></p><p>url的值与color的值顺序乱了，为啥？</p><h3 id="分析编译后的class文件"><a href="#分析编译后的class文件" class="headerlink" title="分析编译后的class文件"></a>分析编译后的class文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">//</span><br><span class="line">// Source code recreated from a .class file by IntelliJ IDEA</span><br><span class="line">// (powered by Fernflower decompiler)</span><br><span class="line">//</span><br><span class="line">public class Button &#123;</span><br><span class="line">    private String content;</span><br><span class="line">    private String color;</span><br><span class="line">    private String url;</span><br><span class="line">    public static final Button DEFAULT_BUTTON = builder().content(&quot;xxcontent&quot;).color(&quot;#FE6D4D&quot;).url(&quot;http://www.xx.com&quot;).build();</span><br><span class="line"></span><br><span class="line">    ////这里..，url为第二个形参，与字段声明顺序不一致</span><br><span class="line">    public Button(String content, String url, String color) &#123;</span><br><span class="line">        this.content = content;</span><br><span class="line">        this.color = color;</span><br><span class="line">        this.url = url;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Button button = DEFAULT_BUTTON;</span><br><span class="line">        System.out.println(button);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static Button.ButtonBuilder builder() &#123;</span><br><span class="line">        return new Button.ButtonBuilder();</span><br><span class="line">    &#125;</span><br><span class="line">    //getter/setter</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;Button(content=&quot; + this.getContent() + &quot;, color=&quot; + this.getColor() + &quot;, url=&quot; + this.getUrl() + &quot;)&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static class ButtonBuilder &#123;</span><br><span class="line">        private String content;</span><br><span class="line">        private String color;</span><br><span class="line">        private String url;</span><br><span class="line"></span><br><span class="line">        ButtonBuilder() &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public Button.ButtonBuilder content(String content) &#123;</span><br><span class="line">            this.content = content;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public Button.ButtonBuilder color(String color) &#123;</span><br><span class="line">            this.color = color;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public Button.ButtonBuilder url(String url) &#123;</span><br><span class="line">            this.url = url;</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public Button build() &#123;</span><br><span class="line">            return new Button(this.content, this.color, this.url);////这里..</span><br><span class="line">        &#125;</span><br><span class="line">        //tostring()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>不仔细看代码或者debug，其实不容易看出来区别，问题就在于ButtonBuilder的build()方法内部使用了Button类的全参构造函数，而且其字段顺序和Button类各个字段顺序一致；而观察Button类内部的全参构造函数发现，url是第二个形参，跟字段顺序不一致，所以导致值错乱。</p><p>建议：构造函数最好使用ide自动生成，形参顺序保持和字段顺序一致，避免出现类似问题。</p><p>说明：如果不显示声明带参数的构造函数，lombok会自动生成带参数的构造函数，是没问题的，顺序是一致的。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;有下例：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br
+      
+    
+    </summary>
+    
+      <category term="lombok" scheme="http://zhangxiangnan.com/categories/lombok/"/>
+    
+    
+      <category term="lombok" scheme="http://zhangxiangnan.com/tags/lombok/"/>
+    
+  </entry>
   
   <entry>
     <title>java线程协作通信</title>
@@ -481,34 +507,6 @@
       <category term="http" scheme="http://zhangxiangnan.com/tags/http/"/>
     
       <category term="译" scheme="http://zhangxiangnan.com/tags/%E8%AF%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>okhttp之连接Connections</title>
-    <link href="http://zhangxiangnan.com/2016/09/25/http/okhttp/okhttp%E4%B9%8B%E8%BF%9E%E6%8E%A5Connections/"/>
-    <id>http://zhangxiangnan.com/2016/09/25/http/okhttp/okhttp之连接Connections/</id>
-    <published>2016-09-25T04:51:16.000Z</published>
-    <updated>2019-02-27T05:39:45.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><p>在使用Okhttp发送请求时，尽管你仅仅提供URL，OkHttp使用三种方式来设计连接：URL、Address、和路有route。<br><a id="more"></a></p><h4 id="URLs链接"><a href="#URLs链接" class="headerlink" title="URLs链接"></a>URLs链接</h4><p>URLs（如 <a href="https://github.com/square/okhttp" target="_blank" rel="noopener">https://github.com/square/okhttp</a> ）是HTTP和Internet互联网的基石。为了成为一个为web上任何东西的通用的、去中心化分散的的命名方案，他们也指出了如何访问web资源。</p><p>URLs是抽象的：</p><ul><li>URLS指出调用可能是明文的（http）或者加密的（https），但没有指出哪一种加密算法应该使用，也未指定该如何验证访问者的身份或者何种的凭证应该被信任，</li><li>也未指出是否应该使用一个特定的代理服务器或者如何和代理服务器认证。</li></ul><p>URLS也是具体的：每一个URL标示一个特定的路径（如/square/okhttp)和查询(如?=q=xx&amp;a=xx)。每一个web服务器管理许多URLS。</p><h4 id="Addresses地址"><a href="#Addresses地址" class="headerlink" title="Addresses地址"></a>Addresses地址</h4><p>地址指定一个web服务器（如github.com），以及连接到服务器所需的静态配置：端口、Https设置、优先的网络协议（如HTTP/2或者SPDY）。</p><p>共享相同address地址的URLs可能共享相同的底层的TCP socket连接。共享一个连接对性能有重大提升：低延迟、高吞吐（因为TCP启动较慢，三次握手）以及节省用电.Okhttp使用一个自动重用HTTP/1.x连接的连接池、支持多路复用技术的HTTP/2、SPDY连接。<br>在Okhttp中，address地址的一些字段来自URL（协议，主机，端口），剩余来自OkHttpClient。</p><h4 id="路由Routes"><a href="#路由Routes" class="headerlink" title="路由Routes"></a>路由Routes</h4><p>路由提供动态必需的动态信息来实际连接到一个web服务器。通过特定的ip地址尝试（通过DNS查询发现），使用准确的代理服务器（如果使用了一个ProxySelector），以及TLS协商的版本（针对HTTPS连接）。<br>一个地址可能有许多路由，例如，在多数据中心的一个web服务器可能在DNS应答中返回多个ip地址。</p><h4 id="连接-1"><a href="#连接-1" class="headerlink" title="连接"></a>连接</h4><p>当你使用Okhttp请求一个URL，如下是Okhttp请求的内部过程：   </p><p>  1、它使用URL和配置好的OkHttpClient来创建一个address地址，这个address地址指出了我们如何连接到web服务器。<br>  2、它尝试在连接池中检索来获取那个地址的连接<br>  3、若在连接池中没有找到对应连接，它选择一个路由来尝试。这通常意味着发出一个DNS请求来得到服务器的IP地址。如果必须的话，它还会选择一个TLS版本和代理服务器<br>  4、如果是一个新路由，它通过构建一个直接socket连接、一个TLS隧道（针对一个HTTP代理上的HTTPS）、或者一个直接的TLS连接来连接。必要时它会进行TLS握手。<br>  5、最后发送HTTP请求然后读取响应。</p><p>如果连接异常，Okhttp将再选择一个路有，再次重试。这允许Okhttp在当一个服务端的多个地址有一部分不可达时，进行恢复。这当一个连接池中的连接过时失效时，或者已经尝试的TLS版本不支持的话，也是有用处的。</p><p>一旦响应被接受，连接就会被返回到连接池，以便新的请求可以重用该连接。在一个连接不活跃一段时间后，连接将被从连接池回收。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;连接&quot;&gt;&lt;a href=&quot;#连接&quot; class=&quot;headerlink&quot; title=&quot;连接&quot;&gt;&lt;/a&gt;连接&lt;/h3&gt;&lt;p&gt;在使用Okhttp发送请求时，尽管你仅仅提供URL，OkHttp使用三种方式来设计连接：URL、Address、和路有route。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="http" scheme="http://zhangxiangnan.com/categories/http/"/>
-    
-    
-      <category term="okhttp" scheme="http://zhangxiangnan.com/tags/okhttp/"/>
-    
-      <category term="http" scheme="http://zhangxiangnan.com/tags/http/"/>
-    
-      <category term="译" scheme="http://zhangxiangnan.com/tags/%E8%AF%91/"/>
-    
-      <category term="Connections" scheme="http://zhangxiangnan.com/tags/Connections/"/>
     
   </entry>
   
