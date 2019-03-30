@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一块学习">
+    <meta name="keyword" content="undefined">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        张向南的博客 | zhangxiangnan&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> progress everyday </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/avatar.png">
+        </div>
+        <div class="name">
+            <i>zhangxiangnan</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么选用微服务？"><span class="toc-text">为什么选用微服务？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#单体应用的缺点"><span class="toc-text">单体应用的缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#微服务的缺点"><span class="toc-text">微服务的缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#什么是服务化？"><span class="toc-text">什么是服务化？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何拆分"><span class="toc-text">如何拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#何时拆分"><span class="toc-text">何时拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#服务化引入的问题"><span class="toc-text">服务化引入的问题</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> progress everyday </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-03-30 18:06:27</span></span>
+        
+        
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <h3 id="为什么选用微服务？"><a href="#为什么选用微服务？" class="headerlink" title="为什么选用微服务？"></a>为什么选用微服务？</h3><p>微服务相对单体应用而言，单体应用即单个服务包含所用功能，统一维护部署；微服务是单体应用拆分的多个小些的服务。</p>
+<h4 id="单体应用的缺点"><a href="#单体应用的缺点" class="headerlink" title="单体应用的缺点"></a>单体应用的缺点</h4><ul>
+<li>包含所有功能，改一处功能或者一处功能有问题影响整个服务稳定性</li>
+<li>随着业务迭代，项目易变得庞大混乱，团队代码合并成本高，定位故障也复杂</li>
+<li>单体应用使用统一框架、语言，可能有些模块使用其他语言更适合，无法个性化</li>
+<li>编译、部署时间长，成本高<br>单体与微服务要根据具体业务体量及团队大小，不能盲目追随微服务。</li>
+</ul>
+<h4 id="微服务的缺点"><a href="#微服务的缺点" class="headerlink" title="微服务的缺点"></a>微服务的缺点</h4><ul>
+<li>一个人可能需要维护很多小型服务（维护成本高）</li>
+<li>单个服务独立部署会浪费些硬件资源</li>
+<li>可能引入跨服务事务即分布式事务、跨库查询的问题（耦合的数据库逻辑最好不要拆到多个服务）</li>
+<li>性能下降</li>
+<li>可用性问题</li>
+<li>测试、排查问题成本高</li>
+<li>系统架构变复杂</li>
+</ul>
+<h3 id="什么是服务化？"><a href="#什么是服务化？" class="headerlink" title="什么是服务化？"></a>什么是服务化？</h3><p>单体应用各个maven模块之间通过jar依赖调用自身服务的本地方法，是单个进程内的调用逻辑；或者直接调用自身服务的某个service类，服务化即单体应用按业务或其他原则拆分多个小服务后，小服务间通过rpc（http、thrift等）调用，是多个进程间，多个主机间的调用逻辑</p>
+<p>微服务是更细粒度的服务化</p>
+<ul>
+<li>拆分粒度更细，某个模块也可以单独拆</li>
+<li>单独部署维护</li>
+</ul>
+<h3 id="如何拆分"><a href="#如何拆分" class="headerlink" title="如何拆分"></a>如何拆分</h3><ul>
+<li>纵向，按业务领域、业务功能模块拆分，如拆为首页服务、价格、预定、生单等</li>
+<li>横向，将公共公用、独立的功能拆分出来，提供服务给多个服务使用，如用户服务可以作为公共基础服务给多个使用方提供用户信息的查询</li>
+<li>一个业务进行读写拆分，提升稳定性</li>
+<li>按qps高低拆分</li>
+</ul>
+<p>拆分太细，维护成本太高，性能也会变差，要把我合适的粒度，综合分析有必要拆再拆</p>
+<h3 id="何时拆分"><a href="#何时拆分" class="headerlink" title="何时拆分"></a>何时拆分</h3><p>团队规模逐步扩大，业务逐渐复杂，多人协作维护一个单体应用时沟通、编译、发布、维护等成本变高时，或者为了某个功能的稳定性，当掌握微服务相关技术栈后可以考虑拆分</p>
+<h3 id="服务化引入的问题"><a href="#服务化引入的问题" class="headerlink" title="服务化引入的问题"></a>服务化引入的问题</h3><ul>
+<li>服务间通信采用何种协议，http、rpc以及接口的格式、规范、版本、兼容性等问题</li>
+<li>服务如何注册发现？注册中心</li>
+<li>服务监控包括性能，调用链路成功率，稳定性</li>
+<li>服务间的调用治理，包括超时、重试、熔断降级、截流等，以及服务的上下链路调用与被调用服务的管理（哪些服务，哪些机器提供、机房分布等）</li>
+<li>问题排查需要各个服务间有一个追踪标识，请求id等唯一标识请求</li>
+</ul>
+<p>###微服务的基本组件</p>
+<ul>
+<li><p>服务描述（接口文档、api）</p>
+<p>服务提供的接口名称，参数格式（参数名、类型），返回结果格式（值及类型），常见服务描述方式：</p>
+<ul>
+<li>RESTFul API，描述http、https协议的服务描述，swagger管理</li>
+<li>xml配置，rpc协议的服务描述</li>
+<li>idl，thrift、grpc跨语言服务调用框架</li>
+</ul>
+</li>
+<li><p>注册中心</p>
+<p>可以自己实现，或者使用开源框架，如zookeeper、nacos、consul、eureka等</p>
+<ul>
+<li>1、服务提供者将提供的服务、服务ip地址、端口号登记到注册中心；</li>
+<li>2、服务消费者根据其配置文件中描述的服务信息从注册中心订阅所需服务</li>
+<li>3、注册中心返回服务提供者地址列表给服务消费者，服务消费者根据得到的服务提供者的ip、端口等信息，通过轮询、一致性hash等负载均衡策略，直接发起调用（不经过注册中心）</li>
+<li>4、服务提供者下线、上线机器/节点时，注册中心将变更通知给服务消费者（如zookeeper的临时有序节点实现节点下线通知），服务消费者剔除/增加节点信息。 </li>
+</ul>
+</li>
+<li><p>服务框架</p>
+<p>注册中心使服务消费者得到服务提供者的地址，要有以下信息才可以调用：</p>
+<ul>
+<li>服务通信协议 四层的tcp、udp、七层http…</li>
+<li>数据传输方式 同步、异步，连接是单连接、多路复用</li>
+<li>数据压缩格式 压缩减少网络传输时间及带宽，json、protbuf、xml、hession、kyro、java序列化、thrift等</li>
+</ul>
+</li>
+<li><p>服务监控</p>
+<p>对服务消费者与服务提供者之间的调用次数、成功率等指标收集、统计、展示</p>
+<ul>
+<li>指标收集 每次请求耗时、成功与否、源ip、目的ip、接口名称等</li>
+<li>聚合处理 每秒qps，平均耗时、tp95、tp90、tp99、tp99.9、成功率等</li>
+<li>监控展示 界面化展示查看，可添加监控报警，按不同时间（小时、天、周等）、维度（主机、接口名等）聚合统计</li>
+</ul>
+</li>
+<li><p>服务追踪</p>
+<p>分布式服务追踪，用于排查问题，一个traceid或requestid查询所有服务的日志，分析原因</p>
+</li>
+<li><p>服务治理</p>
+<ul>
+<li>单节点故障自动摘除</li>
+<li>机房故障自动切换其他机房，中心故障自动切换其他中心，本地不可用切异地</li>
+<li>熔断截流机制</li>
+<li>超时重试</li>
+<li>同机房、同中心、同地域优先调用</li>
+<li>服务手动禁用、下线</li>
+<li>自动弹性扩容</li>
+</ul>
+</li>
+</ul>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

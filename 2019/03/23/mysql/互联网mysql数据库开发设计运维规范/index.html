@@ -89,7 +89,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础规范"><span class="toc-text">基础规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命名规范"><span class="toc-text">命名规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表设计规范"><span class="toc-text">表设计规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql特点"><span class="toc-text">mysql特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字段设计规范"><span class="toc-text">字段设计规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引设计规范"><span class="toc-text">索引设计规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分库分表"><span class="toc-text">分库分表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL使用规范"><span class="toc-text">SQL使用规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流程规范"><span class="toc-text">流程规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发规范技巧"><span class="toc-text">开发规范技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读写分离"><span class="toc-text">读写分离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对象关系映射"><span class="toc-text">对象关系映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql各数据类型范围"><span class="toc-text">mysql各数据类型范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础规范"><span class="toc-text">基础规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命名规范"><span class="toc-text">命名规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表设计规范"><span class="toc-text">表设计规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字段设计规范"><span class="toc-text">字段设计规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引设计规范"><span class="toc-text">索引设计规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL使用规范"><span class="toc-text">SQL使用规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流程规范"><span class="toc-text">流程规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开发规范技巧"><span class="toc-text">开发规范技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql特点"><span class="toc-text">mysql特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分库分表"><span class="toc-text">分库分表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读写分离"><span class="toc-text">读写分离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#对象关系映射"><span class="toc-text">对象关系映射</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql各数据类型范围"><span class="toc-text">mysql各数据类型范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
 </div>
     
 </div>
@@ -161,7 +161,9 @@
 <li>数据库名称尽量合项目或业务名称一样，各个环境的库名最好一样</li>
 <li>库名、表名、字段名要用小写，下划线风格，&lt;=32个字符，名称和业务绑定要有意义，不得拼音英文混合。</li>
 <li>索引名，唯一索引名为uk_字段名，普通索引idx_字段名，小写</li>
-<li>表名单数<h3 id="表设计规范"><a href="#表设计规范" class="headerlink" title="表设计规范"></a>表设计规范</h3></li>
+<li>表名单数</li>
+</ul>
+<h3 id="表设计规范"><a href="#表设计规范" class="headerlink" title="表设计规范"></a>表设计规范</h3><ul>
 <li>表必须要有主键id<ul>
 <li>表碎片率低，顺序insert效率高；</li>
 <li>推荐unsigned整数（BIGINT），值自增或者业务设置</li>
@@ -171,10 +173,6 @@
 </li>
 <li>禁止使用外键，影响性能，可能会死锁，造成表与表耦合</li>
 <li>大字段，冷门字段可以拆分到单独表，分离冷热数据</li>
-</ul>
-<h3 id="mysql特点"><a href="#mysql特点" class="headerlink" title="mysql特点"></a>mysql特点</h3><ul>
-<li>mysql的查询缓存适用于更新频率非常低，查询频率非常高的场景，否则建议关闭查询缓存</li>
-<li>简单使用mysql，不要使用外键、分区表、存储过程等特性</li>
 </ul>
 <h3 id="字段设计规范"><a href="#字段设计规范" class="headerlink" title="字段设计规范"></a>字段设计规范</h3><ul>
 <li>必须把字段定义为NOT NULL并提供默认值<ul>
@@ -238,9 +236,6 @@
 <li>使用explain进行sql性能分析，是否使用索引，避免extra出现：use file sort，use tempory，导致性能降低</li>
 <li>具有唯一特性的一个或多个字段建立唯一索引，避免脏数据</li>
 <li>sql explain时语句type至少达到range级别（基于索引范围搜索），ref好些(使用索引)，constants(匹配单条记录)最好。</li>
-<li><h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3></li>
-<li>通常根据表的某个字段如订单号、userid来进行hash或者range拆分</li>
-<li>单表数据量建议超过千万级别或单表容量&gt;2GB才推荐分库分表，不过有的表数据量亿级容量也可以轻松应对，看情况</li>
 </ul>
 <h3 id="SQL使用规范"><a href="#SQL使用规范" class="headerlink" title="SQL使用规范"></a>SQL使用规范</h3><ul>
 <li>sql要尽可能简单，拆分</li>
@@ -315,6 +310,14 @@
 </ul>
 </li>
 </ul>
+<h3 id="mysql特点"><a href="#mysql特点" class="headerlink" title="mysql特点"></a>mysql特点</h3><ul>
+<li>mysql的查询缓存适用于更新频率非常低，查询频率非常高的场景，否则建议关闭查询缓存</li>
+<li>简单使用mysql，不要使用外键、分区表、存储过程等特性</li>
+</ul>
+<h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3><ul>
+<li>通常根据表的某个字段如订单号、userid来进行hash或者range拆分</li>
+<li>单表数据量建议超过千万级别或单表容量&gt;2GB才推荐分库分表，不过有的表数据量亿级容量也可以轻松应对，看情况</li>
+</ul>
 <h3 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h3><ul>
 <li>主从复制分异步复制，半同步复制</li>
 <li>建议交易环节所有请求都走主库</li>
@@ -324,7 +327,8 @@
 <li>domain类不能直接返回到展示层，需进行到VO或DTO的转换</li>
 <li>mybatis的mapper里不能使用${}，要用#{}，防止sql注入，提升性能，预编译</li>
 <li>mybatis的queryForList(String statementName,int start,int size)不要使用，底层查询所有数据，然后内存截取</li>
-<li><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3></li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
 <li>互联网业务一般高并发，大数据量，然而数据库连接有效，查询&amp;写入必须快速，否则就影响性能，长时间占有连接则影响并发。提升性能则查询尽可能走索引，不要导致全局扫描、文件排序。</li>
 <li>针对数据的统计分析，或者数据的多维度搜索、聚合，建议使用ETL或者搜索引擎</li>
 </ul>
@@ -376,7 +380,6 @@
 </tr>
 </tbody>
 </table>
-<p>作者：cxuan<br>链接：<a href="https://www.jianshu.com/p/7a655e5345b2" target="_blank" rel="noopener">https://www.jianshu.com/p/7a655e5345b2</a><br>来源：简书<br>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><a href="https://www.kancloud.cn/wubx/mysql-sql-standard/600511" target="_blank" rel="noopener">https://www.kancloud.cn/wubx/mysql-sql-standard/600511</a></li>
 <li><a href="https://www.verynull.com/2017/02/18/MySQL%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%9A%E5%8A%A1%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" target="_blank" rel="noopener">https://www.verynull.com/2017/02/18/MySQL%E4%BA%92%E8%81%94%E7%BD%91%E4%B8%9A%E5%8A%A1%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/</a></li>
